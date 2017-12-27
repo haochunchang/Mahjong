@@ -7,6 +7,7 @@
 #include "module/Shuffler.h"
 #include "module/MJhand.h"
 #include "module/MJcollection.h"
+#include "module/MJstage.h"
 
 using std::cout;
 using std::cin;

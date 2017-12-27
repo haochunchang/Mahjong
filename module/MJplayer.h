@@ -1,5 +1,6 @@
 #ifndef MJPLAYER 
 #define MJPLAYER 
+#include <map>
 #include <iostream>
 #include "MJhand.h"
 using namespace std;

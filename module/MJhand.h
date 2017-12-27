@@ -21,7 +21,7 @@ public:
 	int total_len() const;
 	int faceup_len() const;
 	void set_faceup_len(int f);
-	void set_stage(bool s);
+	void set_stage(int s);
 	bool stage() const;
 	
 	int caneat(const MJtile&);
