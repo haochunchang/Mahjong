@@ -26,7 +26,7 @@ using namespace std;
 // MJhand::canminggone	|	done	|
 // MJhand::cananggone	|	done	|
 // MJhand::canbuggone	|	done	|
-// MJhand::canhu		|			|
+// MJhand::canhu		|	done    |
 
 // 		function		|	status	|	comment
 // --------------------------------------------------------
@@ -36,13 +36,15 @@ using namespace std;
 // MJhand::faceup		|	done	|
 // MJhand::applique		|	done	|
 // MJhand::initial		|	done	|
+// MJhand::showhandtoothers
 // MJhand::eat 			|	done	|
 // MJhand::pong			|	done	|
 // MJhand::minggone		|	done	|
 // MJhand::angone		|	done	|
 // MJhand::buggone		|	done	|
-// MJhand::huother		|			|
-// MJhand::huown		|			|
+// MJhand::huother		|   done	|
+// MJhand::huown		|	done	|
+// MJhand::gethuhand    |           |
 // MJhand::getTotalLen	|	done	|	for test
 // MJhand::getFaceupLen	|	done	|	for test
 // MJhand::getLastTile	|	done	|	for test
@@ -456,6 +458,13 @@ void MJhand::initial(MJcollection& mjcol){
   	arrange();
 }
 
+void MJhand::showhandtoothers() {
+    // print the hand on the screen. 
+    // Only the faceup tiles will be shown. 
+    // Needs the gap between faceup and facedown tiles.   
+    //TODO
+}
+
 void MJhand::eat(const MJtile& t, int method){
     // 助教給的 1:(001), 2:(010), 3:(100)
     // caneat 的
@@ -753,7 +762,7 @@ void MJhand::bugone(int index, MJcollection& mjcol){
 void MJhand::huother(const MJtile& t){
   	if (canhu(t)){
   		_tiles[_total_len] = t;  	
-  		_stage = 0;
+  		_stage = 2;
   		_total_len++;
 		arrange();
   	}
@@ -762,10 +771,14 @@ void MJhand::huother(const MJtile& t){
 void MJhand::huown(){
   	MJtile t = _tiles[_total_len];
   	if (canhu(t)){
-  		_stage = 0;
+  		_stage = 2;
   		_total_len++;
   		arrange();
   	}
+}
+
+MJhand* MJhand::gethuhand(){
+    return this;    
 }
 // ======== Print out Methods ===================
 ostream& operator << (ostream& os, const MJhand& h){

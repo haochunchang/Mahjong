@@ -22,8 +22,8 @@ public:
 	void end();
 private:
 	vector<MJplayer*> _players;
-	int rounds;//圈數 一個風為一圈 
-	int valueofpoints;//一台多少錢 
+	int rounds;
+	int valueofpoints;
 }; 
 
 MJgame::MJgame(){
@@ -32,10 +32,33 @@ MJgame::MJgame(){
 	cout<<"******Welcome to Taiwan Mahjong*****"<<endl;
 	cout<<"************************************"<<endl;
 	cout<<endl;
-}
+    rounds = 0;
+    valueofpoints = 1;
+};
+
 MJgame::~MJgame(){
-}
+};
+
 void MJgame::setting() {
+    int human = -1;
+    while(human > 4 || human < 0) {
+        fprintf(stdout, "How many human players? (0~4)\n");
+        fscanf(stdin, "%d", &human);
+        if(human < 0) {
+            fprintf(stdout, "Too few human players, please input 0~4\n");
+        } else if (human > 4) {
+            fprintf(stdout, "Too many human players, please input 0~4\n");
+        }
+    }
+
+    if (human != 4) {
+        fprintf(stdout, "There will be %d AI players\n What kind of AI do you want?\n", 4-human);
+        fprintf(stdout, "1: GreedyAI, 0: CustomAI\n");
+        bool isAIgreedy = true;
+        fscanf(stdin, "%d", &isAIgreedy);
+        // Set with AI players
+    }
+    //
 }
 
 void MJgame::start() {

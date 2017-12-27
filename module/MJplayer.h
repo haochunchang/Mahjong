@@ -6,7 +6,7 @@ using namespace std;
 class MJplayer{
 	public :
 		MJplayer();
-		MJplayer(int , int);
+		MJplayer(int, int, MJtile*, int); // position, money, tiles, num_tiles
 		~MJplayer();
 		int Get_Pos() const;
 		int Get_Mon() const;
