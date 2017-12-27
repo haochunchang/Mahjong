@@ -19,8 +19,8 @@ using namespace std;
 // MJhand::faceup_len	|	done	|
 // MJhand::total_len	|	done	|
 // MJhand::stage		|	done	|
-// MJhand::set_faceup_len| 			|
-// MJhand::set_stage
+// MJhand::set_faceup_len| 	done	|
+// MJhand::set_stage	|	done	|
 // MJhand::caneat		|	done	|
 // MJhand::canpong		|	done	|
 // MJhand::canminggone	|	done	|
@@ -128,7 +128,7 @@ bool MJhand::stage() const {
 	return _stage;
 }
 
-void MJhand::set_stage(bool s) {
+void MJhand::set_stage(int s) {
 	_stage = s;
 }
 
@@ -778,7 +778,7 @@ void MJhand::huown(){
 }
 
 MJhand* MJhand::gethuhand(){
-    return this;    
+    return this;
 }
 // ======== Print out Methods ===================
 ostream& operator << (ostream& os, const MJhand& h){

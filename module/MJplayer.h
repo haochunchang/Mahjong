@@ -11,8 +11,8 @@ class MJplayer{
 		int Get_Pos() const;
 		int Get_Mon() const;
 		void Print_Hand() const;
-		void strategy(int position, MJtile t);
-		void getinfo(int position, MJtile* ts, int tiles_num);
+		void strategy(int position, MJtile t, int &actiontype, int &actionparameter);
+		void getinfo(int position, int type, MJtile* ts, int tiles_num);
 		//type: eat=1 pong=2 minggone=3 angone=4 bugone=5 applique=6
 
 	private :

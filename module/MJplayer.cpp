@@ -56,16 +56,38 @@ void MJplayer::Print_Hand() const{
     return;
 }
 
-void MJplayer::strategy(int position, MJtile t) {
-    //if 現在出牌的人是上家, check if caneat
-    map<int, int> previousPerson;
+void MJplayer::strategy(int position, MJtile t, int &actiontype, int &actionparameter) {
+    // call after every play
 
-    // check if canpong, cangone, canhu
+    // if 現在出牌的人是上家, check if caneat
+    if(previousPerson[_position]==position){
+        cout << "check if caneat: ";
+        (_hand.caneat(t)) ? (cout << "true" <<endl) : (cout << "false" << endl);
+    }
+    // check if canpong
+    cout << "check if canpong: ";
+    (_hand.canpong(t)) ? (cout << "true" <<endl) : (cout << "false" << endl);
+
+    // check if canminggone
+    cout << "check if canminggone: ";
+    (_hand.canminggone(t)) ? (cout << "true" <<endl) : (cout << "false" << endl);
+
+    // check if canbugone
+    // not sure if angone is needed
+    cout << "check if canbugone: ";
+    (_hand.canbugone(t)) ? (cout << "true" <<endl) : (cout << "false" << endl);
+    
+    // check if canhu
+    cout << "check if canhu: ";
+    (_hand.canhu(t)) ? (cout << "true" <<endl) : (cout << "false" << endl);
+    
     return;
 }
 
-void MJplayer::getinfo(int position, MJtile* ts, int tiles_num) {
-     return;
+void MJplayer::getinfo(int position, int type, MJtile* ts, int tiles_num) {
+    // type: eat=1 pong=2 minggone=3 angone=4 bugone=5 applique=6
+    // call after any type above
+    return;
 }
 
 

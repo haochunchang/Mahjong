@@ -55,7 +55,7 @@ public:
 private:
 	int _total_len;
 	int _faceup_len;
-	int _stage;//0 normal stage, 1 draw stage
+	int _stage;//0 normal stage, 1 draw stage, 2 hu
 	MJtile _tiles[30];//total 17 tiles, at most 30 = 17+8+5
     bool noreveal[30];
 }; 
