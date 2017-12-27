@@ -1,41 +1,71 @@
 #include <iostream>
+#include <map>
 #include "MJplayer.h"
+#include "MJhand.h"
 
 using namespace std;
 
 MJplayer::MJplayer() {
     _position = 0;
     _money = 0;
+
+    // 1 的上家是 2，2 的上家是 3，3 的上家是 4，4 的上家是 1
+    previousPerson[1] = 2;
+    previousPerson[2] = 3;
+    previousPerson[3] = 4;
+    previousPerson[4] = 1;
+
+    // 1 的對家是 3，3 的對家是 1，2 的對家是 4，4 的對家是 2
+    oppositePerson[1] = 3;
+    oppositePerson[3] = 1;
+    oppositePerson[2] = 4;
+    oppositePerson[4] = 2;
 }
 
 MJplayer::MJplayer(int pos, int money, MJtile* t, int n) {
     _position = pos;
     _money = money;
     _hand = MJhand(t, n); 
+
+    // 1 的上家是 2，2 的上家是 3，3 的上家是 4，4 的上家是 1
+    previousPerson[1] = 2;
+    previousPerson[2] = 3;
+    previousPerson[3] = 4;
+    previousPerson[4] = 1;
+
+    // 1 的對家是 3，3 的對家是 1，2 的對家是 4，4 的對家是 2
+    oppositePerson[1] = 3;
+    oppositePerson[3] = 1;
+    oppositePerson[2] = 4;
+    oppositePerson[4] = 2;
 }
 
 MJplayer::~MJplayer() {
 }
 
-MJplayer::Get_Pos() const {
+int MJplayer::Get_Pos() const {
     return _position;
 }
 
-MJplayer::Get_Mon() const {
+int MJplayer::Get_Mon() const {
     return _money;
 }
 
-MJplayer::Print_Hand() {
+void MJplayer::Print_Hand() const{
     cout << _hand << endl;       
+    return;
 }
 
-MJplayer::strategy(int position, MJtile t) {
+void MJplayer::strategy(int position, MJtile t) {
     //if 現在出牌的人是上家, check if caneat
+    map<int, int> previousPerson;
+
     // check if canpong, cangone, canhu
+    return;
 }
 
-MJplayer::getinfo(int position, MJtile* ts, int tiles_num) {
-     
+void MJplayer::getinfo(int position, MJtile* ts, int tiles_num) {
+     return;
 }
 
 

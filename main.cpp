@@ -3,10 +3,10 @@
 #include <stdlib.h>
 //#include <Windows.h>
 
-#include "MJtile.h"
-#include "Shuffler.h"
-#include "MJhand.h"
-#include "MJcollection.h"
+#include "module/MJtile.h"
+#include "module/Shuffler.h"
+#include "module/MJhand.h"
+#include "module/MJcollection.h"
 
 using std::cout;
 using std::cin;

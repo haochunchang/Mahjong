@@ -19,5 +19,7 @@ class MJplayer{
 		MJhand _hand;
 		int _position;//east = 1 ,south = 2 , west = 3 , north = 4 
 		int _money;
+    	map<int, int> previousPerson;
+    	map<int, int> oppositePerson;
 };
 #endif
