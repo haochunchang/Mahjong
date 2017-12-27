@@ -1,9 +1,9 @@
 # CP2017
-A Mahjong Game implemented in C++
-Mahjong，中文為麻將，為一種源自中國的策略遊戲
-我們實作的程式為台灣16張麻將，分數計算為20底10台
-遊戲規則: http://www.dragona.com.tw/mahjong-rule/
-台數計算: http://ezmjtw.tripod.com/mahjong16-big5.htm
+## A Mahjong Game implemented in C++
+## Description
+1. Mahjong，中文為麻將，為一種源自中國的策略遊戲，我們實作的程式為台灣16張麻將，分數計算為20底10台。
+2. 遊戲規則: http://www.dragona.com.tw/mahjong-rule/
+3. 台數計算: http://ezmjtw.tripod.com/mahjong16-big5.htm
 
 ## 麻將對照表
 ![Model Architecture](/images/ids.jpeg)
