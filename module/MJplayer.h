@@ -9,7 +9,9 @@ class MJplayer{
 		MJplayer();
 		MJplayer(int, int, MJtile*, int); // position, money, tiles, num_tiles
 		~MJplayer();
+		void Set_Pos(int);
 		int Get_Pos() const;
+		void Set_Mon(int);
 		int Get_Mon() const;
 		void Print_Hand() const;
 		void strategy(int position, MJtile t, int &actiontype, int &actionparameter);

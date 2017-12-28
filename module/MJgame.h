@@ -64,7 +64,7 @@ void MJgame::setting() {
 
 void MJgame::start() {
     MJstage stage;
-
+    stage.pickSeat();
 }
 
 void MJgame::end() {

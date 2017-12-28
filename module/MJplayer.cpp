@@ -6,6 +6,7 @@
 using namespace std;
 
 MJplayer::MJplayer() {
+    cout << "Call MJplayer constructor." << endl;
     _position = 0;
     _money = 0;
 
@@ -23,6 +24,7 @@ MJplayer::MJplayer() {
 }
 
 MJplayer::MJplayer(int pos, int money, MJtile* t, int n) {
+    cout << "Call MJplayer constructor with input value." << endl;
     _position = pos;
     _money = money;
     _hand = MJhand(t, n);
@@ -40,21 +42,38 @@ MJplayer::MJplayer(int pos, int money, MJtile* t, int n) {
     oppositePerson[4] = 2;
 }
 
+
 MJplayer::~MJplayer() {
 }
+
+
+void MJplayer::Set_Pos(int position) {
+    _position = position;
+    return;
+}
+
 
 int MJplayer::Get_Pos() const {
     return _position;
 }
 
+
+void MJplayer::Set_Mon(int money) {
+    _money = money;
+    return;
+}
+
+
 int MJplayer::Get_Mon() const {
     return _money;
 }
+
 
 void MJplayer::Print_Hand() const {
     cout << _hand << endl;
     return;
 }
+
 
 void MJplayer::strategy(int position, MJtile t, int &actiontype, int &actionparameter) {
     // call after every play
