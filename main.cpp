@@ -1,13 +1,12 @@
 #include <iostream>
 #include <ctime>
 #include <stdlib.h>
-//#include <Windows.h>
+#include <Windows.h>
 
-#include "module/MJtile.h"
-#include "module/Shuffler.h"
-#include "module/MJhand.h"
-#include "module/MJcollection.h"
-#include "module/MJstage.h"
+#include "MJtile.h"
+#include "Shuffler.h"
+#include "MJhand.h"
+#include "MJcollection.h"
 
 using std::cout;
 using std::cin;
@@ -16,12 +15,14 @@ using std::endl;
 // test 先不用看
 void test(void);
 
+void testhu(void);
 void testMinggone(void);
 void testBugone(void);
 void testAngone(void);
 void testInitEatPong(void);
-void testCanHu(void);
+
 int main(){
+    testhu();
     // testInitEatPongMinggone();
 
     // while(true){
@@ -38,28 +39,35 @@ int main(){
     //     testAngone();
     //     Sleep(1);
     // }
-    testCanHu();    
+
     return 0;
 }
-
-void testCanHu(void){
+void testhu(void){
     Shuffler s;
     MJtile mjtiles[144];
     s.init();
     s.fill(mjtiles);
     MJcollection mjcol = MJcollection(mjtiles);
+    
+    // 第一組
+    // 二條碰，南碰，一二三萬，四五六萬，四筒對，四五條，input t 為六條
+    int hu_1[16] = {117, 118, 119, 49, 50, 52, 66, 67, 68, 85, 86, 101, 102, 103, 118, 119};
+    int input_1 = 135;
 
-    // 前 16 個拿去當 MJhand，index 16 ~ 143 當剩下 collection
-    MJhand myhand = MJhand(mjtiles, 16);
+    // 將 MJhand 照上面 ID 設定
     for(int i=0; i<16; i++){
-        mjcol.drawfronttile();
+        mjtiles[i] = MJtile(hu_1[i]);
     }
-    MJtile t = mjcol.drawfronttile();
-    cout << "\n\nInitial: \n";
-    myhand.initial(mjcol);
+    MJhand myhand = MJhand(mjtiles, 16);
+    myhand.set_faceup_len(3);
+    MJtile t = MJtile(input_1);
+    // 印出
     cout << myhand;
-    cout << "Input:" << t << endl; 
-    myhand.canhu(t);
+    cout << t;
+
+    bool canhu = myhand.canhu(t);
+    cout << canhu;
+    return;
 }
 
 void testInitEatPongMinggone(void){
@@ -156,7 +164,7 @@ void testBugone(void){
     myhand.initial(mjcol);
     cout << myhand;
 
-    //srand(GetTickCount());
+    srand(GetTickCount());
     // srand((time(NULL)));
     MJtile t = MJtile(rand()%144+1);
     cout << "input tile: \n";
@@ -208,7 +216,7 @@ void testAngone(void){
     myhand.initial(mjcol);
     cout << myhand;
 
-    //srand(GetTickCount());
+    srand(GetTickCount());
     // srand((time(NULL)));
     myhand.draw(mjcol);
     cout << "After draw: \n" << myhand;
@@ -250,7 +258,7 @@ void testMinggone(){
     myhand.initial(mjcol);
     cout << myhand;
 
-    //srand(GetTickCount());
+    srand(GetTickCount());
     // srand((time(NULL)));
     MJtile t = MJtile(rand()%144+1);
     cout << "input tile: \n";
