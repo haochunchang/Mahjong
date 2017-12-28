@@ -4,9 +4,18 @@
 #include <cstdlib>
 #include <ctime>
 #include "MJcollection.h"
+#include "shuffler.h"
 #include "MJplayer.h"
 #include "MJgame.h"
 using namespace std;
+
+// In TA's dependency graph
+// MJstage includes
+// 1. Dealing phase
+// 2. Stretagy phase
+// 3. Check cangong phase
+// 4. comparison phase
+// 5. shooting phase
 
 // All the rules refer to the following webpage
 // http://www.dragona.com.tw/mahjong-rule/
@@ -43,7 +52,7 @@ public:
 private:
 	vector<MJplayer> _players;
 	// It's a vector bt TA originally
-	int bookmaker; // 莊家
+	int _bookmaker; // 莊家
 };
 
 MJstage::MJstage() {
@@ -68,7 +77,7 @@ void MJstage::pickSeat(void) {
 	srand(time(NULL));
 	int pos[4] = {1, 2, 3, 4};
 	for (int i = 0; i < 4; i++) {
-		int change_with = rand() % 4 + 1;
+		int change_with = rand() % 4;
 		swapInt(pos[i], pos[change_with]);
 	}
 	// cout << "pos[0] = " << pos[0] << endl;
@@ -77,12 +86,37 @@ void MJstage::pickSeat(void) {
 	// cout << "pos[3] = " << pos[3] << endl;
 
 	// now can set position for the 4 _players
-	for(int i=0; i<4; i++){
+	for (int i = 0; i < 4; i++) {
 		_players[i].Set_Pos(pos[i]);
+		cout << "Set _players[" << i << "]'s position to " << pos[i] << endl;
 	}
 }
 
 
+void MJstage::pickBookmaker(void) {
+	srand(time(NULL));
+	_bookmaker = rand() % 4 + 1;
+	cout << "Set _bookmaker to " << _bookmaker << endl;
+}
 
+
+void MJstage::getTiles(void) {
+	Shuffler s;
+	MJtile mjtiles[144];
+	s.init();
+	s.fill(mjtiles);
+	MJcollection mjcol = MJcollection(mjtiles);
+	for (int i = 0; i < 4; i++) {
+		// 從 mjcol 從前面取走 16 張給 _players[i]
+		MJtile mjtiles_for_player[16];
+		for (int i = 0; i < 16; i++) {
+			mjtiles_for_player[i] = mjcol.drawfronttile();
+		}
+		_players[i].Set_Hand(mjtiles_for_player, 16);
+		cout << "_players[" << i << "]'s hand is: " << endl;
+		_players[i].Print_Hand();
+	}
+	return;
+}
 
 #endif

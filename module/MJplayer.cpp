@@ -69,8 +69,14 @@ int MJplayer::Get_Mon() const {
 }
 
 
+void MJplayer::Set_Hand(MJtile* mjtiles, int number) {
+    _hand = MJhand(mjtiles, number);
+    return;
+}
+
+
 void MJplayer::Print_Hand() const {
-    cout << _hand << endl;
+    cout << _hand;
     return;
 }
 

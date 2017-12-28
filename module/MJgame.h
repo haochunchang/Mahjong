@@ -22,7 +22,6 @@ public:
     void setting();
     void end();
 private:
-    vector<MJplayer*> _players;
     int rounds;
     int valueofpoints;
 };
@@ -65,6 +64,8 @@ void MJgame::setting() {
 void MJgame::start() {
     MJstage stage;
     stage.pickSeat();
+    stage.pickBookmaker();
+    stage.getTiles();
 }
 
 void MJgame::end() {
