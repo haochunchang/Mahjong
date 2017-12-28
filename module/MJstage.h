@@ -37,10 +37,9 @@ class MJstage {
 public:
 	MJstage(void);				// 還不確定要怎寫
 	void pickSeat(void);		// done
-	void pickBookmaker(void);
-	void getTiles(void);
-	void applique(void);
-	void arrange(void);
+	void pickBookmaker(void);	// done
+	void getTiles(void);		// done
+	void initiate(void);
 	void drawTile(void);
 	void playTile(void);
 	void eatPongGone(void);
@@ -53,11 +52,19 @@ private:
 	vector<MJplayer> _players;
 	// It's a vector bt TA originally
 	int _bookmaker; // 莊家
+	MJcollection mjcol;
 };
 
 MJstage::MJstage() {
 	cout << "Call MJstage constructor." << endl;
 	// 在想要不要等有牌的資訊再來 init MJplayer
+
+	Shuffler s;
+	MJtile mjtiles[144];
+	s.init();
+	s.fill(mjtiles);
+	mjcol = MJcollection(mjtiles);
+
 	for (int i = 0; i < 4; i++) {
 		_players.push_back(MJplayer());
 	}
@@ -101,11 +108,8 @@ void MJstage::pickBookmaker(void) {
 
 
 void MJstage::getTiles(void) {
-	Shuffler s;
-	MJtile mjtiles[144];
-	s.init();
-	s.fill(mjtiles);
-	MJcollection mjcol = MJcollection(mjtiles);
+	cout << "Do getTiles:" << endl;
+	
 	for (int i = 0; i < 4; i++) {
 		// 從 mjcol 從前面取走 16 張給 _players[i]
 		MJtile mjtiles_for_player[16];
@@ -118,5 +122,16 @@ void MJstage::getTiles(void) {
 	}
 	return;
 }
+
+
+void MJstage::initiate(void) {
+	cout << "Do initiate:" << endl;
+	for (int i = 0; i < 4; i++) {
+		_players[i].initiate(mjcol);
+		cout << "_players[" << i << "]'s hand is: " << endl;
+		_players[i].Print_Hand();
+	}
+}
+
 
 #endif

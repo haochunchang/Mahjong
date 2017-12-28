@@ -58,19 +58,26 @@ void MJgame::setting() {
         fscanf(stdin, "%d", &isAIgreedy);
         // Set with AI players
     }
-    //
+    return;
 }
 
 void MJgame::start() {
     MJstage stage;
+    cout << endl;
     stage.pickSeat();
+    cout << endl;
     stage.pickBookmaker();
+    cout << endl;
     stage.getTiles();
+    cout << endl;
+    stage.initiate();
+    return;
 }
 
 void MJgame::end() {
     cout << "Game End." << endl;
     cout << "Press any button to exit.." << endl;
     cin.get();
+    return;
 }
 #endif

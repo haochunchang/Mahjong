@@ -2,6 +2,7 @@
 #include <map>
 #include "MJplayer.h"
 #include "MJhand.h"
+#include "MJcollection.h"
 
 using namespace std;
 
@@ -77,6 +78,12 @@ void MJplayer::Set_Hand(MJtile* mjtiles, int number) {
 
 void MJplayer::Print_Hand() const {
     cout << _hand;
+    return;
+}
+
+
+void MJplayer::initiate(MJcollection& mjcol){
+    _hand.initial(mjcol);
     return;
 }
 
