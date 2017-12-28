@@ -3,6 +3,7 @@
 #include <vector>
 #include <cstdlib>
 #include <ctime>
+#include <map>
 #include "MJcollection.h"
 #include "shuffler.h"
 #include "MJplayer.h"
@@ -40,22 +41,17 @@ public:
 	void pickBookmaker(void);	// done
 	void getTiles(void);		// done
 	void initiate(void);		// done
-
-	// 以下寫成一個 mainGame 就好？
-	void drawTile(void);
-	void playTile(void);
-	void eatPongGone(void);
-	void ting(void);
-	void hu(void);
-	void flowBureau(void);
-	
+	void mainGame(void);
 	void countTai(void);
 
 private:
 	vector<MJplayer> _players;
 	// It's a vector by TA originally
-	int _bookmaker; // player index (0 - 3), not position (1 - 4)
+	int _bookmaker;
+	// player index (0 - 3), not position (1 - 4)
 	MJcollection mjcol;
+	map<int, int> playerToPos;
+	map<int, int> posToPlayer;
 };
 
 MJstage::MJstage() {
@@ -98,7 +94,11 @@ void MJstage::pickSeat(void) {
 	// now can set position for the 4 _players
 	for (int i = 0; i < 4; i++) {
 		_players[i].Set_Pos(pos[i]);
+		playerToPos[i] = pos[i];
+		posToPlayer[pos[i]] = i;
 		cout << "Set _players[" << i << "]'s position to " << pos[i] << endl;
+		cout << "Set playerToPos[" << i << "] to " << pos[i] << endl;
+		cout << "Set posToPlayer[" << pos[i] << "] to " << i << endl;
 	}
 }
 
@@ -134,7 +134,6 @@ void MJstage::getTiles(void) {
 
 
 void MJstage::initiate(void) {
-	// 小問題：因為莊家會拿多一張，在 arrange 時沒有處理到最後那張
 	cout << "Do initiate:" << endl;
 	for (int i = 0; i < 4; i++) {
 		_players[i].initiate(mjcol);
@@ -143,5 +142,40 @@ void MJstage::initiate(void) {
 	}
 }
 
+
+void MJstage::mainGame(void) {
+	// greedy algorithm
+
+	int currentPos;
+	int currentPlayer;
+	int actiontype[4] = {0, 0, 0, 0};
+	int actionparameter[4] = {0, 0, 0, 0};
+	// 出牌順序：逆時針 (pos 4, 3, 2, 1, 4, etc.)
+	// 可以用 0 開始往下減 % 4 + 4 來實現
+
+	// currentPos 設定為莊家
+	currentPlayer = _bookmaker;
+	currentPos = playerToPos[_bookmaker];
+	// 首先莊家丟一張牌。
+	// 另外寫個函數，只有在開場這裡會用到
+	// --- 待寫 ---
+	MJtile t; // 先當作莊家丟出的牌
+	// 其他三家要傳進那張丟出來的牌看能不能有 strategy
+	for (int i = 0; i < 4; i++) {
+		if (i != currentPlayer) {
+			_players[i].strategy(currentPlayer, t, actiontype[i], actionparameter[i]);
+		}
+	}
+
+	// --- 我覺得在莊家丟出 tile 後，到吃碰槓都沒人會再丟出 tile，要另外用遞迴函數 ---
+	// 條件：如果都沒 _players 要吃碰槓，就 return
+	// 有的話就吃碰槓丟出新的 tile，call 自己
+
+
+	// 換下一個人
+	(currentPos == 4) ? (currentPos = 1) : (currentPos += 1);
+	currentPlayer = posToPlayer[currentPos];
+	return;
+}
 
 #endif
