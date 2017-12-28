@@ -25,7 +25,7 @@ MJplayer::MJplayer() {
 MJplayer::MJplayer(int pos, int money, MJtile* t, int n) {
     _position = pos;
     _money = money;
-    _hand = MJhand(t, n); 
+    _hand = MJhand(t, n);
 
     // 1 的上家是 2，2 的上家是 3，3 的上家是 4，4 的上家是 1
     previousPerson[1] = 2;
@@ -51,8 +51,8 @@ int MJplayer::Get_Mon() const {
     return _money;
 }
 
-void MJplayer::Print_Hand() const{
-    cout << _hand << endl;       
+void MJplayer::Print_Hand() const {
+    cout << _hand << endl;
     return;
 }
 
@@ -60,27 +60,27 @@ void MJplayer::strategy(int position, MJtile t, int &actiontype, int &actionpara
     // call after every play
 
     // if 現在出牌的人是上家, check if caneat
-    if(previousPerson[_position]==position){
+    if (previousPerson[_position] == position) {
         cout << "check if caneat: ";
-        (_hand.caneat(t)) ? (cout << "true" <<endl) : (cout << "false" << endl);
+        (_hand.caneat(t)) ? (cout << "true" << endl) : (cout << "false" << endl);
     }
     // check if canpong
     cout << "check if canpong: ";
-    (_hand.canpong(t)) ? (cout << "true" <<endl) : (cout << "false" << endl);
+    (_hand.canpong(t)) ? (cout << "true" << endl) : (cout << "false" << endl);
 
     // check if canminggone
     cout << "check if canminggone: ";
-    (_hand.canminggone(t)) ? (cout << "true" <<endl) : (cout << "false" << endl);
+    (_hand.canminggone(t)) ? (cout << "true" << endl) : (cout << "false" << endl);
 
     // check if canbugone
     // not sure if angone is needed
     cout << "check if canbugone: ";
-    (_hand.canbugone(t)) ? (cout << "true" <<endl) : (cout << "false" << endl);
-    
+    (_hand.canbugone(t)) ? (cout << "true" << endl) : (cout << "false" << endl);
+
     // check if canhu
     cout << "check if canhu: ";
-    (_hand.canhu(t)) ? (cout << "true" <<endl) : (cout << "false" << endl);
-    
+    (_hand.canhu(t)) ? (cout << "true" << endl) : (cout << "false" << endl);
+
     return;
 }
 

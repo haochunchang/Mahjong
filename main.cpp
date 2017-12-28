@@ -3,17 +3,16 @@
 #include <stdlib.h>
 #include <Windows.h>
 
-#include "MJtile.h"
-#include "Shuffler.h"
-#include "MJhand.h"
-#include "MJcollection.h"
+#include "module/MJtile.h"
+#include "module/Shuffler.h"
+#include "module/MJhand.h"
+#include "module/MJcollection.h"
+#include "module/MJplayer.h"
+#include "module/MJgame.h"
 
 using std::cout;
 using std::cin;
 using std::endl;
-
-// test 先不用看
-void test(void);
 
 void testhu(void);
 void testMinggone(void);
@@ -22,26 +21,32 @@ void testAngone(void);
 void testInitEatPong(void);
 
 int main(){
-    testhu();
-    // testInitEatPongMinggone();
-
-    // while(true){
-    //     testMinggone();
-    //     Sleep(1);
-    // }
-
-    // while(true){
-    //     testBugone();
-    //     Sleep(1);
-    //  }
-
-    // while(true){
-    //     testAngone();
-    //     Sleep(1);
-    // }
-
+    MJgame mygame;
+    mygame.setting();
+    mygame.start();
+    mygame.end();
     return 0;
 }
+
+// testhu();
+
+// testInitEatPongMinggone();
+
+// while(true){
+//     testMinggone();
+//     Sleep(1);
+// }
+
+// while(true){
+//     testBugone();
+//     Sleep(1);
+//  }
+
+// while(true){
+//     testAngone();
+//     Sleep(1);
+// }
+
 void testhu(void){
     Shuffler s;
     MJtile mjtiles[144];
@@ -273,93 +278,3 @@ void testMinggone(){
         cin.get();
     }
 }
-
-
-// void test() {
-//     Shuffler s;
-//     MJtile mjtiles[144];
-//     s.init();
-//     s.fill(mjtiles);
-//     MJcollection mjcol = MJcollection(mjtiles);
-    
-//     // 前 16 個拿去當 MJhand，index 16 ~ 143 當剩下 collection
-//     MJhand myhand = MJhand(mjtiles, 16);
-//     for(int i=0; i<16; i++){
-//         mjcol.drawfronttile();
-//     }
-
-
-//     cout << "\n\nDeclare an MJhand: \n";
-//     cout << myhand;
-
-//     cout << "Initial: \n";
-//     myhand.initial(mjcol);
-//     cout << myhand;
-    
-//     srand((time(NULL)));
-//     MJtile t = MJtile(rand()%144+1);
-//     cout << "input tile: \n";
-//     cout << t;
-
-//     cout << "\ncaneat: ";
-//     switch(myhand.caneat(t)){
-//         case 0: cout << "false"; break;
-//         case 1: 
-//             cout << "(001)"; 
-//             myhand.eat(t, 1); 
-//             cout << "\nEat with method1 (001)" << endl; 
-//             cout << "\n" << myhand; 
-//             break;
-//         case 2: cout << "(010)"; 
-//             myhand.eat(t, 2); 
-//             cout << "\nEat with method2 (010)" << endl; 
-//             cout << "\n" << myhand; 
-//             break;
-//         case 3: cout << "(001) (010)"; 
-//             myhand.eat(t, 1); 
-//             cout << "\nEat with method1 (001)" << endl; 
-//             cout << "\n" << myhand; 
-//             break;
-//         case 4: cout << "(100)"; 
-//             myhand.eat(t, 3); 
-//             cout << "\nEat with method3 (100)" << endl; 
-//             cout << "\n" << myhand; 
-//             break;
-//         case 5: 
-//             cout << "(001) (100)"; 
-//             myhand.eat(t, 3); 
-//             cout << "\nEat with method3 (100)" << endl; 
-//             cout << "\n" << myhand; 
-//             break;
-//         case 6: 
-//             cout << "(010) (100)"; 
-//             myhand.eat(t, 3); 
-//             cout << "\nEat with method3 (100)" << endl; 
-//             cout << "\n" << myhand; 
-//             break;
-//         case 7: 
-//             cout << "(001) (010) (100)"; 
-//             myhand.eat(t, 2); 
-//             cout << "\nEat with method2 (010)" << endl; 
-//             cout << "\n" << myhand; 
-//             break;
-//     }
-//     cout << "\ncanpong: ";
-//     (myhand.canpong(t)) ? (cout << "true") : (cout << "false");
-//     cout << "\ncanminggone: ";
-//     (myhand.canminggone(t)) ? (cout << "true") : (cout << "false");
-
-    // if(myhand.canpong(t)){
-    //  myhand.pong(t);
-    //  cout << "\n" << myhand;
-    // }
-
-
-    // myhand.draw(mjcol);
-    // cout << "\nAfter draw a tile: \n";
-    // cout << myhand;
-
-    // myhand.play(1);
-    // cout << "\nAfter play a tile: \n";
-    // cout << myhand;
-// }
