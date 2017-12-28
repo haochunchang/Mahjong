@@ -39,19 +39,22 @@ public:
 	void pickSeat(void);		// done
 	void pickBookmaker(void);	// done
 	void getTiles(void);		// done
-	void initiate(void);
+	void initiate(void);		// done
+
+	// 以下寫成一個 mainGame 就好？
 	void drawTile(void);
 	void playTile(void);
 	void eatPongGone(void);
 	void ting(void);
 	void hu(void);
 	void flowBureau(void);
+	
 	void countTai(void);
 
 private:
 	vector<MJplayer> _players;
-	// It's a vector bt TA originally
-	int _bookmaker; // 莊家
+	// It's a vector by TA originally
+	int _bookmaker; // player index (0 - 3), not position (1 - 4)
 	MJcollection mjcol;
 };
 
@@ -102,14 +105,14 @@ void MJstage::pickSeat(void) {
 
 void MJstage::pickBookmaker(void) {
 	srand(time(NULL));
-	_bookmaker = rand() % 4 + 1;
-	cout << "Set _bookmaker to " << _bookmaker << endl;
+	_bookmaker = rand() % 4;
+	cout << "_players[" << _bookmaker << "] is the bookmaker" << endl;
 }
 
 
 void MJstage::getTiles(void) {
 	cout << "Do getTiles:" << endl;
-	
+
 	for (int i = 0; i < 4; i++) {
 		// 從 mjcol 從前面取走 16 張給 _players[i]
 		MJtile mjtiles_for_player[16];
@@ -117,14 +120,21 @@ void MJstage::getTiles(void) {
 			mjtiles_for_player[i] = mjcol.drawfronttile();
 		}
 		_players[i].Set_Hand(mjtiles_for_player, 16);
+	}
+	cout << "_players[" << _bookmaker << "] draw 17th tile" << endl;
+	_players[_bookmaker].draw(mjcol);
+
+	for (int i = 0; i < 4; i++) {
 		cout << "_players[" << i << "]'s hand is: " << endl;
 		_players[i].Print_Hand();
 	}
+
 	return;
 }
 
 
 void MJstage::initiate(void) {
+	// 小問題：因為莊家會拿多一張，在 arrange 時沒有處理到最後那張
 	cout << "Do initiate:" << endl;
 	for (int i = 0; i < 4; i++) {
 		_players[i].initiate(mjcol);

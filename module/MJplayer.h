@@ -19,10 +19,13 @@ public :
 	void Set_Hand(MJtile*, int); // tiles, num_tiles
 	void Print_Hand() const;
 	void initiate(MJcollection&);
+	void draw(MJcollection&);
 
 	void strategy(int position, MJtile t, int &actiontype, int &actionparameter);
+	// call after every play
 	void getinfo(int position, int type, MJtile* ts, int tiles_num);
-	//type: eat=1 pong=2 minggone=3 angone=4 bugone=5 applique=6
+	// type: eat=1 pong=2 minggone=3 angone=4 bugone=5 applique=6
+	// call after any type above
 
 private :
 	MJhand _hand;

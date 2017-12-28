@@ -88,6 +88,12 @@ void MJplayer::initiate(MJcollection& mjcol){
 }
 
 
+void MJplayer::draw(MJcollection& mjcol) {
+    _hand.draw(mjcol);
+    return;
+}
+
+
 void MJplayer::strategy(int position, MJtile t, int &actiontype, int &actionparameter) {
     // call after every play
 

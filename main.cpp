@@ -22,7 +22,7 @@ void testInitEatPong(void);
 
 int main(){
     MJgame mygame;
-    mygame.setting();
+    // mygame.setting();
     mygame.start();
     mygame.end();
     return 0;
