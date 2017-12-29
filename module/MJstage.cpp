@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <map>
+#include <cassert>
 #include "MJcollection.h"
 #include "Shuffler.h"
 #include "MJplayer.h"
@@ -120,22 +121,62 @@ void MJstage::mainGame(void) {
 	// 首先莊家丟一張牌。
 	// 另外寫個函數，只有在開場這裡會用到
 	// --- 待寫 ---
-	MJtile t; // 先當作莊家丟出的牌
-	// 其他三家要傳進那張丟出來的牌看能不能有 strategy
-	for (int i = 0; i < 4; i++) {
-		if (i != currentPlayer) {
-			_players[i].strategy(currentPlayer, t, actiontype[i], actionparameter[i]);
-		}
-	}
+	// 莊家丟牌也可以call strategy來決定
+    
+    MJtile dummy; // 先當作莊家丟出的牌，給莊家決定要丟哪一張牌
+    _players[_bookmaker].stategy(currentPlayer, dummy, actiontype[_bookmaker], actionparameter[_bookmaker]);
+    if (actiontype[_bookmaker] == -1) {
+        // 莊家自摸
+        //TODO
+        break;
+    }
+    assert(actiontype[_bookmaker] == 6);
+    MJtile t = _players[_bookmaker].play(actionparameter[_bookmaker]);
 
+    // 正式開局！
+    while(mjcol.size() != 0) {
+	    // 其他三家要傳進那張丟出來的牌看能不能有 strategy
+	    for (int i = 0; i < 4; i++) {
+		    if (i != currentPlayer) {
+			    _players[i].strategy(currentPlayer, t, actiontype[i], actionparameter[i]);
+		    }
+	    }
+
+        // Checking Actions: gone > pong > eat
+        for (int i = 0; i < 4; i++) {
+            if (actiontype[i] == -1) {
+                // someone hu
+                //TODO
+                break;
+            } else {
+                int decide = 0;
+                
+            }
+        }
+
+        // Assign actions on players 
+
+	    // 換下一個人
+	    (currentPos == 4) ? (currentPos = 1) : (currentPos += 1);
+	    currentPlayer = posToPlayer[currentPos];
+        
+        // 下一位出牌
+        _players[currentPlayer].stategy(currentPlayer, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
+        // actiontype must == 6, play a tile
+        if (actiontype[currentPlayer] == -1) {
+            // 自摸
+            //TODO
+            break;
+        }
+        assert(actiontype[currentPlayer] == 6);
+        MJtile t = _players[currentPlayer].play(actionparameter[currentPlayer]);
+    }
+
+	return;
+    
+    // 這段不太懂
 	// --- 我覺得在莊家丟出 tile 後，到吃碰槓都沒人會再丟出 tile，要另外用遞迴函數 ---
 	// 條件：如果都沒 _players 要吃碰槓，就 return
 	// 有的話就吃碰槓丟出新的 tile，call 自己
-
-
-	// 換下一個人
-	(currentPos == 4) ? (currentPos = 1) : (currentPos += 1);
-	currentPlayer = posToPlayer[currentPos];
-	return;
 }
 
