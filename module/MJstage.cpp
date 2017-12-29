@@ -3,7 +3,7 @@
 #include <ctime>
 #include <map>
 #include "MJcollection.h"
-#include "shuffler.h"
+#include "Shuffler.h"
 #include "MJplayer.h"
 #include "MJgame.h"
 #include "MJstage.h"
@@ -70,7 +70,7 @@ void MJstage::pickBookmaker(void) {
 void MJstage::getTiles(void) {
 	cout << "Do getTiles:" << endl;
 
-	vector<MJtile> mjtiles_for_player(4, MJtile[16]);
+	MJtile mjtiles_for_player[4][16];
 	for (int k = 0; k < 4; k++) {
         for (int i = 0; i < 4; i++) {
 		    // 從 mjcol 從前面取走 4 張給 _players[i]
@@ -80,7 +80,7 @@ void MJstage::getTiles(void) {
 		}
     }
     for (int i = 0; i < 4; i++) {
-        _players[i].Set_Hand(mjtiles_for_player, 16);
+        _players[i].Set_Hand(mjtiles_for_player[i], 16);
 	}
 	cout << "_players[" << _bookmaker << "] draw 17th tile" << endl;
 	_players[_bookmaker].draw(mjcol);

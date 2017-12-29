@@ -54,7 +54,7 @@ void MJgame::setting() {
     if (human != 4) {
         fprintf(stdout, "There will be %d AI players\n What kind of AI do you want?\n", 4 - human);
         fprintf(stdout, "1: GreedyAI, 0: CustomAI\n");
-        bool isAIgreedy = true;
+        int isAIgreedy = 1;
         fscanf(stdin, "%d", &isAIgreedy);
         // Set with AI players
     }
