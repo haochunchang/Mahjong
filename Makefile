@@ -1,4 +1,8 @@
+CC=g++
+OUTPUT=main
+SOURCES=$(wildcard module/*.cpp)
+
 all:
-	g++ -std=c++11 ./module/MJtile.cpp ./module/MJhand.cpp ./module/MJplayer.cpp ./main.cpp -o main
+	$(CC) -std=c++11 $(SOURCES) ./main.cpp -o $(OUTPUT)
 clean:
-	rm main
+	rm $(OUTPUT)
