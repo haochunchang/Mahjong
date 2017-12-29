@@ -6,7 +6,8 @@
 #include "MJcollection.h"
 #include "Shuffler.h"
 #include "MJplayer.h"
-#include "MJgame.h"
+// #include "MJgame.h"
+// 不能加這行ㄅ
 #include "MJstage.h"
 using namespace std;
 
@@ -22,7 +23,6 @@ void swapInt(int& a, int& b) {
 //============ MJstage Class Methods =================
 MJstage::MJstage() {
 	cout << "Call MJstage constructor." << endl;
-	// 在想要不要等有牌的資訊再來 init MJplayer
 
 	Shuffler s;
 	MJtile mjtiles[144];
@@ -73,15 +73,15 @@ void MJstage::getTiles(void) {
 
 	MJtile mjtiles_for_player[4][16];
 	for (int k = 0; k < 4; k++) {
-        for (int i = 0; i < 4; i++) {
-		    // 從 mjcol 從前面取走 4 張給 _players[i]
-		    for (int j = k*4; j < (k+1)*4; j++) {
-			    mjtiles_for_player[i][j] = mjcol.drawfronttile();
-		    }
+		for (int i = 0; i < 4; i++) {
+			// 從 mjcol 從前面取走 4 張給 _players[i]
+			for (int j = k * 4; j < (k + 1) * 4; j++) {
+				mjtiles_for_player[i][j] = mjcol.drawfronttile();
+			}
 		}
-    }
-    for (int i = 0; i < 4; i++) {
-        _players[i].Set_Hand(mjtiles_for_player[i], 16);
+	}
+	for (int i = 0; i < 4; i++) {
+		_players[i].Set_Hand(mjtiles_for_player[i], 16);
 	}
 	cout << "_players[" << _bookmaker << "] draw 17th tile" << endl;
 	_players[_bookmaker].draw(mjcol);
@@ -107,76 +107,100 @@ void MJstage::initiate(void) {
 
 void MJstage::mainGame(void) {
 	// greedy algorithm
+	// 應該把 _players 的資料型態改成 MJAIPlayer？
 
 	int currentPos;
 	int currentPlayer;
 	int actiontype[4] = {0, 0, 0, 0};
 	int actionparameter[4] = {0, 0, 0, 0};
 	// 出牌順序：逆時針 (pos 4, 3, 2, 1, 4, etc.)
-	// 可以用 0 開始往下減 % 4 + 4 來實現
 
-	// currentPos 設定為莊家
 	currentPlayer = _bookmaker;
 	currentPos = playerToPos[_bookmaker];
-	// 首先莊家丟一張牌。
-	// 另外寫個函數，只有在開場這裡會用到
-	// --- 待寫 ---
-	// 莊家丟牌也可以call strategy來決定
-    
-    MJtile dummy; // 先當作莊家丟出的牌，給莊家決定要丟哪一張牌
-    _players[_bookmaker].stategy(currentPlayer, dummy, actiontype[_bookmaker], actionparameter[_bookmaker]);
-    if (actiontype[_bookmaker] == -1) {
-        // 莊家自摸
-        //TODO
-        break;
-    }
-    assert(actiontype[_bookmaker] == 6);
-    MJtile t = _players[_bookmaker].play(actionparameter[_bookmaker]);
 
-    // 正式開局！
-    while(mjcol.size() != 0) {
-	    // 其他三家要傳進那張丟出來的牌看能不能有 strategy
-	    for (int i = 0; i < 4; i++) {
-		    if (i != currentPlayer) {
-			    _players[i].strategy(currentPlayer, t, actiontype[i], actionparameter[i]);
-		    }
-	    }
+	// currentPlayer 丟牌
+	// 先當作莊家丟出的牌，給莊家決定要丟哪一張牌
+	MJtile dummy;
 
-        // Checking Actions: gone > pong > eat
-        for (int i = 0; i < 4; i++) {
-            if (actiontype[i] == -1) {
-                // someone hu
-                //TODO
-                break;
-            } else {
-                int decide = 0;
-                
-            }
-        }
+	// 這裡是隨邊丟一個假的 dummy 進去，反正 strategy 裡面不會去用到 dummy 是嘛？
+	_players[_bookmaker].strategy(currentPlayer, dummy, actiontype[_bookmaker], actionparameter[_bookmaker]);
+	if (actiontype[_bookmaker] == -1) {
+		// 莊家自摸
+		// TODO
+	}
 
-        // Assign actions on players 
+	assert(actiontype[_bookmaker] == 6);
+	MJtile t = _players[_bookmaker].play(actionparameter[_bookmaker]);
 
-	    // 換下一個人
-	    (currentPos == 4) ? (currentPos = 1) : (currentPos += 1);
-	    currentPlayer = posToPlayer[currentPos];
-        
-        // 下一位出牌
-        _players[currentPlayer].stategy(currentPlayer, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
-        // actiontype must == 6, play a tile
-        if (actiontype[currentPlayer] == -1) {
-            // 自摸
-            //TODO
-            break;
-        }
-        assert(actiontype[currentPlayer] == 6);
-        MJtile t = _players[currentPlayer].play(actionparameter[currentPlayer]);
-    }
+	// 正式開局！
+	// while 為何不從丟牌開始，感覺比較符合真實情況？
+	while (mjcol.size() != 0) {
+		// 其他三家要傳進那張丟出來的牌看能不能有 strategy
+		for (int i = 0; i < 4; i++) {
+			if (i != currentPlayer) {
+				_players[i].strategy(currentPlayer, t, actiontype[i], actionparameter[i]);
+			}
+		}
+
+
+		// Checking Actions: hu (-1)
+		for (int i = 0; i < 4; i++) {
+			if (actiontype[i] == -1) {
+				// someone hu
+				// 這樣兩人同時胡會只胡 index 小的喔
+				//TODO
+				break;
+			}
+		}
+
+		// Checking Actions: minggone (3)
+		for (int i = 0; i < 4; i++) {
+			if (actiontype[i] == 3) {
+				// someone minggone
+				// 這樣兩人同時槓會只槓 index 小的
+				//TODO
+				break;
+			}
+		}
+
+		// Checking Actions: pong (2)
+		for (int i = 0; i < 4; i++) {
+			if (actiontype[i] == 2) {
+				// someone pong
+				// 這樣兩人同時碰會只碰 index 小的
+				//TODO
+				break;
+			}
+		}
+
+		// Checking Actions: eat (1)
+		for (int i = 0; i < 4; i++) {
+			if (actiontype[i] == -1) {
+				// someone eat，可用 actionparameter 判斷怎麼吃
+				// 這樣兩人同時吃會只吃 index 小的
+				//TODO
+				break;
+			}
+		}
+
+		// Assign actions on players
+
+		// 換下一個人
+		(currentPos == 1) ? (currentPos = 4) : (currentPos -= 1);
+		currentPlayer = posToPlayer[currentPos];
+
+		// 下一位出牌
+		_players[currentPlayer].strategy(currentPlayer, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
+		// actiontype must == 6, play a tile
+		if (actiontype[currentPlayer] == -1) {
+			// 自摸
+			//TODO
+			break;
+		}
+		assert(actiontype[currentPlayer] == 6);
+		MJtile t = _players[currentPlayer].play(actionparameter[currentPlayer]);
+	}
 
 	return;
-    
-    // 這段不太懂
-	// --- 我覺得在莊家丟出 tile 後，到吃碰槓都沒人會再丟出 tile，要另外用遞迴函數 ---
-	// 條件：如果都沒 _players 要吃碰槓，就 return
-	// 有的話就吃碰槓丟出新的 tile，call 自己
 }
 
