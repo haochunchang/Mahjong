@@ -12,11 +12,6 @@ class MJGreedyAIplayer: public MJplayer {
     // actiontype: play=6, actionparameter: index in hand (start from faceup_len)
     void strategy(int position, MJtile t, int &actiontype, int &actionparameter) {
         // Naive and greedy strategy
-        // check if canhu
-        if (_hand.canhu(t)) {
-            actiontype = -1;
-            return;
-        }
         // 上家出的牌才能吃
         if (previousPerson[_position] == position) {
             if (_hand.caneat(t)) {
@@ -27,6 +22,11 @@ class MJGreedyAIplayer: public MJplayer {
             }    
         }
         if (position != _position) { // other players playing
+            // check if canhu
+            if (_hand.canhu(t)) {
+                actiontype = -1;
+                return;
+            }
             // check if canminggone
             if (_hand.canminggone(t)) {
                 actiontype = 3;
