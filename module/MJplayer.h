@@ -20,6 +20,7 @@ public :
 	void Print_Hand() const;
 	void initiate(MJcollection&);
 	void draw(MJcollection&);
+    MJtile play(int);
 
 	void strategy(int position, MJtile t, int &actiontype, int &actionparameter);
 	// call after every play

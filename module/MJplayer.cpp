@@ -94,8 +94,14 @@ void MJplayer::draw(MJcollection& mjcol) {
 }
 
 
+MJtile MJplayer::play(int index) {
+    return _hand.play(index); 
+}
+
+
 void MJplayer::strategy(int position, MJtile t, int &actiontype, int &actionparameter) {
     // call after every play
+    // This one is for human player
 
     // if 現在出牌的人是上家, check if caneat
     if (previousPerson[_position] == position) {
