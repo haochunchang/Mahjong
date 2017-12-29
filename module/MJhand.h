@@ -22,7 +22,7 @@ public:
 	int faceup_len() const;
 	void set_faceup_len(int f);
 	void set_stage(int s);
-	bool stage() const;
+	int stage() const;
 	
 	int caneat(const MJtile&);
 	bool canpong(const MJtile&);

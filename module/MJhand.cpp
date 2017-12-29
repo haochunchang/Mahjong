@@ -124,7 +124,7 @@ int MJhand::total_len() const {
 	return _total_len;
 }
 
-bool MJhand::stage() const {
+int MJhand::stage() const {
 	return _stage;
 }
 
