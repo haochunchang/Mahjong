@@ -150,30 +150,54 @@ void MJstage::mainGame(void) {
 	int currentPlayer;
 	int actiontype[4] = {0, 0, 0, 0};
 	int actionparameter[4] = {0, 0, 0, 0};
-	// 出牌順序：逆時針 (pos 4, 3, 2, 1, 4, etc.)
-	// 可以用 0 開始往下減 % 4 + 4 來實現
 
-	// currentPos 設定為莊家
+	// 出牌順序：逆時針 (pos 4, 3, 2, 1, 4, etc.)
 	currentPlayer = _bookmaker;
 	currentPos = playerToPos[_bookmaker];
-	// 首先莊家丟一張牌。
-	// 另外寫個函數，只有在開場這裡會用到
-	// --- 待寫 ---
-	MJtile t; // 先當作莊家丟出的牌
+
+	// 首先莊家丟一張不要的牌。
+	// --- play 待寫 ---
+	// MJtile t = _players[currentPlayer].play();
+	MJtile t; // 暫時當 strategy 的傳入牌
 	// 其他三家要傳進那張丟出來的牌看能不能有 strategy
 	for (int i = 0; i < 4; i++) {
 		if (i != currentPlayer) {
 			_players[i].strategy(currentPlayer, t, actiontype[i], actionparameter[i]);
 		}
 	}
+	// type: eat = 1, pong = 2, minggone = 3, angone = 4, bugone = 5, applique = 6
+	// 如果每個人的 actiontype 裡面有明槓則優先做，再來碰，再來吃
+	for (int i = 0; i < 4; i++) {
+		if (actiontype[i] == 3) {
+			// 玩家明槓，待寫
+			// _players[i].minggone();
+			// 明槓的玩家抽一張牌
+			// _players[i].draw();
+			// 丟一張不要的牌
+			// t = _players[i].play();
+			// 其他人再判斷這張牌能不能吃碰槓，寫法可能是包成遞迴 call 自己
+		} else if (actiontype[i] == 2) {
+			// 跟上面一樣，換成碰
+			// _players[i].pong();
+			// 碰的玩家抽一張牌
+			// _players[i].draw();
+			// 丟一張不要的牌
+			// t = _players[i].play();
+			// 其他人再判斷這張牌能不能吃碰槓，寫法可能是包成遞迴 call 自己
+		} else if (actiontype[i] == 1) {
+			// _players[i].eat(actionparameter[i]);
+			// 吃的玩家抽一張牌
+			// _players[i].draw();
+			// 丟一張不要的牌
+			// t = _players[i].play();
+			// 其他人再判斷這張牌能不能吃碰槓，寫法可能是包成遞迴 call 自己
+		}
+	}
 
-	// --- 我覺得在莊家丟出 tile 後，到吃碰槓都沒人會再丟出 tile，要另外用遞迴函數 ---
-	// 條件：如果都沒 _players 要吃碰槓，就 return
-	// 有的話就吃碰槓丟出新的 tile，call 自己
 
 
 	// 換下一個人
-	(currentPos == 4) ? (currentPos = 1) : (currentPos += 1);
+	(currentPos == 1) ? (currentPos = 4) : (currentPos -= 1);
 	currentPlayer = posToPlayer[currentPos];
 	return;
 }
