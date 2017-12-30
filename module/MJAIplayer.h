@@ -10,7 +10,6 @@ public:
 	//      1. Other player played a tile
 	//      2. One must decide which tile to play
 	// actiontype: hu=-1 nothing=0 eat=1 pong=2 minggone=3 angone=4 bugone=5
-	// actiontype: play=6, actionparameter: index in hand (start from faceup_len)
 	void strategy(int position, MJtile t, int &actiontype, int &actionparameter) {
 		// Naive and greedy strategy
 		// 上家出的牌才能吃
