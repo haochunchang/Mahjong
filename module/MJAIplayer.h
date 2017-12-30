@@ -10,6 +10,7 @@ public:
 	//      1. Other player played a tile
 	//      2. One must decide which tile to play
 	// actiontype: hu=-1 nothing=0 eat=1 pong=2 minggone=3 angone=4 bugone=5
+	// actionparameter: huown=1 huother=2
 	void strategy(int position, MJtile t, int &actiontype, int &actionparameter) {
 		// Naive and greedy strategy
 		// 上家出的牌才能吃
@@ -27,6 +28,7 @@ public:
 			// check if canhu
 			if (_hand.canhu(t)) {
 				actiontype = -1;
+				actionparameter = 2;
 				return;
 			}
 			// check if canminggone
@@ -42,6 +44,11 @@ public:
 		} else {
 			// 自己 call 這個函數時
 			// 剛從牌底抽牌，決定要不要補槓、暗槓
+			if (_hand.canhu(t)) {
+				actiontype = -1;
+				actionparameter = 1;
+				return;
+			}
 			if(_hand.canbugone(t)){
 				actiontype = 5;
 				return;

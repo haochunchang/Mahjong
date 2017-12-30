@@ -71,6 +71,8 @@ void MJgame::start() {
     stage.getTiles();
     cout << endl;
     stage.initiate();
+    cout << endl;
+    // stage.mainGame(rounds);
     return;
 }
 

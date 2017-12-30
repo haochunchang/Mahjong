@@ -47,13 +47,13 @@ MJstage::MJstage(int n_human, int AIkind) {
 	for (int i = 0; i < n_human; i++) {
 		_players.push_back(MJplayer());
 	}
-    for (int i = 0; i < 4-n_human; i++) {
-        if (AIkind == 1) {
-            _players.push_back(MJGreedyAIplayer());    
-        } else {
-            _players.push_back(MJCustomAIplayer());    
-        }
-    }
+	for (int i = 0; i < 4 - n_human; i++) {
+		if (AIkind == 1) {
+			_players.push_back(MJGreedyAIplayer());
+		} else {
+			_players.push_back(MJCustomAIplayer());
+		}
+	}
 }
 
 
@@ -126,10 +126,9 @@ void MJstage::initiate(void) {
 }
 
 
-void MJstage::mainGame(void) {
+void MJstage::mainGame(int& rounds) {
 	// greedy algorithm
-	// 應該把 _players 的資料型態改成 MJAIPlayer？
-
+	cout << "Enter mainGame:" << endl;
 	int currentPos;
 	int currentPlayer;
 	int actiontype[4] = {0, 0, 0, 0};
@@ -142,7 +141,7 @@ void MJstage::mainGame(void) {
 	/*
 	// 這裡要判斷開局時莊家有沒有胡，跟之後摸一張牌、別人出牌時的寫法應該會不一樣（有一張傳入的牌）
 	// 在initiate就有莊家就已經摸一張牌了，所以只要判斷有沒有胡？
-    // 補充：因為開局只可能是胡，之後摸一張牌還可能是補槓暗槓
+	// 補充：因為開局只可能是胡，之後摸一張牌還可能是補槓暗槓
 	// 我覺得是可以直接不寫因為機率太低了
 
 	MJtile dummy;
@@ -157,68 +156,76 @@ void MJstage::mainGame(void) {
 	// 判定莊家沒胡之後莊家丟一張牌
 	int index = _players[_bookmaker].decidePlay();
 	MJtile t = _players[_bookmaker].play(index);
+	cout << "Initially, bookmaker plays:\n" << t;
 
 	// 正式開局！
-	// while 為何不從丟牌開始，感覺比較符合真實情況？
+
 	while (mjcol.size() != 0) {
+		cout << "Enter while loop. Rounds " << ++rounds << "." << endl;
+
 		// 其他三家要傳進那張丟出來的牌看能不能有 strategy
+		cout << "Other players dicide strategy." << endl;
 		for (int i = 0; i < 4; i++) {
 			if (i != currentPlayer) {
 				_players[i].strategy(currentPlayer, t, actiontype[i], actionparameter[i]);
 			}
 		}
+		// printStrategy(actiontype*, actionparameter*);
+		// TODO
 
 		// Checking Actions: gone > pong > eat
 		int current_action_type = 0;
-        int current_action_param = 0;
+		int current_action_param = 0;
 		// decide which player's action is executed
 		int player_to_act = -1;
 		for (int i = 0; i < 4; i++) {
 			if (actiontype[i] == -1) {
-				// someone huother
-				// TODO
+				_players[i].act(actiontype[i], actionparameter[i], t, mjcol);
+				cout << "_players[" << i << "] huother!" << endl;
+				cin.get();
 				break;
 			} else { // 優先順序：gone > pong > eat，同時有人同樣動作就由玩家index小的先？應該要由下家優先
 				if (actiontype[i] > current_action_type) {
 					player_to_act = i;
 					current_action_type = actiontype[i];
-                    current_action_param = actionparameter[i];
+					current_action_param = actionparameter[i];
 				}
 			}
 		}
+		//printAction(player_to_act,current_action_type, current_action_param);
+		//TODO
 
 		// Assign actions on players
 		// 下一位出牌
 		MJtile dummy;
-        if (player_to_act == -1) { // 大家都沒有動作，直接換下一位
-			// 原來寫 (currentPos == 4) ? (currentPos = 1) : (currentPos += 1); 是不是有誤？
+		if (player_to_act == -1) { // 大家都沒有動作，直接換下一位
 			(currentPos == 1) ? (currentPos = 4) : (currentPos -= 1);
 			currentPlayer = posToPlayer[currentPos];
 			_players[currentPlayer].draw(mjcol);
-		    _players[currentPlayer].strategy(currentPlayer, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
-		    if (actiontype[currentPlayer] == -1) {
-			    // 自摸, huown
-			    //TODO
-			    break;
-		    }
-	        index = _players[currentPlayer].decidePlay();
-            t = _players[currentPlayer].play(index);
+			_players[currentPlayer].strategy(currentPlayer, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
+			if (actiontype[currentPlayer] == -1) {
+				// 自摸, huown
+				//TODO
+				break;
+			}
+			index = _players[currentPlayer].decidePlay();
+			t = _players[currentPlayer].play(index);
 
-        } else {
+		} else {
 			_players[player_to_act].act(current_action_type, current_action_param, t, mjcol);
 			currentPos = playerToPos[player_to_act];
 			currentPlayer = player_to_act;
-		    // 有吃碰槓的動作就是直接出一張，不用抽
-            _players[currentPlayer].strategy(currentPlayer, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
-		    if (actiontype[currentPlayer] == -1) {
-			    // 自摸, huown
-			    //TODO
-			    break;
-		    }
-	        index = _players[currentPlayer].decidePlay();
-            t = _players[currentPlayer].play(index);
-        }
-    }
+			// 有吃碰槓的動作就是直接出一張，不用抽
+			_players[currentPlayer].strategy(currentPlayer, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
+			if (actiontype[currentPlayer] == -1) {
+				// 自摸, huown
+				//TODO
+				break;
+			}
+			index = _players[currentPlayer].decidePlay();
+			t = _players[currentPlayer].play(index);
+		}
+	}
 	return;
 }
 

@@ -11,11 +11,11 @@ MJplayer::MJplayer() {
     _position = 0;
     _money = 0;
 
-    // 1 的上家是 2，2 的上家是 3，3 的上家是 4，4 的上家是 1
-    previousPlayer[1] = 2;
-    previousPlayer[2] = 3;
-    previousPlayer[3] = 4;
-    previousPlayer[4] = 1;
+    // 1 的上家是 4，2 的上家是 1，3 的上家是 2，4 的上家是 3
+    previousPlayer[1] = 4;
+    previousPlayer[2] = 1;
+    previousPlayer[3] = 2;
+    previousPlayer[4] = 3;
 
     // 1 的對家是 3，3 的對家是 1，2 的對家是 4，4 的對家是 2
     oppositePlayer[1] = 3;
@@ -30,11 +30,11 @@ MJplayer::MJplayer(int pos, int money, MJtile* t, int n) {
     _money = money;
     _hand = MJhand(t, n);
 
-    // 1 的上家是 2，2 的上家是 3，3 的上家是 4，4 的上家是 1
-    previousPlayer[1] = 2;
-    previousPlayer[2] = 3;
-    previousPlayer[3] = 4;
-    previousPlayer[4] = 1;
+    // 1 的上家是 4，2 的上家是 1，3 的上家是 2，4 的上家是 3
+    previousPlayer[1] = 4;
+    previousPlayer[2] = 1;
+    previousPlayer[3] = 2;
+    previousPlayer[4] = 3;
 
     // 1 的對家是 3，3 的對家是 1，2 的對家是 4，4 的對家是 2
     oppositePlayer[1] = 3;
@@ -82,7 +82,7 @@ void MJplayer::Print_Hand() const {
 }
 
 
-void MJplayer::initiate(MJcollection& mjcol){
+void MJplayer::initiate(MJcollection& mjcol) {
     _hand.initial(mjcol);
     return;
 }
@@ -95,24 +95,31 @@ void MJplayer::draw(MJcollection& mjcol) {
 
 
 MJtile MJplayer::play(int index) {
-    return _hand.play(index); 
+    return _hand.play(index);
 }
 
 // actiontype: hu=-1 nothing=0 eat=1 pong=2 minggone=3 angone=4 bugone=5
 void MJplayer::act(int type, int param, MJtile& t, MJcollection& mjcol) {
-    switch(type) {
-        case 1:
-            _hand.eat(t, param);
-            break;
-        case 2:
-            _hand.pong(t);
-            break;
-        case 3:
-            _hand.minggone(t, mjcol);
-            break;
-        default:
-            return;
+    switch (type) {
+    case -1:
+        if (param == 2)
+            _hand.huother(t);
+        if (param == 1)
+            _hand.huown();
+        break;
+    case 1:
+        _hand.eat(t, param);
+        break;
+    case 2:
+        _hand.pong(t);
+        break;
+    case 3:
+        _hand.minggone(t, mjcol);
+        break;
+    default:
+        return;
     }
+    return;
 }
 
 
@@ -148,6 +155,7 @@ void MJplayer::strategy(int position, MJtile t, int &actiontype, int &actionpara
 
 int MJplayer::decidePlay(void) {
     int pos = 0;
+    cout << _hand;
     cout << "Which tile do you want to play?" << endl;
     cin >> pos;
     return pos;
