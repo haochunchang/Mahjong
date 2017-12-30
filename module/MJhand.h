@@ -20,11 +20,14 @@ public:
 	MJhand(MJtile*, int);
 	~MJhand();
 	
-	int total_len() const;
 	int faceup_len() const;
 	void set_faceup_len(int f);
-	void set_stage(int s);
+
+	int total_len() const;
+	void set_total_len(int f);
+	
 	int stage() const;
+	void set_stage(int s);
 	
 	int caneat(const MJtile&);
 	bool canpong(const MJtile&);

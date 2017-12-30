@@ -112,25 +112,36 @@ MJhand::MJhand(MJtile* t, int n) {
 MJhand::~MJhand() {
 }
 
+
 int MJhand::faceup_len() const {
 	return _faceup_len;
 }
+
 
 void MJhand::set_faceup_len(int f) {
 	_faceup_len = f;
 }
 
+
 int MJhand::total_len() const {
 	return _total_len;
 }
+
+
+void MJhand::set_total_len(int t) {
+	_total_len = t;
+}
+
 
 int MJhand::stage() const {
 	return _stage;
 }
 
+
 void MJhand::set_stage(int s) {
 	_stage = s;
 }
+
 
 int MJhand::getTotalLen(void) {
 	return _total_len;
