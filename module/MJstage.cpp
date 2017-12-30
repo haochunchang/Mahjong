@@ -141,7 +141,8 @@ void MJstage::mainGame(void) {
 
 	/*
 	// 這裡要判斷開局時莊家有沒有胡，跟之後摸一張牌、別人出牌時的寫法應該會不一樣（有一張傳入的牌）
-	// 補充：因為開局只可能是胡，之後摸一張牌還可能是補槓暗槓
+	// 在initiate就有莊家就已經摸一張牌了，所以只要判斷有沒有胡？
+    // 補充：因為開局只可能是胡，之後摸一張牌還可能是補槓暗槓
 	// 我覺得是可以直接不寫因為機率太低了
 
 	MJtile dummy;
@@ -167,47 +168,6 @@ void MJstage::mainGame(void) {
 			}
 		}
 
-		/*
-		// Checking Actions: hu (-1)
-		for (int i = 0; i < 4; i++) {
-			if (actiontype[i] == -1) {
-				// someone hu
-				// 這樣兩人同時胡會只胡 index 小的喔
-				//TODO
-				break;
-			}
-		}
-
-		// Checking Actions: minggone (3)
-		for (int i = 0; i < 4; i++) {
-			if (actiontype[i] == 3) {
-				// someone minggone
-				// 這樣兩人同時槓會只槓 index 小的
-				//TODO
-				break;
-			}
-		}
-
-		// Checking Actions: pong (2)
-		for (int i = 0; i < 4; i++) {
-			if (actiontype[i] == 2) {
-				// someone pong
-				// 這樣兩人同時碰會只碰 index 小的
-				//TODO
-				break;
-			}
-		}
-
-		// Checking Actions: eat (1)
-		for (int i = 0; i < 4; i++) {
-			if (actiontype[i] == -1) {
-				// someone eat，可用 actionparameter 判斷怎麼吃
-				// 這樣兩人同時吃會只吃 index 小的
-				//TODO
-				break;
-			}
-		}*/
-
 		// Checking Actions: gone > pong > eat
 		int current_action = 0;
 		// decide which player's action is executed
@@ -226,32 +186,37 @@ void MJstage::mainGame(void) {
 		}
 
 		// Assign actions on players
-		if (player_to_act == -1) { // 大家都沒有動作，直接換下一位
+		// 下一位出牌
+		MJtile dummy;
+        if (player_to_act == -1) { // 大家都沒有動作，直接換下一位
 			// 原來寫 (currentPos == 4) ? (currentPos = 1) : (currentPos += 1); 是不是有誤？
 			(currentPos == 1) ? (currentPos = 4) : (currentPos -= 1);
 			currentPlayer = posToPlayer[currentPos];
-		} else {
+			_players[currentPlayer].draw(mjcol);
+		    _players[currentPlayer].strategy(currentPlayer, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
+		    if (actiontype[currentPlayer] == -1) {
+			    // 自摸, huown
+			    //TODO
+			    break;
+		    }
+	        index = _players[currentPlayer].decidePlay();
+            t = _players[currentPlayer].play(index);
+
+        } else {
 			// 之類的動作：_players[player_to_act].act(current_action);
 			currentPos = playerToPos[player_to_act];
 			currentPlayer = player_to_act;
-		}
-
-		// 下一位出牌
-		MJtile dummy;
-
-		_players[currentPlayer].draw(mjcol);
-		_players[currentPlayer].strategy(currentPlayer, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
-		// actiontype must == 6, play a tile
-		if (actiontype[currentPlayer] == -1) {
-			// 自摸, huown
-			//TODO
-			break;
-		}
-	    index = _players[currentPlayer].decidePlay();
-        t = _players[currentPlayer].play(index);
-
+		    // 有吃碰槓的動作就是直接出一張，不用抽
+            _players[currentPlayer].strategy(currentPlayer, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
+		    if (actiontype[currentPlayer] == -1) {
+			    // 自摸, huown
+			    //TODO
+			    break;
+		    }
+	        index = _players[currentPlayer].decidePlay();
+            t = _players[currentPlayer].play(index);
+        }
     }
-
 	return;
 }
 
