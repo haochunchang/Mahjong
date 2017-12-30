@@ -145,7 +145,7 @@ MJstage::MJstage(int n_human, int AIkind) {
 
 MJstage::~MJstage() {
     for (int i = 0; i < 4; i++) {
-        delete[] _players[i];    
+        delete _players[i];    
     }    
 }
 
@@ -258,7 +258,7 @@ void MJstage::mainGame(int& rounds) {
 		cout << "Enter while loop. Rounds " << ++rounds << "." << endl;
 
 		// 其他三家要傳進那張丟出來的牌看能不能有 strategy
-		cout << "Other players dicide strategy." << endl;
+		cout << "Other players decide strategy." << endl;
 		for (int i = 0; i < 4; i++) {
 			if (i != currentPlayer) {
 				_players[i]->strategy(currentPlayer, t, actiontype[i], actionparameter[i]);
