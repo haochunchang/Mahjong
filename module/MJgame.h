@@ -24,6 +24,7 @@ public:
 private:
     int rounds;
     int valueofpoints;
+    MJstage stage;
 };
 
 MJgame::MJgame() {
@@ -51,19 +52,17 @@ void MJgame::setting() {
         }
     }
 
+    int isAIgreedy = 1;
     if (human != 4) {
         fprintf(stdout, "There will be %d AI players\n What kind of AI do you want?\n", 4 - human);
         fprintf(stdout, "1: GreedyAI, 0: CustomAI\n");
-        int isAIgreedy = 1;
         fscanf(stdin, "%d", &isAIgreedy);
-        // Set with AI players
     }
+    stage = MJstage(human, isAIgreedy);
     return;
 }
 
 void MJgame::start() {
-    MJstage stage;
-    cout << endl;
     stage.pickSeat();
     cout << endl;
     stage.pickBookmaker();
