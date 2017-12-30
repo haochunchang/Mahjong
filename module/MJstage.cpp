@@ -51,7 +51,7 @@ MJstage::MJstage(int n_human, int AIkind) {
         if (AIkind == 1) {
             _players.push_back(MJGreedyAIplayer());    
         } else {
-            _players.push_back(MJcustomAIplayer());    
+            _players.push_back(MJCustomAIplayer());    
         }
     }
 }
@@ -179,7 +179,7 @@ void MJstage::mainGame(void) {
 				// TODO
 				break;
 			} else { // 優先順序：gone > pong > eat，同時有人同樣動作就由玩家index小的先？應該要由下家優先
-				if (actiontype[i] > current_action) {
+				if (actiontype[i] > current_action_type) {
 					player_to_act = i;
 					current_action_type = actiontype[i];
                     current_action_param = actionparameter[i];
@@ -205,7 +205,7 @@ void MJstage::mainGame(void) {
             t = _players[currentPlayer].play(index);
 
         } else {
-			_players[player_to_act].act(current_action_type, current_action_param, t);
+			_players[player_to_act].act(current_action_type, current_action_param, t, mjcol);
 			currentPos = playerToPos[player_to_act];
 			currentPlayer = player_to_act;
 		    // 有吃碰槓的動作就是直接出一張，不用抽

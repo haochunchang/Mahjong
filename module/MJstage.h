@@ -41,7 +41,7 @@ public:
 	void countTai(void);
 
 private:
-	vector<MJGreedyAIplayer> _players;
+	vector<MJplayer> _players;
 	// It's a vector by TA originally
 	int _bookmaker;
 	// player index (0 - 3), not position (1 - 4)
