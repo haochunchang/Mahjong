@@ -793,9 +793,11 @@ MJhand* MJhand::gethuhand() {
 }
 // ======== Print out Methods ===================
 MJtile& MJhand::operator [] (int index) {
-	if (index < _total_len && index > 0) {
+	// 用 <= 是因為少數函數如 decidePlay 會用到 index == _total_len
+	if (index <= _total_len && index >= 0) {
 		return _tiles[index];
 	} else {
+		cout << "Total len is " << _total_len << ". Try to get index " << index << endl;
 		assert(false);
 	}
 }

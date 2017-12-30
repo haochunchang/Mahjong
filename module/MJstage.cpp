@@ -37,14 +37,15 @@ void printStrategy(int* actiontype, int* actionparameter) {
 		case 1:
 			cout << "eat ";
 			switch (actionparameter[i]) {
-			case 1: cout << "(001)";
-			case 2: cout << "(010)";
-			case 3: cout << "(001) (010)";
-			case 4: cout << "(100)";
-			case 5: cout << "(001) (100)";
-			case 6: cout << "(010) (100)";
-			case 7: cout << "(001) (010) (100)";
+			case 1: cout << "(001)" << endl;
+			case 2: cout << "(010)" << endl;
+			case 3: cout << "(001) (010)" << endl;
+			case 4: cout << "(100)" << endl;
+			case 5: cout << "(001) (100)" << endl;
+			case 6: cout << "(010) (100)" << endl;
+			case 7: cout << "(001) (010) (100)" << endl;
 			}
+			break;
 		case 2:
 			cout << "pong" << endl;
 			break;
@@ -59,6 +60,7 @@ void printStrategy(int* actiontype, int* actionparameter) {
 			break;
 		}
 	}
+	return;
 }
 
 
@@ -100,12 +102,13 @@ void printAction(int player_to_act, int current_action_type, int current_action_
 		cout << "bugone" << endl;
 		break;
 	}
+	return;
 }
 
 
 //============ MJstage Class Methods =================
 MJstage::MJstage() {
-	cout << "Call MJstage constructor." << endl;
+	// cout << "Call MJstage constructor." << endl;
 
 	Shuffler s;
 	MJtile mjtiles[144];
@@ -114,7 +117,7 @@ MJstage::MJstage() {
 	mjcol = MJcollection(mjtiles);
 
 	for (int i = 0; i < 4; i++) {
-        MJplayer* ptr = new MJGreedyAIplayer();
+		MJplayer* ptr = new MJGreedyAIplayer();
 		_players.push_back(ptr);
 	}
 }
@@ -130,15 +133,15 @@ MJstage::MJstage(int n_human, int AIkind) {
 	mjcol = MJcollection(mjtiles);
 
 	for (int i = 0; i < n_human; i++) {
-        MJplayer *ptr = new (MJplayer);
+		MJplayer *ptr = new (MJplayer);
 		_players.push_back(ptr);
 	}
 	for (int i = 0; i < 4 - n_human; i++) {
 		if (AIkind == 1) {
-            MJplayer *ptr = new (MJGreedyAIplayer);
+			MJplayer *ptr = new (MJGreedyAIplayer);
 			_players.push_back(ptr);
 		} else {
-            MJplayer *ptr = new (MJCustomAIplayer);
+			MJplayer *ptr = new (MJCustomAIplayer);
 			_players.push_back(ptr);
 		}
 	}
@@ -146,9 +149,9 @@ MJstage::MJstage(int n_human, int AIkind) {
 
 
 MJstage::~MJstage() {
-    for (int i = 0; i < 4; i++) {
-        delete _players[i];    
-    }    
+	for (int i = 0; i < 4; i++) {
+		delete _players[i];
+	}
 }
 
 
@@ -199,13 +202,15 @@ void MJstage::getTiles(void) {
 	for (int i = 0; i < 4; i++) {
 		_players[i]->Set_Hand(mjtiles_for_player[i], 16);
 	}
-	cout << "_players[" << _bookmaker << "] draw 17th tile" << endl;
+	cout << "_players[" << _bookmaker << "] draw the 17th tile." << endl;
 	_players[_bookmaker]->draw(mjcol);
 
+	/*
 	for (int i = 0; i < 4; i++) {
 		cout << "_players[" << i << "]'s hand is: " << endl;
 		_players[i]->Print_Hand();
 	}
+	*/
 
 	return;
 }
@@ -248,18 +253,14 @@ void MJstage::mainGame(int& rounds) {
 	assert(actiontype[_bookmaker] == 6);
 	*/
 
-	// 判定莊家沒胡之後莊家丟一張牌
-	//
-	//
-	//
-	//	就算 _player 是 AI player 好像還是會用 MJplayer 的 decidePlay	QQ
-	//
-	//
-	//									↓↓↓↓↓↓
-	int index = _players[_bookmaker]->decidePlay();
-	MJtile t = _players[_bookmaker]->play(index);
-	cout << "Initially, bookmaker plays:\n";
+	cout << "It is bookmaker (_player[" << currentPlayer << "])'s turn." << endl;
+	cout << "Bookmaker decides what tile to play." << endl;
+	int index = _players[currentPlayer]->decidePlay();
+	int number = index - _players[currentPlayer]->faceup_len() + 1;
+	MJtile t = _players[currentPlayer]->play(number);
+	cout << "Initially, bookmaker plays:" << endl;
 	cout << t;
+	cin.get();
 
 	// 正式開局！
 
@@ -300,39 +301,51 @@ void MJstage::mainGame(int& rounds) {
 		cin.get();
 
 		// Assign actions on players
-		// 下一位出牌
 		MJtile dummy;
 		if (player_to_act == -1) { // 大家都沒有動作，直接換下一位
 			(currentPos == 1) ? (currentPos = 4) : (currentPos -= 1);
 			currentPlayer = posToPlayer[currentPos];
+			cout << "It is _player[" << currentPlayer << "]'s turn." << endl;
 			_players[currentPlayer]->draw(mjcol);
+			// 檢查是否胡牌
 			_players[currentPlayer]->strategy(currentPlayer, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
-			if (actiontype[currentPlayer] == -1) {
-				if(actionparameter[currentPlayer]==1){
-					// huown
-					_players[currentPlayer]->act(-1, 1, dummy, mjcol);
-				}
-				//TODO
+			if (actiontype[currentPlayer] == -1 && actionparameter[currentPlayer] == 1) {
+				// huown
+				_players[currentPlayer]->act(-1, 1, dummy, mjcol);
 				break;
 			}
+			cout << "_players[" << currentPlayer << "] decides what tile to play." << endl;
 			index = _players[currentPlayer]->decidePlay();
-			t = _players[currentPlayer]->play(index);
+			number = index - _players[currentPlayer]->faceup_len() + 1;
+			t = _players[currentPlayer]->play(number);
+			cout << "_players[" << currentPlayer << "] plays:" << endl;
+			cout << t;
+			cin.get();
 
 		} else {
+			// player_to_act 不為 1，即至少有人有動作
 			_players[player_to_act]->act(current_action_type, current_action_param, t, mjcol);
 			currentPos = playerToPos[player_to_act];
 			currentPlayer = player_to_act;
+			cout << "It is _player[" << currentPlayer << "]'s turn." << endl;
 			// 有吃碰槓的動作就是直接出一張，不用抽
 			_players[currentPlayer]->strategy(currentPlayer, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
-			if (actiontype[currentPlayer] == -1) {
-				// 自摸, huown
-				//TODO
+			if (actiontype[currentPlayer] == -1 && actionparameter[currentPlayer] == 1) {
+				// huown
+				_players[currentPlayer]->act(-1, 1, dummy, mjcol);
 				break;
 			}
 			index = _players[currentPlayer]->decidePlay();
-			t = _players[currentPlayer]->play(index);
+			number = index - _players[currentPlayer]->faceup_len() + 1;
+			t = _players[currentPlayer]->play(number);
+			cout << "_players[" << currentPlayer << "] plays:" << endl;
+			cout << t;
+			cin.get();
 		}
+		cout << "Finish a loop. Now the remain mjcol is at size " << mjcol.size() << endl;
+		cout << endl;
 	}
+
 	return;
 }
 

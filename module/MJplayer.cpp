@@ -7,7 +7,7 @@
 using namespace std;
 
 MJplayer::MJplayer() {
-    cout << "Call MJplayer constructor." << endl;
+    // cout << "Call MJplayer constructor." << endl;
     _position = 0;
     _money = 0;
 
@@ -69,6 +69,10 @@ int MJplayer::Get_Mon() const {
     return _money;
 }
 
+
+int MJplayer::faceup_len() const {
+    return _hand.faceup_len();
+}
 
 void MJplayer::Set_Hand(MJtile* mjtiles, int number) {
     _hand = MJhand(mjtiles, number);
