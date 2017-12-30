@@ -1,7 +1,7 @@
 #include <iostream>
 #include <ctime>
-#include <stdlib.h>
-#include <Windows.h>
+#include <cstdlib>
+//#include <Windows.h>
 
 #include "module/MJtile.h"
 #include "module/Shuffler.h"
@@ -22,7 +22,7 @@ void testInitEatPong(void);
 
 int main(){
     MJgame mygame;
-    // mygame.setting();
+    mygame.setting();
     mygame.start();
     mygame.end();
     return 0;
@@ -169,8 +169,8 @@ void testBugone(void){
     myhand.initial(mjcol);
     cout << myhand;
 
-    srand(GetTickCount());
-    // srand((time(NULL)));
+    //srand(GetTickCount());
+    srand((time(NULL)));
     MJtile t = MJtile(rand()%144+1);
     cout << "input tile: \n";
     cout << t;
@@ -221,8 +221,8 @@ void testAngone(void){
     myhand.initial(mjcol);
     cout << myhand;
 
-    srand(GetTickCount());
-    // srand((time(NULL)));
+    //srand(GetTickCount());
+    srand((time(NULL)));
     myhand.draw(mjcol);
     cout << "After draw: \n" << myhand;
     cout << "The last tile is\n" << myhand.getLastTile();
@@ -263,8 +263,8 @@ void testMinggone(){
     myhand.initial(mjcol);
     cout << myhand;
 
-    srand(GetTickCount());
-    // srand((time(NULL)));
+    //srand(GetTickCount());
+    srand((time(NULL)));
     MJtile t = MJtile(rand()%144+1);
     cout << "input tile: \n";
     cout << t;
