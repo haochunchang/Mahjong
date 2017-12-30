@@ -100,13 +100,13 @@ public:
 	}
 };
 
-/*
+
 class MJCustomAIplayer: public MJplayer {
 	void strategy(int position, MJtile t, int &actiontype, int &actionparameter) {
 		// Use information from getinfo to decide
 		//TODO
 	};
 };
-*/
+
 
 #endif
