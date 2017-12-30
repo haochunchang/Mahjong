@@ -99,7 +99,7 @@ MJtile MJplayer::play(int index) {
 }
 
 // actiontype: hu=-1 nothing=0 eat=1 pong=2 minggone=3 angone=4 bugone=5
-void MJplayer::act(int type, int param, MJtile& t) {
+void MJplayer::act(int type, int param, MJtile& t, MJcollection& mjcol) {
     switch(type) {
         case 1:
             _hand.eat(t, param);
@@ -108,7 +108,7 @@ void MJplayer::act(int type, int param, MJtile& t) {
             _hand.pong(t);
             break;
         case 3:
-            _hand.minggone(t);
+            _hand.minggone(t, mjcol);
             break;
         default:
             return;
