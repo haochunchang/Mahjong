@@ -6,8 +6,10 @@
 #include "MJcollection.h"
 #include "Shuffler.h"
 #include "MJplayer.h"
+#include "MJAIplayer.h"
+// 加進去會編譯錯檢查一下
 // #include "MJgame.h"
-// 不能加這行ㄅ
+// 不能加這行ㄅ，加了會互相 include 會 error
 #include "MJstage.h"
 using namespace std;
 
@@ -189,6 +191,7 @@ void MJstage::mainGame(void) {
 		(currentPos == 1) ? (currentPos = 4) : (currentPos -= 1);
 		currentPlayer = posToPlayer[currentPos];
 
+		
 		// 下一位出牌
 		_players[currentPlayer].strategy(currentPlayer, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
 		// actiontype must == 6, play a tile

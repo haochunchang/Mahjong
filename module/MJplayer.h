@@ -28,11 +28,11 @@ public :
 	// type: eat=1 pong=2 minggone=3 angone=4 bugone=5 applique=6
 	// call after any type above
 
-private :
+protected :
 	MJhand _hand;
 	int _position;//east = 1 ,south = 2 , west = 3 , north = 4
 	int _money;
-	map<int, int> previousPerson;
-	map<int, int> oppositePerson;
+	map<int, int> previousPlayer;
+	map<int, int> oppositePlayer;
 };
 #endif

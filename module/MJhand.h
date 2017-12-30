@@ -14,6 +14,8 @@ using namespace std;
 class MJhand{
 	friend ostream& operator << (ostream&, const MJhand&);
 public:
+	MJtile& operator [] (int);
+	
 	MJhand();
 	MJhand(MJtile*, int);
 	~MJhand();
