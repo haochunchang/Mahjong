@@ -9,7 +9,6 @@ class MJGreedyAIplayer: public MJplayer {
 	//      1. Other player played a tile
 	//      2. One must decide which tile to play
 	// actiontype: hu=-1 nothing=0 eat=1 pong=2 minggone=3 angone=4 bugone=5
-	// actiontype: play=6, actionparameter: index in hand (start from faceup_len)
 	void strategy(int position, MJtile t, int &actiontype, int &actionparameter) {
 		// Naive and greedy strategy
 		// 上家出的牌才能吃
@@ -40,6 +39,11 @@ class MJGreedyAIplayer: public MJplayer {
 				return;
 			}
 		} else {
+            if (_hand.canhu(_hand.getLastTile())) {
+                actiontype = -1;
+                return;
+            }
+            /*
 			// 剛從牌底抽牌，決定要不要補槓、暗槓
 			actiontype = 6;
 			actionparameter = _hand.faceup_len();
@@ -52,7 +56,7 @@ class MJGreedyAIplayer: public MJplayer {
 					actionparameter = i;
 					return;
 				}
-			}
+			}*/
 		}
 		return;
 	};
@@ -93,8 +97,6 @@ class MJGreedyAIplayer: public MJplayer {
 		for (int i = _hand.faceup_len() + 1; i < _hand.total_len(); i++) {
 			
 		}
-
-
 		return 1;
 	}
 };

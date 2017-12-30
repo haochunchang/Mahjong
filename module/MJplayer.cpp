@@ -128,6 +128,15 @@ void MJplayer::strategy(int position, MJtile t, int &actiontype, int &actionpara
     return;
 }
 
+
+int decidePlay(void) {
+    int pos = 0;
+    cout << "Which tile do you want to play?" << endl;
+    cin >> pos;
+    return pos;
+}
+
+
 void MJplayer::getinfo(int position, int type, MJtile* ts, int tiles_num) {
     // type: eat=1 pong=2 minggone=3 angone=4 bugone=5 applique=6
     // call after any type above

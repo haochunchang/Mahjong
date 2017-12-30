@@ -24,7 +24,8 @@ public :
 
 	void strategy(int position, MJtile t, int &actiontype, int &actionparameter);
 	// call after every play
-	void getinfo(int position, int type, MJtile* ts, int tiles_num);
+	int decidePlay(void);
+    void getinfo(int position, int type, MJtile* ts, int tiles_num);
 	// type: eat=1 pong=2 minggone=3 angone=4 bugone=5 applique=6
 	// call after any type above
 
