@@ -112,7 +112,8 @@ MJstage::MJstage() {
 	mjcol = MJcollection(mjtiles);
 
 	for (int i = 0; i < 4; i++) {
-		_players.push_back(MJGreedyAIplayer());
+        MJplayer *ptr = new (MJGreedyAIplayer());
+		_players.push_back(ptr);
 	}
 }
 
@@ -127,15 +128,25 @@ MJstage::MJstage(int n_human, int AIkind) {
 	mjcol = MJcollection(mjtiles);
 
 	for (int i = 0; i < n_human; i++) {
-		_players.push_back(MJplayer());
+        MJplayer *ptr = new (MJplayer());
+		_players.push_back(ptr);
 	}
 	for (int i = 0; i < 4 - n_human; i++) {
 		if (AIkind == 1) {
-			_players.push_back(MJGreedyAIplayer());
+            MJplayer *ptr = new (MJGreedyAIplayer());
+			_players.push_back(ptr);
 		} else {
-			_players.push_back(MJCustomAIplayer());
+            MJplayer *ptr = new (MJCustomAIplayer());
+			_players.push_back(ptr);
 		}
 	}
+}
+
+
+MJstage::~MJstage() {
+    for (int i = 0; i < 4; i++) {
+        delete[] _players[i];    
+    }    
 }
 
 
@@ -154,7 +165,7 @@ void MJstage::pickSeat(void) {
 
 	// now can set position for the 4 _players
 	for (int i = 0; i < 4; i++) {
-		_players[i].Set_Pos(pos[i]);
+		_players[i]->Set_Pos(pos[i]);
 		playerToPos[i] = pos[i];
 		posToPlayer[pos[i]] = i;
 		cout << "Set _players[" << i << "]'s position to " << pos[i] << endl;
@@ -184,14 +195,14 @@ void MJstage::getTiles(void) {
 		}
 	}
 	for (int i = 0; i < 4; i++) {
-		_players[i].Set_Hand(mjtiles_for_player[i], 16);
+		_players[i]->Set_Hand(mjtiles_for_player[i], 16);
 	}
 	cout << "_players[" << _bookmaker << "] draw 17th tile" << endl;
-	_players[_bookmaker].draw(mjcol);
+	_players[_bookmaker]->draw(mjcol);
 
 	for (int i = 0; i < 4; i++) {
 		cout << "_players[" << i << "]'s hand is: " << endl;
-		_players[i].Print_Hand();
+		_players[i]->Print_Hand();
 	}
 
 	return;
@@ -201,9 +212,9 @@ void MJstage::getTiles(void) {
 void MJstage::initiate(void) {
 	cout << "Do initiate:" << endl;
 	for (int i = 0; i < 4; i++) {
-		_players[i].initiate(mjcol);
+		_players[i]->initiate(mjcol);
 		cout << "_players[" << i << "]'s hand is: " << endl;
-		_players[i].Print_Hand();
+		_players[i]->Print_Hand();
 	}
 }
 
@@ -236,8 +247,8 @@ void MJstage::mainGame(int& rounds) {
 	*/
 
 	// 判定莊家沒胡之後莊家丟一張牌
-	int index = _players[_bookmaker].decidePlay();
-	MJtile t = _players[_bookmaker].play(index);
+	int index = _players[_bookmaker]->decidePlay();
+	MJtile t = _players[_bookmaker]->play(index);
 	cout << "Initially, bookmaker plays:\n";
 	cout << t;
 
@@ -250,7 +261,7 @@ void MJstage::mainGame(int& rounds) {
 		cout << "Other players dicide strategy." << endl;
 		for (int i = 0; i < 4; i++) {
 			if (i != currentPlayer) {
-				_players[i].strategy(currentPlayer, t, actiontype[i], actionparameter[i]);
+				_players[i]->strategy(currentPlayer, t, actiontype[i], actionparameter[i]);
 			}
 		}
 		printStrategy(actiontype, actionparameter);
@@ -263,7 +274,7 @@ void MJstage::mainGame(int& rounds) {
 		int player_to_act = -1;
 		for (int i = 0; i < 4; i++) {
 			if (actiontype[i] == -1) {
-				_players[i].act(actiontype[i], actionparameter[i], t, mjcol);
+				_players[i]->act(actiontype[i], actionparameter[i], t, mjcol);
 				cout << "_players[" << i << "] huother!" << endl;
 				cin.get();
 				break;
@@ -285,32 +296,32 @@ void MJstage::mainGame(int& rounds) {
 		if (player_to_act == -1) { // 大家都沒有動作，直接換下一位
 			(currentPos == 1) ? (currentPos = 4) : (currentPos -= 1);
 			currentPlayer = posToPlayer[currentPos];
-			_players[currentPlayer].draw(mjcol);
-			_players[currentPlayer].strategy(currentPlayer, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
+			_players[currentPlayer]->draw(mjcol);
+			_players[currentPlayer]->strategy(currentPlayer, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
 			if (actiontype[currentPlayer] == -1) {
 				if(actionparameter[currentPlayer]==1){
 					// huown
-					_players[currentPlayer].act(-1, 1, dummy, mjcol);
+					_players[currentPlayer]->act(-1, 1, dummy, mjcol);
 				}
 				//TODO
 				break;
 			}
-			index = _players[currentPlayer].decidePlay();
-			t = _players[currentPlayer].play(index);
+			index = _players[currentPlayer]->decidePlay();
+			t = _players[currentPlayer]->play(index);
 
 		} else {
-			_players[player_to_act].act(current_action_type, current_action_param, t, mjcol);
+			_players[player_to_act]->act(current_action_type, current_action_param, t, mjcol);
 			currentPos = playerToPos[player_to_act];
 			currentPlayer = player_to_act;
 			// 有吃碰槓的動作就是直接出一張，不用抽
-			_players[currentPlayer].strategy(currentPlayer, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
+			_players[currentPlayer]->strategy(currentPlayer, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
 			if (actiontype[currentPlayer] == -1) {
 				// 自摸, huown
 				//TODO
 				break;
 			}
-			index = _players[currentPlayer].decidePlay();
-			t = _players[currentPlayer].play(index);
+			index = _players[currentPlayer]->decidePlay();
+			t = _players[currentPlayer]->play(index);
 		}
 	}
 	return;
