@@ -5,10 +5,12 @@
 using namespace std;
 
 class MJGreedyAIplayer: public MJplayer {
+public:
 	// There are two cases that strategy is called:
 	//      1. Other player played a tile
 	//      2. One must decide which tile to play
 	// actiontype: hu=-1 nothing=0 eat=1 pong=2 minggone=3 angone=4 bugone=5
+	// actiontype: play=6, actionparameter: index in hand (start from faceup_len)
 	void strategy(int position, MJtile t, int &actiontype, int &actionparameter) {
 		// Naive and greedy strategy
 		// 上家出的牌才能吃
@@ -39,24 +41,16 @@ class MJGreedyAIplayer: public MJplayer {
 				return;
 			}
 		} else {
-            if (_hand.canhu(_hand.getLastTile())) {
-                actiontype = -1;
-                return;
-            }
-            /*
+			// 自己 call 這個函數時
 			// 剛從牌底抽牌，決定要不要補槓、暗槓
-			actiontype = 6;
-			actionparameter = _hand.faceup_len();
-			// 你直接用 _hand[i] 喔XD 我幫你 overload 好了
-			for (int i = _hand.faceup_len() + 1; i < _hand.total_len(); i++) {
-				int suit = _hand[i].suit();
-				int rank = _hand[i].rank();
-				// 尋找落單的牌，跟左右兩張都不一樣
-				if (!(_hand[i + 1].fromsuitrank(suit, rank)) && !(_hand[i - 1].fromsuitrank(suit, rank))) {
-					actionparameter = i;
-					return;
-				}
-			}*/
+			if(_hand.canbugone(t)){
+				actiontype = 5;
+				return;
+			}
+			if(_hand.canangone(t)){
+				actiontype = 4;
+				return;
+			}
 		}
 		return;
 	};
@@ -95,17 +89,25 @@ class MJGreedyAIplayer: public MJplayer {
 
 		// 從 faceup_len + 1 到 total_len - 1 找落單的，即左右兩邊都沒有跟自己一樣或 rank 加減 1 的
 		for (int i = _hand.faceup_len() + 1; i < _hand.total_len(); i++) {
-			
+			int suit = _hand[i].suit();
+			int rank = _hand[i].rank();
+			bool previousTile = _hand[i - 1].fromsuitrank(suit, rank - 1) || _hand[i - 1].fromsuitrank(suit, rank);
+			bool nextTile = _hand[i + 1].fromsuitrank(suit, rank) || _hand[i + 1].fromsuitrank(suit, rank + 1);
+			if (!previousTile && !nextTile) return i;
 		}
-		return 1;
+
+		// 沒其他判斷方式了，就 return 第一張牌吧
+		return _hand.faceup_len();
 	}
 };
 
+/*
 class MJCustomAIplayer: public MJplayer {
 	void strategy(int position, MJtile t, int &actiontype, int &actionparameter) {
 		// Use information from getinfo to decide
 		//TODO
 	};
 };
+*/
 
 #endif

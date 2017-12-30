@@ -7,9 +7,6 @@
 #include "Shuffler.h"
 #include "MJplayer.h"
 #include "MJAIplayer.h"
-// 加進去會編譯錯檢查一下
-// #include "MJgame.h"
-// 不能加這行ㄅ，加了會互相 include 會 error
 #include "MJstage.h"
 using namespace std;
 
@@ -33,7 +30,7 @@ MJstage::MJstage() {
 	mjcol = MJcollection(mjtiles);
 
 	for (int i = 0; i < 4; i++) {
-		_players.push_back(MJplayer());
+		_players.push_back(MJGreedyAIplayer());
 	}
 }
 
@@ -120,19 +117,23 @@ void MJstage::mainGame(void) {
 	currentPlayer = _bookmaker;
 	currentPos = playerToPos[_bookmaker];
 
-	// currentPlayer 丟牌
-	// 先當作莊家丟出的牌，給莊家決定要丟哪一張牌
-	MJtile dummy;
+	/*
+	// 這裡要判斷開局時莊家有沒有胡，跟之後摸一張牌、別人出牌時的寫法應該會不一樣（有一張傳入的牌）
+	// 補充：因為開局只可能是胡，之後摸一張牌還可能是補槓暗槓
+	// 我覺得是可以直接不寫因為機率太低了
 
-	// 這裡是隨邊丟一個假的 dummy 進去，反正 strategy 裡面不會去用到 dummy 是嘛？
+	MJtile dummy;
 	_players[_bookmaker].strategy(currentPlayer, dummy, actiontype[_bookmaker], actionparameter[_bookmaker]);
 	if (actiontype[_bookmaker] == -1) {
 		// 莊家自摸
 		// TODO
 	}
-
 	assert(actiontype[_bookmaker] == 6);
-	MJtile t = _players[_bookmaker].play(actionparameter[_bookmaker]);
+	*/
+
+	// 判定莊家沒胡之後莊家丟一張牌
+	int index = _players[_bookmaker].decidePlay();
+	MJtile t = _players[_bookmaker].play(index);
 
 	// 正式開局！
 	// while 為何不從丟牌開始，感覺比較符合真實情況？
@@ -144,7 +145,7 @@ void MJstage::mainGame(void) {
 			}
 		}
 
-        /*
+		/*
 		// Checking Actions: hu (-1)
 		for (int i = 0; i < 4; i++) {
 			if (actiontype[i] == -1) {
@@ -184,36 +185,40 @@ void MJstage::mainGame(void) {
 				break;
 			}
 		}*/
-        // Checking Actions: gone > pong > eat
-        int current_action = 0;
-        // decide which player's action is executed
-        int player_to_act = -1;
-        for (int i = 0; i < 4; i++) {
-            if (actiontype[i] == -1) {
-                // someone huother
-                //TODO
-                break;
-            } else { // 優先順序：gone > pong > eat，同時有人同樣動作就由玩家index小的先？應該要由下家優先
-                if (actiontype[i] > current_action) {
-                    player_to_act = i;
-                    current_action = actiontype[i];
-                }
-            }
-        }
+
+		// Checking Actions: gone > pong > eat
+		int current_action = 0;
+		// decide which player's action is executed
+		int player_to_act = -1;
+		for (int i = 0; i < 4; i++) {
+			if (actiontype[i] == -1) {
+				// someone huother
+				// TODO
+				break;
+			} else { // 優先順序：gone > pong > eat，同時有人同樣動作就由玩家index小的先？應該要由下家優先
+				if (actiontype[i] > current_action) {
+					player_to_act = i;
+					current_action = actiontype[i];
+				}
+			}
+		}
 
 		// Assign actions on players
-        if (player_to_act == -1) { // 大家都沒有動作，直接換下一位
-            (currentPos == 4) ? (currentPos = 1) : (currentPos += 1);
-	        currentPlayer = posToPlayer[currentPos];
-        } else {
-            // 之類的動作：_players[player_to_act].act(current_action);
-            currentPos = playerToPos[player_to_act];
-            currentPlayer = player_to_act;
-        }
-    
+		if (player_to_act == -1) { // 大家都沒有動作，直接換下一位
+			// 原來寫 (currentPos == 4) ? (currentPos = 1) : (currentPos += 1); 是不是有誤？
+			(currentPos == 1) ? (currentPos = 4) : (currentPos -= 1);
+			currentPlayer = posToPlayer[currentPos];
+		} else {
+			// 之類的動作：_players[player_to_act].act(current_action);
+			currentPos = playerToPos[player_to_act];
+			currentPlayer = player_to_act;
+		}
+
 		// 下一位出牌
-		_players[currentPlayer].draw(mjcol); 
-        _players[currentPlayer].strategy(currentPlayer, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
+		MJtile dummy;
+
+		_players[currentPlayer].draw(mjcol);
+		_players[currentPlayer].strategy(currentPlayer, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
 		// actiontype must == 6, play a tile
 		if (actiontype[currentPlayer] == -1) {
 			// 自摸, huown

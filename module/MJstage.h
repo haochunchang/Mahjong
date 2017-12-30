@@ -1,5 +1,8 @@
 #ifndef MJSTAGE
 #define MJSTAGE
+
+#include "MJAIplayer.h"
+
 using namespace std;
 
 // In TA's dependency graph
@@ -37,7 +40,7 @@ public:
 	void countTai(void);
 
 private:
-	vector<MJplayer> _players;
+	vector<MJGreedyAIplayer> _players;
 	// It's a vector by TA originally
 	int _bookmaker;
 	// player index (0 - 3), not position (1 - 4)
