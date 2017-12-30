@@ -3,11 +3,13 @@
 #include <ctime>
 #include <map>
 #include <cassert>
+
 #include "MJcollection.h"
 #include "Shuffler.h"
 #include "MJplayer.h"
 #include "MJAIplayer.h"
 #include "MJstage.h"
+
 using namespace std;
 
 
@@ -112,7 +114,7 @@ MJstage::MJstage() {
 	mjcol = MJcollection(mjtiles);
 
 	for (int i = 0; i < 4; i++) {
-        MJplayer *ptr = new (MJGreedyAIplayer);
+        MJplayer* ptr = new MJGreedyAIplayer();
 		_players.push_back(ptr);
 	}
 }
@@ -247,6 +249,13 @@ void MJstage::mainGame(int& rounds) {
 	*/
 
 	// 判定莊家沒胡之後莊家丟一張牌
+	//
+	//
+	//
+	//	就算 _player 是 AI player 好像還是會用 MJplayer 的 decidePlay	QQ
+	//
+	//
+	//									↓↓↓↓↓↓
 	int index = _players[_bookmaker]->decidePlay();
 	MJtile t = _players[_bookmaker]->play(index);
 	cout << "Initially, bookmaker plays:\n";

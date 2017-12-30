@@ -35,6 +35,7 @@ MJgame::MJgame() {
     cout << endl;
     rounds = 0;
     valueofpoints = 1;
+    MJstage stage;
 };
 
 MJgame::~MJgame() {

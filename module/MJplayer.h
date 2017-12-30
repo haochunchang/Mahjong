@@ -24,10 +24,10 @@ public :
     void act(int, int, MJtile&, MJcollection&);
 
 	// actiontype: hu=-1 nothing=0 eat=1 pong=2 minggone=3 angone=4 bugone=5
-	void strategy(int position, MJtile t, int &actiontype, int &actionparameter);
+	virtual void strategy(int position, MJtile t, int &actiontype, int &actionparameter);
 	// call after every play
-	int decidePlay(void);
-    void getinfo(int position, int type, MJtile* ts, int tiles_num);
+	virtual int decidePlay(void);
+    virtual void getinfo(int position, int type, MJtile* ts, int tiles_num);
 	// type: eat=1 pong=2 minggone=3 angone=4 bugone=5 applique=6
 	// call after any type above
 
