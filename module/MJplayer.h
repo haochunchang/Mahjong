@@ -21,7 +21,9 @@ public :
 	void initiate(MJcollection&);
 	void draw(MJcollection&);
     MJtile play(int);
+    void act(int);
 
+	// actiontype: hu=-1 nothing=0 eat=1 pong=2 minggone=3 angone=4 bugone=5
 	void strategy(int position, MJtile t, int &actiontype, int &actionparameter);
 	// call after every play
 	int decidePlay(void);
