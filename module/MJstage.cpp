@@ -144,7 +144,7 @@ void MJstage::mainGame(void) {
 			}
 		}
 
-
+        /*
 		// Checking Actions: hu (-1)
 		for (int i = 0; i < 4; i++) {
 			if (actiontype[i] == -1) {
@@ -183,20 +183,40 @@ void MJstage::mainGame(void) {
 				//TODO
 				break;
 			}
-		}
+		}*/
+        // Checking Actions: gone > pong > eat
+        int current_action = 0;
+        // decide which player's action is executed
+        int player_to_act = -1;
+        for (int i = 0; i < 4; i++) {
+            if (actiontype[i] == -1) {
+                // someone huother
+                //TODO
+                break;
+            } else { // 優先順序：gone > pong > eat，同時有人同樣動作就由玩家index小的先？應該要由下家優先
+                if (actiontype[i] > current_action) {
+                    player_to_act = i;
+                    current_action = actiontype[i];
+                }
+            }
+        }
 
 		// Assign actions on players
-
-		// 換下一個人
-		(currentPos == 1) ? (currentPos = 4) : (currentPos -= 1);
-		currentPlayer = posToPlayer[currentPos];
-
-		
+        if (player_to_act == -1) { // 大家都沒有動作，直接換下一位
+            (currentPos == 4) ? (currentPos = 1) : (currentPos += 1);
+	        currentPlayer = posToPlayer[currentPos];
+        } else {
+            // 之類的動作：_players[player_to_act].act(current_action);
+            currentPos = playerToPos[player_to_act];
+            currentPlayer = player_to_act;
+        }
+    
 		// 下一位出牌
-		_players[currentPlayer].strategy(currentPlayer, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
+		_players[currentPlayer].draw(mjcol); 
+        _players[currentPlayer].strategy(currentPlayer, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
 		// actiontype must == 6, play a tile
 		if (actiontype[currentPlayer] == -1) {
-			// 自摸
+			// 自摸, huown
 			//TODO
 			break;
 		}
