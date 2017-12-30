@@ -27,6 +27,7 @@ class MJstage {
 public:
 	MJstage(void);				// 還不確定要怎寫
 	MJstage(int, int);
+    ~MJstage(void);
     void pickSeat(void);		// done
 	void pickBookmaker(void);	// done
 	void getTiles(void);		// done

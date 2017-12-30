@@ -112,7 +112,7 @@ MJstage::MJstage() {
 	mjcol = MJcollection(mjtiles);
 
 	for (int i = 0; i < 4; i++) {
-        MJplayer *ptr = new (MJGreedyAIplayer());
+        MJplayer *ptr = new (MJGreedyAIplayer);
 		_players.push_back(ptr);
 	}
 }
@@ -128,15 +128,15 @@ MJstage::MJstage(int n_human, int AIkind) {
 	mjcol = MJcollection(mjtiles);
 
 	for (int i = 0; i < n_human; i++) {
-        MJplayer *ptr = new (MJplayer());
+        MJplayer *ptr = new (MJplayer);
 		_players.push_back(ptr);
 	}
 	for (int i = 0; i < 4 - n_human; i++) {
 		if (AIkind == 1) {
-            MJplayer *ptr = new (MJGreedyAIplayer());
+            MJplayer *ptr = new (MJGreedyAIplayer);
 			_players.push_back(ptr);
 		} else {
-            MJplayer *ptr = new (MJCustomAIplayer());
+            MJplayer *ptr = new (MJCustomAIplayer);
 			_players.push_back(ptr);
 		}
 	}
