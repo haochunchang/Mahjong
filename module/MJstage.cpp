@@ -205,7 +205,7 @@ void MJstage::mainGame(void) {
             t = _players[currentPlayer].play(index);
 
         } else {
-			_players[player_to_act].act(current_action_type, current_action_param);
+			_players[player_to_act].act(current_action_type, current_action_param, t);
 			currentPos = playerToPos[player_to_act];
 			currentPlayer = player_to_act;
 		    // 有吃碰槓的動作就是直接出一張，不用抽
