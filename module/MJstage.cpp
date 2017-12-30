@@ -19,6 +19,88 @@ void swapInt(int& a, int& b) {
 }
 
 
+void printStrategy(int* actiontype, int* actionparameter) {
+	// actiontype: hu=-1 nothing=0 eat=1 pong=2 minggone=3 angone=4 bugone=5
+	// actionparameter: huown=1 huother=2
+	for (int i = 0; i < 4; i++) {
+		cout << "_player[" << i << "]: ";
+		switch (actiontype[i]) {
+		case -1:
+			if (actionparameter[i] == 1) cout << "huown" << endl;
+			if (actionparameter[i] == 2) cout << "huother" << endl;
+			break;
+		case 0:
+			cout << "do nothing" << endl;
+			break;
+		case 1:
+			cout << "eat ";
+			switch (actionparameter[i]) {
+			case 1: cout << "(001)";
+			case 2: cout << "(010)";
+			case 3: cout << "(001) (010)";
+			case 4: cout << "(100)";
+			case 5: cout << "(001) (100)";
+			case 6: cout << "(010) (100)";
+			case 7: cout << "(001) (010) (100)";
+			}
+		case 2:
+			cout << "pong" << endl;
+			break;
+		case 3:
+			cout << "minggone" << endl;
+			break;
+		case 4:
+			cout << "angone" << endl;
+			break;
+		case 5:
+			cout << "bugone" << endl;
+			break;
+		}
+	}
+}
+
+
+void printAction(int player_to_act, int current_action_type, int current_action_param) {
+	if (player_to_act == -1) {
+		cout << "No player would like to act." << endl;
+		return;
+	}
+	cout << "_players[" << player_to_act << "] is going to ";
+	switch (current_action_type) {
+	case -1:
+		if (current_action_param == 1) cout << "huown" << endl;
+		if (current_action_param == 2) cout << "huother" << endl;
+		break;
+	case 0:
+		cout << "do nothing" << endl;
+		break;
+	case 1:
+		cout << "eat ";
+		switch (current_action_param) {
+		case 1: cout << "(001)";
+		case 2: cout << "(010)";
+		case 3: cout << "(001) (010)";
+		case 4: cout << "(100)";
+		case 5: cout << "(001) (100)";
+		case 6: cout << "(010) (100)";
+		case 7: cout << "(001) (010) (100)";
+		}
+	case 2:
+		cout << "pong" << endl;
+		break;
+	case 3:
+		cout << "minggone" << endl;
+		break;
+	case 4:
+		cout << "angone" << endl;
+		break;
+	case 5:
+		cout << "bugone" << endl;
+		break;
+	}
+}
+
+
 //============ MJstage Class Methods =================
 MJstage::MJstage() {
 	cout << "Call MJstage constructor." << endl;
@@ -76,8 +158,8 @@ void MJstage::pickSeat(void) {
 		playerToPos[i] = pos[i];
 		posToPlayer[pos[i]] = i;
 		cout << "Set _players[" << i << "]'s position to " << pos[i] << endl;
-		cout << "Set playerToPos[" << i << "] to " << pos[i] << endl;
-		cout << "Set posToPlayer[" << pos[i] << "] to " << i << endl;
+		// cout << "Set playerToPos[" << i << "] to " << pos[i] << endl;
+		// cout << "Set posToPlayer[" << pos[i] << "] to " << i << endl;
 	}
 }
 
@@ -156,7 +238,8 @@ void MJstage::mainGame(int& rounds) {
 	// 判定莊家沒胡之後莊家丟一張牌
 	int index = _players[_bookmaker].decidePlay();
 	MJtile t = _players[_bookmaker].play(index);
-	cout << "Initially, bookmaker plays:\n" << t;
+	cout << "Initially, bookmaker plays:\n";
+	cout << t;
 
 	// 正式開局！
 
@@ -170,8 +253,8 @@ void MJstage::mainGame(int& rounds) {
 				_players[i].strategy(currentPlayer, t, actiontype[i], actionparameter[i]);
 			}
 		}
-		// printStrategy(actiontype*, actionparameter*);
-		// TODO
+		printStrategy(actiontype, actionparameter);
+		cin.get();
 
 		// Checking Actions: gone > pong > eat
 		int current_action_type = 0;
@@ -192,8 +275,9 @@ void MJstage::mainGame(int& rounds) {
 				}
 			}
 		}
-		//printAction(player_to_act,current_action_type, current_action_param);
-		//TODO
+
+		printAction(player_to_act, current_action_type, current_action_param);
+		cin.get();
 
 		// Assign actions on players
 		// 下一位出牌
@@ -204,7 +288,10 @@ void MJstage::mainGame(int& rounds) {
 			_players[currentPlayer].draw(mjcol);
 			_players[currentPlayer].strategy(currentPlayer, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
 			if (actiontype[currentPlayer] == -1) {
-				// 自摸, huown
+				if(actionparameter[currentPlayer]==1){
+					// huown
+					_players[currentPlayer].act(-1, 1, dummy, mjcol);
+				}
 				//TODO
 				break;
 			}

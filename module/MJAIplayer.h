@@ -6,6 +6,9 @@ using namespace std;
 
 class MJGreedyAIplayer: public MJplayer {
 public:
+	MJGreedyAIplayer() {
+		cout << "Call MJGreedyAIplayer constructor." << endl;
+	}
 	// There are two cases that strategy is called:
 	//      1. Other player played a tile
 	//      2. One must decide which tile to play
@@ -17,9 +20,24 @@ public:
 		if (previousPlayer[_position] == position) {
 			if (_hand.caneat(t)) {
 				// eat 為可以吃的方式
-				int eat = _hand.caneat(t);
+				int method = _hand.caneat(t);
 				actiontype = 1;
-				actionparameter = eat;
+				switch (method) {
+				case 3:
+					method = 1;
+					break;
+				case 5:
+					method = 1;
+					break;
+				case 6:
+					method = 2;
+					break;
+				case 7:
+					method = 1;
+					break;
+				}
+				actionparameter = method;
+
 				return;
 			}
 		}
@@ -49,11 +67,11 @@ public:
 				actionparameter = 1;
 				return;
 			}
-			if(_hand.canbugone(t)){
+			if (_hand.canbugone(t)) {
 				actiontype = 5;
 				return;
 			}
-			if(_hand.canangone(t)){
+			if (_hand.canangone(t)) {
 				actiontype = 4;
 				return;
 			}

@@ -72,7 +72,7 @@ void MJgame::start() {
     cout << endl;
     stage.initiate();
     cout << endl;
-    // stage.mainGame(rounds);
+    stage.mainGame(rounds);
     return;
 }
 
