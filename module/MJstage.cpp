@@ -169,7 +169,8 @@ void MJstage::mainGame(void) {
 		}
 
 		// Checking Actions: gone > pong > eat
-		int current_action = 0;
+		int current_action_type = 0;
+        int current_action_param = 0;
 		// decide which player's action is executed
 		int player_to_act = -1;
 		for (int i = 0; i < 4; i++) {
@@ -180,7 +181,8 @@ void MJstage::mainGame(void) {
 			} else { // 優先順序：gone > pong > eat，同時有人同樣動作就由玩家index小的先？應該要由下家優先
 				if (actiontype[i] > current_action) {
 					player_to_act = i;
-					current_action = actiontype[i];
+					current_action_type = actiontype[i];
+                    current_action_param = actionparameter[i];
 				}
 			}
 		}
@@ -203,7 +205,7 @@ void MJstage::mainGame(void) {
             t = _players[currentPlayer].play(index);
 
         } else {
-			// 之類的動作：_players[player_to_act].act(current_action);
+			_players[player_to_act].act(current_action_type, current_action_param);
 			currentPos = playerToPos[player_to_act];
 			currentPlayer = player_to_act;
 		    // 有吃碰槓的動作就是直接出一張，不用抽
