@@ -98,6 +98,23 @@ MJtile MJplayer::play(int index) {
     return _hand.play(index); 
 }
 
+// actiontype: hu=-1 nothing=0 eat=1 pong=2 minggone=3 angone=4 bugone=5
+void MJplayer::act(int type, int param, MJtile& t) {
+    switch(type) {
+        case 1:
+            _hand.eat(t, param);
+            break;
+        case 2:
+            _hand.pong(t);
+            break;
+        case 3:
+            _hand.minggone(t);
+            break;
+        default:
+            return;
+    }
+}
+
 
 void MJplayer::strategy(int position, MJtile t, int &actiontype, int &actionparameter) {
     // call after every play
@@ -129,7 +146,7 @@ void MJplayer::strategy(int position, MJtile t, int &actiontype, int &actionpara
 }
 
 
-int decidePlay(void) {
+int MJplayer::decidePlay(void) {
     int pos = 0;
     cout << "Which tile do you want to play?" << endl;
     cin >> pos;
