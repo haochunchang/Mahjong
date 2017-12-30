@@ -35,6 +35,28 @@ MJstage::MJstage() {
 }
 
 
+MJstage::MJstage(int n_human, int AIkind) {
+	cout << "Call MJstage constructor." << endl;
+
+	Shuffler s;
+	MJtile mjtiles[144];
+	s.init();
+	s.fill(mjtiles);
+	mjcol = MJcollection(mjtiles);
+
+	for (int i = 0; i < n_human; i++) {
+		_players.push_back(MJplayer());
+	}
+    for (int i = 0; i < 4-n_human; i++) {
+        if (AIkind == 1) {
+            _players.push_back(MJGreedyAIplayer());    
+        } else {
+            _players.push_back(MJcustomAIplayer());    
+        }
+    }
+}
+
+
 void MJstage::pickSeat(void) {
 	// east = 1 ,south = 2 , west = 3 , north = 4
 	srand(time(NULL));
@@ -225,9 +247,10 @@ void MJstage::mainGame(void) {
 			//TODO
 			break;
 		}
-		assert(actiontype[currentPlayer] == 6);
-		MJtile t = _players[currentPlayer].play(actionparameter[currentPlayer]);
-	}
+	    index = _players[currentPlayer].decidePlay();
+        t = _players[currentPlayer].play(index);
+
+    }
 
 	return;
 }
