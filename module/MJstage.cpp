@@ -202,16 +202,14 @@ void MJstage::getTiles(void) {
 	for (int i = 0; i < 4; i++) {
 		_players[i]->Set_Hand(mjtiles_for_player[i], 16);
 	}
-	cout << "_players[" << _bookmaker << "] draw the 17th tile." << endl;
-	_players[_bookmaker]->draw(mjcol);
+	
 
-	/*
+	
 	for (int i = 0; i < 4; i++) {
 		cout << "_players[" << i << "]'s hand is: " << endl;
 		_players[i]->Print_Hand();
 	}
-	*/
-
+	
 	return;
 }
 
@@ -223,6 +221,9 @@ void MJstage::initiate(void) {
 		cout << "_players[" << i << "]'s hand is: " << endl;
 		_players[i]->Print_Hand();
 	}
+
+	cout << "_players[" << _bookmaker << "] draw the 17th tile." << endl;
+	_players[_bookmaker]->draw(mjcol);
 }
 
 
