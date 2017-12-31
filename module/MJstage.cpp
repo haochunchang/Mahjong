@@ -37,13 +37,13 @@ void printStrategy(int* actiontype, int* actionparameter) {
 		case 1:
 			cout << "eat ";
 			switch (actionparameter[i]) {
-			case 1: cout << "(001)" << endl;
-			case 2: cout << "(010)" << endl;
-			case 3: cout << "(001) (010)" << endl;
-			case 4: cout << "(100)" << endl;
-			case 5: cout << "(001) (100)" << endl;
-			case 6: cout << "(010) (100)" << endl;
-			case 7: cout << "(001) (010) (100)" << endl;
+			case 1: cout << "(001)" << endl; break;
+			case 2: cout << "(010)" << endl; break;
+			case 3: cout << "(001) (010)" << endl; break;
+			case 4: cout << "(100)" << endl; break;
+			case 5: cout << "(001) (100)" << endl; break;
+			case 6: cout << "(010) (100)" << endl; break;
+			case 7: cout << "(001) (010) (100)" << endl; break;
 			}
 			break;
 		case 2:
@@ -81,14 +81,15 @@ void printAction(int player_to_act, int current_action_type, int current_action_
 	case 1:
 		cout << "eat ";
 		switch (current_action_param) {
-		case 1: cout << "(001)";
-		case 2: cout << "(010)";
-		case 3: cout << "(001) (010)";
-		case 4: cout << "(100)";
-		case 5: cout << "(001) (100)";
-		case 6: cout << "(010) (100)";
-		case 7: cout << "(001) (010) (100)";
+		case 1: cout << "(001)"; break;
+		case 2: cout << "(010)"; break;
+		case 3: cout << "(001) (010)"; break;
+		case 4: cout << "(100)"; break;
+		case 5: cout << "(001) (100)"; break;
+		case 6: cout << "(010) (100)"; break;
+		case 7: cout << "(001) (010) (100)"; break;
 		}
+		break;
 	case 2:
 		cout << "pong" << endl;
 		break;
@@ -202,14 +203,14 @@ void MJstage::getTiles(void) {
 	for (int i = 0; i < 4; i++) {
 		_players[i]->Set_Hand(mjtiles_for_player[i], 16);
 	}
-	
 
-	
+
+
 	for (int i = 0; i < 4; i++) {
 		cout << "_players[" << i << "]'s hand is: " << endl;
 		_players[i]->Print_Hand();
 	}
-	
+
 	return;
 }
 
