@@ -80,54 +80,81 @@ public:
 	};
 
 	int decidePlay(void) {
-		// 這時手中應該會多一張牌，所以 arrange 時不會排到最後這張
+		// 目前策略：
+		// 先找落單的東西北中發白，還沒寫
+		// 再找 rank 是 1 或 9，如果落單先打，定義是非 1, 1... 或 1, 2... 或 1, 3...
+		// 再從第一張開始找任何 rank 是落單的，目前是從第二張開始找QQ 還要改
+		// 都不是前述狀況的話打第一張牌
+
+
+		// 這時手中應該會比 total len 多一張牌，所以 arrange 時不會排到最後這張
 		_hand.set_total_len(_hand.total_len() + 1);
 		_hand.arrange();
 
 		_hand.set_total_len(_hand.total_len() - 1);
 		cout << "In decidePlay function. After arrange, the hand is:" << endl;
 		cout << _hand;
-		// 先找 suit 是 1, 2, 3;  rank 是 1 或 9 且落單（旁邊不是 1、2 或 8、9）的
-		// e.g. 1W, 1W, ... 不算落單、..., 8W, 9W 不算落單，1W, 3W, ... 才是落單
-		// 現在總牌數應該比 total len 多一
-		cout << "First find rank is 1 or 9." << endl;
-		for (int i = _hand.faceup_len(); i <= _hand.total_len(); i++) {
-			int suit = _hand[i].suit();
-			int rank = _hand[i].rank();
-			cout << "suit is " << suit << " and rank is " << rank << endl;
-			// 處理 rank 是 1 
+		cout << "First, check rank is 1 or 9." << endl;
+		// 檢查第一張牌，如果是 rank 1，則下一張 rank 要是 1 或 2
+		int i = _hand.faceup_len();
+		int suit = _hand[i].suit();
+		int rank = _hand[i].rank();
+		if ((suit == 1 || suit == 2 || suit == 3) && (rank == 1)) {
+			// cout << "The very first tile is of rank 1." << endl;
+			if (!(_hand[i + 1].fromsuitrank(suit, 1)) && !(_hand[i + 1].fromsuitrank(suit, 2))
+			        && !(_hand[i + 1].fromsuitrank(suit, 3))) return i;
+		}
+		// 檢查最後一張
+		i = _hand.total_len();
+		suit = _hand[i].suit();
+		rank = _hand[i].rank();
+		if ((suit == 1 || suit == 2 || suit == 3) && (rank == 9)) {
+			// cout << "The very last tile is of rank 9." << endl;
+			if (!(_hand[i - 1].fromsuitrank(suit, 8)) && !(_hand[i - 1].fromsuitrank(suit, 9))
+			        && !(_hand[i - 1].fromsuitrank(suit, 7))) return i;
+		}
+		// 檢查中間其他張
+		for (i = _hand.faceup_len() + 1; i < _hand.total_len(); i++) {
+			suit = _hand[i].suit();
+			rank = _hand[i].rank();
+			// cout << "Check the tile of suit " << suit << " and rank " << rank << endl;
+			// 處理 rank 是 1，至少要前面是 1，或後面是 1 or 2 or 3
 			if ((suit == 1 || suit == 2 || suit == 3) && (rank == 1)) {
-				// 已經是最後一張了
-				if (i == _hand.total_len()) return i;
-				else {
-					// 後一張 rank 是 1 或 2 的話過關，不是 1 或 2 就打這張牌
-					if (!(_hand[i + 1].fromsuitrank(suit, 1)) && !(_hand[i + 1].fromsuitrank(suit, 2))) return i;
-				}
+				bool previousTile = _hand[i - 1].fromsuitrank(suit, 1);
+				bool nextTile = _hand[i + 1].fromsuitrank(suit, 1) ||
+				                _hand[i + 1].fromsuitrank(suit, 2) ||
+				                _hand[i + 1].fromsuitrank(suit, 3);
+				if (!previousTile && !nextTile) return i;
 			}
-			// 處理 rank 是 9
+
+			// 處理 rank 是 9，至少要前面是 7 or 8 or 9，或後面是 9
 			if ((suit == 1 || suit == 2 || suit == 3) && (rank == 9)) {
-				// 是第一張
-				if (i == _hand.faceup_len()) return i;
-				else {
-					// 前一張 rank 是 8 或 9 的話過關，不是 8 或 9 就打這張牌
-					if (!(_hand[i - 1].fromsuitrank(suit, 8)) && !(_hand[i - 1].fromsuitrank(suit, 9))) return i;
-				}
+				bool previousTile = _hand[i - 1].fromsuitrank(suit, 7) ||
+				                    _hand[i - 1].fromsuitrank(suit, 8) ||
+				                    _hand[i - 1].fromsuitrank(suit, 9);
+				bool nextTile = _hand[i + 1].fromsuitrank(suit, 9);
+				if (!previousTile && !nextTile) return i;
 			}
 		}
 
 		// 從 faceup_len + 1 到 total_len - 1 找落單的，即左右兩邊都沒有跟自己一樣或 rank 加減 1 的
-		cout << "Second find the lonely tile." << endl;
+		// cout << "Second find the lonely tile." << endl;
+		// 檢查第一張牌，待辦
+		// 檢查最後一張，待辦
+		// 檢查中間其他張
 		for (int i = _hand.faceup_len() + 1; i < _hand.total_len(); i++) {
-			cout << "in index " << i << endl;
+			// cout << "in index " << i << endl;
 			int suit = _hand[i].suit();
 			int rank = _hand[i].rank();
-			cout << "suit is " << suit << " and rank is " << rank << endl;
-			bool previousTile = _hand[i - 1].fromsuitrank(suit, rank - 1) || _hand[i - 1].fromsuitrank(suit, rank);
-			cout << "previousTile is rank or rank - 1? ";
-			(previousTile) ? (cout << "true" << endl) : (cout << "false" << endl);
-			bool nextTile = _hand[i + 1].fromsuitrank(suit, rank) || _hand[i + 1].fromsuitrank(suit, rank + 1);
-			cout << "nextTile is rank or rank - 1? ";
-			(nextTile) ? (cout << "true" << endl) : (cout << "false" << endl);
+			// cout << "suit is " << suit << " and rank is " << rank << endl;
+			bool previousTile = _hand[i - 1].fromsuitrank(suit, rank - 1) ||
+			                    _hand[i - 1].fromsuitrank(suit, rank);
+			// cout << "previousTile is rank or rank - 1? ";
+			// (previousTile) ? (cout << "true" << endl) : (cout << "false" << endl);
+			bool nextTile = _hand[i + 1].fromsuitrank(suit, rank) ||
+			                _hand[i + 1].fromsuitrank(suit, rank + 1);
+			// cout << "nextTile is rank or rank - 1? ";
+			// (nextTile) ? (cout << "true" << endl) : (cout << "false" << endl);
 			if (!previousTile && !nextTile) return i;
 			cout << endl;
 		}
