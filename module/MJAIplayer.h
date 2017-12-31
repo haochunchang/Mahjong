@@ -81,10 +81,22 @@ public:
 
 	int decidePlay(void) {
 		// 目前策略：
-		// 先找落單的東西北中發白，還沒寫
+		// 先找落單的東西北中發白
 		// 再找 rank 是 1 或 9，如果落單先打，定義是非 1, 1... 或 1, 2... 或 1, 3...
-		// 再從第一張開始找任何 rank 是落單的，目前是從第二張開始找QQ 還要改
+		// 再從第一張開始找任何 rank 是落單的
 		// 都不是前述狀況的話打第一張牌
+
+		// 目前問題：
+		// 如果有成組的牌在手牌，還是有可能被打出去
+
+		// 接下來如果都不是前述情況，可能會再這樣寫：
+		// 如果只有 Fa Fa 應先丟，因為只能等 Fa，但應先確定手牌是不是 Fa Fa Fa 以免丟掉
+		// 如果只有 6W 8W 應先丟，因為只能等 7W
+		// 然後丟 6W 6W 這種，但要先確定是不是 6W 6W 6W
+		// 然後才丟 8W 9W 或 1W 2W 這種，但要先確定不是 789 或 123
+		// 然後 3W 4W 這種，但要先確定不是 234 或 345
+
+		// 這樣的缺點是無法處理 445566，但這機率低就算了
 
 
 		// 這時手中應該會比 total len 多一張牌，所以 arrange 時不會排到最後這張
@@ -95,22 +107,36 @@ public:
 		cout << _hand;
 
 
-		// ***** 處理落單的東南西北中發白 *****		未完成
+		// ***** 處理落單的東南西北中發白 *****
 		// cout << "First, check suit is 4." << endl;
-		for (int i = _hand.faceup_len(); i <= _hand.total_len(); i++) {
-			int suit = _hand[i].suit();
-			int rank = _hand[i].rank();
+		// 看第一張，如果下一張跟自己不一樣就回傳這張
+		int i = _hand.faceup_len();
+		int suit = _hand[i].suit();
+		int rank = _hand[i].rank();
+		if (suit == 4 && !(_hand[i + 1].fromsuitrank(suit, rank))) return i;
+		// 看最後一張，如果前一張跟自己不一樣就回傳這張
+		i = _hand.total_len();
+		suit = _hand[i].suit();
+		rank = _hand[i].rank();
+		if (suit == 4 && !(_hand[i - 1].fromsuitrank(suit, rank))) return i;
+		// 看中間的牌，如果前一張跟自己不一樣且後一張跟自己不一樣才會回傳
+		for (int i = _hand.faceup_len() + 1; i < _hand.total_len(); i++) {
+			suit = _hand[i].suit();
+			rank = _hand[i].rank();
 			if (suit == 4) {
-				// TODO
+				bool previousTile = _hand[i - 1].fromsuitrank(suit, rank);
+				bool nextTile = _hand[i + 1].fromsuitrank(suit, rank);
+				if (!previousTile && !nextTile) return i;
 			}
 		}
+
 
 		// ***** 處理落單的 1 和 9 *****
 		// 檢查第一張牌，如果是 rank 1，則下一張 rank 要是 1 or 2 or 3
 		// cout << "Next, check rank is 1 or 9." << endl;
-		int i = _hand.faceup_len();
-		int suit = _hand[i].suit();
-		int rank = _hand[i].rank();
+		i = _hand.faceup_len();
+		suit = _hand[i].suit();
+		rank = _hand[i].rank();
 		if ((suit == 1 || suit == 2 || suit == 3) && (rank == 1)) {
 			// cout << "The very first tile is of rank 1." << endl;
 			if (!(_hand[i + 1].fromsuitrank(suit, 1)) && !(_hand[i + 1].fromsuitrank(suit, 2))
