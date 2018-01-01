@@ -4,10 +4,6 @@
 #include <map>
 #include <cassert>
 
-#include "MJcollection.h"
-#include "Shuffler.h"
-#include "MJplayer.h"
-#include "MJAIplayer.h"
 #include "MJstage.h"
 
 using namespace std;
@@ -247,6 +243,7 @@ void MJstage::mainGame(int& rounds) {
 
 	currentPlayer = _bookmaker;
     for (int i = 0; i < 4; i++) {
+        cout << i << endl;
         cout << "playerToPos["<<i<<"]: " << playerToPos[i] << ' ' << endl;
     }
     currentPos = playerToPos[_bookmaker];

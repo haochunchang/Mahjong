@@ -1,6 +1,8 @@
 #ifndef MJSTAGE
 #define MJSTAGE
-
+#include "MJcollection.h"
+#include "Shuffler.h"
+#include "MJplayer.h"
 #include "MJAIplayer.h"
 
 using namespace std;
