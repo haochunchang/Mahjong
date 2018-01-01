@@ -10,6 +10,7 @@ MJplayer::MJplayer() {
     // cout << "Call MJplayer constructor." << endl;
     _position = 0;
     _money = 0;
+    _hand = MJhand();
 
     // 1 的上家是 4，2 的上家是 1，3 的上家是 2，4 的上家是 3
     previousPlayer[1] = 4;
