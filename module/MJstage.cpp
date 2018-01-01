@@ -130,8 +130,7 @@ MJstage::MJstage() {
 	mjcol = MJcollection(mjtiles);
 
 	for (int i = 0; i < 4; i++) {
-		MJplayer* ptr = new MJGreedyAIplayer();
-		_players.push_back(ptr);
+		_players.push_back(new MJGreedyAIplayer);
 	}
 }
 
@@ -146,16 +145,13 @@ MJstage::MJstage(int n_human, int AIkind) {
 	mjcol = MJcollection(mjtiles);
 
 	for (int i = 0; i < n_human; i++) {
-		MJplayer *ptr = new (MJplayer);
-		_players.push_back(ptr);
+		_players.push_back(new MJplayer);
 	}
 	for (int i = 0; i < 4 - n_human; i++) {
 		if (AIkind == 1) {
-			MJplayer *ptr = new (MJGreedyAIplayer);
-			_players.push_back(ptr);
+			_players.push_back(new MJGreedyAIplayer);
 		} else {
-			MJplayer *ptr = new (MJCustomAIplayer);
-			_players.push_back(ptr);
+			_players.push_back(new MJCustomAIplayer);
 		}
 	}
 }
@@ -206,15 +202,15 @@ void MJstage::getTiles(void) {
 	MJtile mjtiles_for_player[4][16];
 	for (int k = 0; k < 4; k++) {
 		for (int i = 0; i < 4; i++) {
-			// 從 mjcol 從前面取走 4 張給 _players[i]
+            // 從 mjcol 從前面取走 4 張給 _players[i]
 			for (int j = k * 4; j < (k + 1) * 4; j++) {
-				mjtiles_for_player[i][j] = mjcol.drawfronttile();
+                mjtiles_for_player[i][j] = mjcol.drawfronttile();
 			}
 		}
 	}
 	for (int i = 0; i < 4; i++) {
-		_players[i]->Set_Hand(mjtiles_for_player[i], 16);
-	}
+        _players[i]->Set_Hand(&mjtiles_for_player[i][0], 16);	
+    }
 
 
 	/*
@@ -243,14 +239,17 @@ void MJstage::initiate(void) {
 void MJstage::mainGame(int& rounds) {
 	// greedy algorithm
 	cout << "Enter mainGame:" << endl;
-	int currentPos;
-	int currentPlayer;
+	int currentPos = 0;
+	int currentPlayer = 0;
 	int actiontype[4] = {0, 0, 0, 0};
 	int actionparameter[4] = {0, 0, 0, 0};
 	// 出牌順序：逆時針 (pos 4, 3, 2, 1, 4, etc.)
 
 	currentPlayer = _bookmaker;
-	currentPos = playerToPos[_bookmaker];
+    for (int i = 0; i < 4; i++) {
+        cout << "playerToPos["<<i<<"]: " << playerToPos[i] << ' ' << endl;
+    }
+    currentPos = playerToPos[_bookmaker];
 
 	/*
 	// 這裡要判斷開局時莊家有沒有胡，跟之後摸一張牌、別人出牌時的寫法應該會不一樣（有一張傳入的牌）
@@ -284,7 +283,7 @@ void MJstage::mainGame(int& rounds) {
 		// 其他三家要傳進那張丟出來的牌看能不能有 strategy
 		cout << "Other players decide strategy." << endl;
 		for (int i = 0; i < 4; i++) {
-			if (i != currentPlayer) {
+            if (i != currentPlayer) {
 				_players[i]->strategy(currentPos, t, actiontype[i], actionparameter[i]);
 			}
 		}
