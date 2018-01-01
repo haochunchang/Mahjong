@@ -16,8 +16,10 @@ public:
 	// actionparameter: huown=1 huother=2
 	void strategy(int position, MJtile t, int &actiontype, int &actionparameter) {
 		// Naive and greedy strategy
+		cout << "Call MJGreedyAIplayer::strategy." << endl;
 		// 上家出的牌才能吃
 		if (previousPlayer[_position] == position) {
+			cout << "Previous players playing." << endl;
 			if (_hand.caneat(t)) {
 				// eat 為可以吃的方式
 				int method = _hand.caneat(t);
@@ -43,24 +45,29 @@ public:
 		}
 
 		if (position != _position) { // other players playing
+			// cout << "Other players playing." << endl;
 			// check if canhu
+			cout << "Check if canhu." << endl;
 			if (_hand.canhu(t)) {
 				actiontype = -1;
 				actionparameter = 2;
 				return;
 			}
 			// check if canminggone
+			cout << "Check if canminggone." << endl;
 			if (_hand.canminggone(t)) {
 				actiontype = 3;
 				return;
 			}
 			// check if canpong
+			cout << "Check if canpong." << endl;
 			if (_hand.canpong(t)) {
 				actiontype = 2;
 				return;
 			}
 		} else {
 			// 自己 call 這個函數時
+			cout << "Myself playing." << endl;
 			// 剛從牌底抽牌，決定要不要補槓、暗槓
 			if (_hand.canhu(t)) {
 				actiontype = -1;

@@ -198,15 +198,15 @@ void MJstage::getTiles(void) {
 	MJtile mjtiles_for_player[4][16];
 	for (int k = 0; k < 4; k++) {
 		for (int i = 0; i < 4; i++) {
-            // 從 mjcol 從前面取走 4 張給 _players[i]
+			// 從 mjcol 從前面取走 4 張給 _players[i]
 			for (int j = k * 4; j < (k + 1) * 4; j++) {
-                mjtiles_for_player[i][j] = mjcol.drawfronttile();
+				mjtiles_for_player[i][j] = mjcol.drawfronttile();
 			}
 		}
 	}
 	for (int i = 0; i < 4; i++) {
-        _players[i]->Set_Hand(&mjtiles_for_player[i][0], 16);	
-    }
+		_players[i]->Set_Hand(&mjtiles_for_player[i][0], 16);
+	}
 
 
 	/*
@@ -242,11 +242,11 @@ void MJstage::mainGame(int& rounds) {
 	// 出牌順序：逆時針 (pos 4, 3, 2, 1, 4, etc.)
 
 	currentPlayer = _bookmaker;
-    for (int i = 0; i < 4; i++) {
-        cout << i << endl;
-        cout << "playerToPos["<<i<<"]: " << playerToPos[i] << ' ' << endl;
-    }
-    currentPos = playerToPos[_bookmaker];
+	for (int i = 0; i < 4; i++) {
+		cout << i << endl;
+		cout << "playerToPos[" << i << "]: " << playerToPos[i] << ' ' << endl;
+	}
+	currentPos = playerToPos[_bookmaker];
 
 	/*
 	// 這裡要判斷開局時莊家有沒有胡，跟之後摸一張牌、別人出牌時的寫法應該會不一樣（有一張傳入的牌）
@@ -276,14 +276,24 @@ void MJstage::mainGame(int& rounds) {
 
 	while (mjcol.size() != 0) {
 		cout << "Enter while loop. Rounds " << ++rounds << "." << endl;
+		cout << "Currently is _players[" << currentPlayer << "](position " << currentPos
+		     << ")'s turn.\n" << endl;
 
 		// 其他三家要傳進那張丟出來的牌看能不能有 strategy
-		cout << "Other players decide strategy." << endl;
+		// cout << "Other players decide strategy." << endl;
 		for (int i = 0; i < 4; i++) {
-            if (i != currentPlayer) {
+			cout << "\nEnter tested for loop. i = " << i << "." << endl;
+			if (i != currentPlayer) {
+				// cout << "Enter tested if statement." << endl;
+				cout << "The tile is \n" << t;
+				cout << "The tile in hand is \n";
+				_players[i]->Print_Hand();
 				_players[i]->strategy(currentPos, t, actiontype[i], actionparameter[i]);
+
+				// cout << "_players[" << i << "] has decided the strategy." << endl;
 			}
 		}
+		cout << endl;
 		printStrategy(actiontype, actionparameter);
 		// cin.get();
 
