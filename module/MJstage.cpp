@@ -3,6 +3,7 @@
 #include <ctime>
 #include <map>
 #include <cassert>
+#include <fstream>
 
 #include "MJstage.h"
 
@@ -113,6 +114,15 @@ void printHands(vector<MJplayer*> _players) {
 	return;
 }
 
+
+
+void writeRemainCol(int remain) {
+	ofstream myfile;
+	myfile.open ("20180103test.txt", fstream::in | fstream::out | fstream::app);
+	myfile << remain << "\n";
+	myfile.close();
+	return;
+}
 
 
 //============ MJstage Class Methods =================
@@ -303,6 +313,7 @@ void MJstage::mainGame(int& rounds) {
 				_players[i]->act(actiontype[i], actionparameter[i], t, mjcol);
 				cout << "\n***** _players[" << i << "] huother! *****" << endl;
 				// cin.get();
+				writeRemainCol(mjcol.size());
 				return;
 			} else { // 優先順序：gone > pong > eat，同時有人同樣動作就由玩家index小的先？應該要由下家優先
 				if (actiontype[i] > current_action_type) {
@@ -330,6 +341,7 @@ void MJstage::mainGame(int& rounds) {
 				cout << "\n***** _player[" << currentPlayer << "] huown! *****" << endl;
 				_players[currentPlayer]->act(-1, 1, dummy, mjcol);
 				// cin.get();
+				writeRemainCol(mjcol.size());
 				return;
 			}
 			// printHands(_players);
@@ -364,6 +376,7 @@ void MJstage::mainGame(int& rounds) {
 				cout << "\n***** _player[" << currentPlayer << "] huown! *****" << endl;
 				_players[currentPlayer]->act(-1, 1, dummy, mjcol);
 				// cin.get();
+				writeRemainCol(mjcol.size());
 				return;
 			}
 			// printHands(_players);
@@ -380,6 +393,7 @@ void MJstage::mainGame(int& rounds) {
 		cout << "\n--------------------------------------------------\n" << endl;
 	}
 
+	writeRemainCol(mjcol.size());
 	return;
 }
 
