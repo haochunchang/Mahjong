@@ -300,7 +300,13 @@ bool hu_recursion(vector<MJtile>& tv) {
 	// cout << "print tv in this layer" << endl;
 	// cout << "tv.size() = " << tv.size() << endl;
 	// for(int i=0; i<tv.size(); i++)
-	// 	cout << tv[i] << endl;
+		// cout << tv[i] << endl;
+
+	// 剩一張就直接回傳
+	if (tv.size() == 1){
+		return false;
+	}
+
 
 	// 剩兩張且兩張一樣的話
 	if (tv.size() == 2) {
@@ -340,8 +346,10 @@ bool MJhand::canhu(const MJtile& t) {
 	// Eliminate flowers
 	vector<MJtile> tv(_tiles + _faceup_len, _tiles + _total_len);
 	tv.push_back(t);
+	// cout << "Do sort." << endl;
 	sort(tv.begin(), tv.end(), MJcompare);
 
+	// cout << "Do getting flower id." << endl;
 	int flower_ind = -1;
 	for (int i = 0; i < tv.size(); i++) {
 		if (tv[i].flower() != 0) {
@@ -351,11 +359,14 @@ bool MJhand::canhu(const MJtile& t) {
 		}
 	}
 	if (flower_ind != -1) {
+		// cout << "There is flower tile. Remove from vector." << endl;
 		int tmp = tv.size();
 		for (int i = flower_ind; i < tmp; i++) {
 			tv.pop_back();
 		}
 	}
+	// cout << "Finished the removal. call hu_recursion." << endl;
+
 	// cout << "after processing flower\n";
 	// for(int i=0; i<tv.size(); i++){
 	// 	cout << tv[i];

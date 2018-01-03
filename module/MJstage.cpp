@@ -242,10 +242,6 @@ void MJstage::mainGame(int& rounds) {
 	// 出牌順序：逆時針 (pos 4, 3, 2, 1, 4, etc.)
 
 	currentPlayer = _bookmaker;
-	for (int i = 0; i < 4; i++) {
-		cout << i << endl;
-		cout << "playerToPos[" << i << "]: " << playerToPos[i] << ' ' << endl;
-	}
 	currentPos = playerToPos[_bookmaker];
 
 	/*
@@ -277,17 +273,17 @@ void MJstage::mainGame(int& rounds) {
 	while (mjcol.size() != 0) {
 		cout << "Enter while loop. Rounds " << ++rounds << "." << endl;
 		cout << "Currently is _players[" << currentPlayer << "](position " << currentPos
-		     << ")'s turn.\n" << endl;
+		     << ")'s turn." << endl;
 
 		// 其他三家要傳進那張丟出來的牌看能不能有 strategy
 		// cout << "Other players decide strategy." << endl;
 		for (int i = 0; i < 4; i++) {
-			cout << "\nEnter tested for loop. i = " << i << "." << endl;
+			// cout << "\nEnter tested for loop. i = " << i << "." << endl;
 			if (i != currentPlayer) {
 				// cout << "Enter tested if statement." << endl;
-				cout << "The tile is \n" << t;
-				cout << "The tile in hand is \n";
-				_players[i]->Print_Hand();
+				// cout << "The tile is \n" << t;
+				// cout << "The tile in hand is \n";
+				// _players[i]->Print_Hand();
 				_players[i]->strategy(currentPos, t, actiontype[i], actionparameter[i]);
 
 				// cout << "_players[" << i << "] has decided the strategy." << endl;
@@ -306,7 +302,7 @@ void MJstage::mainGame(int& rounds) {
 			if (actiontype[i] == -1) {
 				_players[i]->act(actiontype[i], actionparameter[i], t, mjcol);
 				cout << "\n***** _players[" << i << "] huother! *****" << endl;
-				cin.get();
+				// cin.get();
 				return;
 			} else { // 優先順序：gone > pong > eat，同時有人同樣動作就由玩家index小的先？應該要由下家優先
 				if (actiontype[i] > current_action_type) {
@@ -333,7 +329,7 @@ void MJstage::mainGame(int& rounds) {
 				// huown
 				cout << "\n***** _player[" << currentPlayer << "] huown! *****" << endl;
 				_players[currentPlayer]->act(-1, 1, dummy, mjcol);
-				cin.get();
+				// cin.get();
 				return;
 			}
 			// printHands(_players);
@@ -367,7 +363,7 @@ void MJstage::mainGame(int& rounds) {
 				// huown
 				cout << "\n***** _player[" << currentPlayer << "] huown! *****" << endl;
 				_players[currentPlayer]->act(-1, 1, dummy, mjcol);
-				cin.get();
+				// cin.get();
 				return;
 			}
 			// printHands(_players);

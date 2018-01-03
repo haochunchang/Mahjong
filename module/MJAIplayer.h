@@ -16,10 +16,10 @@ public:
 	// actionparameter: huown=1 huother=2
 	void strategy(int position, MJtile t, int &actiontype, int &actionparameter) {
 		// Naive and greedy strategy
-		cout << "Call MJGreedyAIplayer::strategy." << endl;
+		// cout << "Call MJGreedyAIplayer::strategy." << endl;
 		// 上家出的牌才能吃
 		if (previousPlayer[_position] == position) {
-			cout << "Previous players playing." << endl;
+			// cout << "Previous players playing." << endl;
 			if (_hand.caneat(t)) {
 				// eat 為可以吃的方式
 				int method = _hand.caneat(t);
@@ -47,27 +47,27 @@ public:
 		if (position != _position) { // other players playing
 			// cout << "Other players playing." << endl;
 			// check if canhu
-			cout << "Check if canhu." << endl;
+			// cout << "Check if canhu." << endl;
 			if (_hand.canhu(t)) {
 				actiontype = -1;
 				actionparameter = 2;
 				return;
 			}
 			// check if canminggone
-			cout << "Check if canminggone." << endl;
+			// cout << "Check if canminggone." << endl;
 			if (_hand.canminggone(t)) {
 				actiontype = 3;
 				return;
 			}
 			// check if canpong
-			cout << "Check if canpong." << endl;
+			// cout << "Check if canpong." << endl;
 			if (_hand.canpong(t)) {
 				actiontype = 2;
 				return;
 			}
 		} else {
 			// 自己 call 這個函數時
-			cout << "Myself playing." << endl;
+			// cout << "Myself playing." << endl;
 			// 剛從牌底抽牌，決定要不要補槓、暗槓
 			if (_hand.canhu(t)) {
 				actiontype = -1;
@@ -110,8 +110,8 @@ public:
 		_hand.set_total_len(_hand.total_len() + 1);
 		_hand.arrange();
 		_hand.set_total_len(_hand.total_len() - 1);
-		cout << "In decidePlay function. After arrange, the hand is:" << endl;
-		cout << _hand;
+		// cout << "In decidePlay function. After arrange, the hand is:" << endl;
+		// cout << _hand;
 
 
 		// ***** 處理落單的東南西北中發白 *****

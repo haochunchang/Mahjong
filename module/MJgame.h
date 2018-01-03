@@ -78,8 +78,8 @@ void MJgame::start() {
 
 void MJgame::end() {
     cout << "Game End." << endl;
-    cout << "Press any button to exit.." << endl;
-    cin.get();
+    // cout << "Press any button to exit.." << endl;
+    // cin.get();
     return;
 }
 #endif
