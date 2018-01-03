@@ -24,6 +24,9 @@ void testInitEatPong(void);
 int main() {
 	// testhu();
 
+	// while (true) {
+	// 	mainGame();
+	// }
 	mainGame();
 	return 0;
 }

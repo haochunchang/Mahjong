@@ -118,7 +118,7 @@ void printHands(vector<MJplayer*> _players) {
 
 void writeRemainCol(int remain) {
 	ofstream myfile;
-	myfile.open ("20180103test.txt", fstream::in | fstream::out | fstream::app);
+	myfile.open ("data/20180103test.txt", fstream::in | fstream::out | fstream::app);
 	myfile << remain << "\n";
 	myfile.close();
 	return;
