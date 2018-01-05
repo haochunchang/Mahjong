@@ -95,8 +95,11 @@ MJhand::MJhand() {
 	_stage = 0;
 	for (int i = 0; i < 30; i++) {
 		_tiles[i] = MJtile();
+        noreveal[i] = false;
 	}
 }
+
+
 MJhand::MJhand(MJtile* t, int n) {
 	_total_len = n;
 	_faceup_len = 0;
@@ -107,10 +110,12 @@ MJhand::MJhand(MJtile* t, int n) {
 		} else {
 			_tiles[i] = MJtile();
 		}
+        noreveal[i] = false;
 	}
 }
-MJhand::~MJhand() {
-}
+
+
+MJhand::~MJhand() {}
 
 
 int MJhand::faceup_len() const {
@@ -480,12 +485,26 @@ void MJhand::initial(MJcollection& mjcol) {
 	arrange();
 }
 
+
 void MJhand::showhandtoothers() {
 	// print the hand on the screen.
 	// Only the faceup tiles will be shown.
 	// Needs the gap between faceup and facedown tiles.
-	//TODO
+	for (int i = _faceup_len; i < _total_len; i++) {
+        noreveal[i] = true;
+    }
+    MJtile t[30];
+    for (int i = 0; i < _total_len; i++) {
+        if (!noreveal[i]) {
+            t[i] = _tiles[i];
+        } else {
+            t[i] = MJtile();    
+        }
+    }
+    MJhand print(t, _total_len);
+    cout << print;
 }
+
 
 void MJhand::eat(const MJtile& t, int method) {
 	// 助教給的 1:(001), 2:(010), 3:(100)
@@ -742,6 +761,9 @@ void MJhand::angone(int index, MJcollection& mjcol) {
 				break;
 			}
 		}
+        for (int i = 1; i < 5; i++) {
+            noreveal[_faceup_len - i] = true;
+        }
 	}
 	return;
 }
