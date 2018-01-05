@@ -9,11 +9,12 @@ public:
 	MJGreedyAIplayer() {
 		// cout << "Call MJGreedyAIplayer constructor." << endl;
 	}
-	// There are two cases that strategy is called:
+	
+    // There are two cases that strategy is called:
 	//      1. Other player played a tile
 	//      2. One must decide which tile to play
-	// actiontype: hu=-1 nothing=0 eat=1 pong=2 minggone=3 angone=4 bugone=5
-	// actionparameter: huown=1 huother=2
+	// actiontype: nothing=0 eat=1 pong=2 minggone=3 angone=4 bugone=5 hu=7 play=8
+	// actionparameter: huown=1 huother=2 play=index
 	void strategy(int position, MJtile t, int &actiontype, int &actionparameter) {
 		// Naive and greedy strategy
 		// cout << "Call MJGreedyAIplayer::strategy." << endl;
@@ -49,7 +50,7 @@ public:
 			// check if canhu
 			// cout << "Check if canhu." << endl;
 			if (_hand.canhu(t)) {
-				actiontype = -1;
+				actiontype = 7;
 				actionparameter = 2;
 				return;
 			}
@@ -70,7 +71,7 @@ public:
 			// cout << "Myself playing." << endl;
 			// 剛從牌底抽牌，決定要不要補槓、暗槓
 			if (_hand.canhu(t)) {
-				actiontype = -1;
+				actiontype = 7;
 				actionparameter = 1;
 				return;
 			}
@@ -82,6 +83,9 @@ public:
 				actiontype = 4;
 				return;
 			}
+            // 以上動作皆沒有，出牌囉
+            actiontype=8;
+            actionparameter=this->decidePlay();
 		}
 		return;
 	};
@@ -225,7 +229,6 @@ public:
 			}
 		}
 
-
 		// ***** 處理只有兩個 suit 4 (Fa Fa) 這種狀況 *****
 		// 先直接看最後兩張是不是這種狀況
 		i = _hand.total_len() - 2;
@@ -241,10 +244,6 @@ public:
 						return i;
 			}
 		}
-
-
-
-
 
 		// 沒其他判斷方式了，就 return 第一張牌吧
 		return _hand.faceup_len();
