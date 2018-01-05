@@ -103,10 +103,10 @@ MJtile MJplayer::play(int index) {
     return _hand.play(index);
 }
 
-// actiontype: hu=-1 nothing=0 eat=1 pong=2 minggone=3 angone=4 bugone=5
+// actiontype: nothing=0 eat=1 pong=2 minggone=3 angone=4 bugone=5 hu=7
 void MJplayer::act(int type, int param, MJtile& t, MJcollection& mjcol) {
     switch (type) {
-    case -1:
+    case 7:
         if (param == 2)
             _hand.huother(t);
         if (param == 1)
