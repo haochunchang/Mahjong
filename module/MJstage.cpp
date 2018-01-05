@@ -55,7 +55,10 @@ void printStrategy(int* actiontype, int* actionparameter) {
 		case 5:
 			cout << "bugone" << endl;
 			break;
-		}
+		case 8:
+            cout << "play: " << actionparameter[i] << endl;
+            break;
+        }
 	}
 	return;
 }
@@ -99,7 +102,7 @@ void printAction(int player_to_act, int current_action_type, int current_action_
 	case 5:
 		cout << "bugone" << endl;
 		break;
-	}
+    }
 	return;
 }
 
@@ -276,9 +279,10 @@ void MJstage::mainGame(int& rounds) {
     }
     if (actiontype[currentPlayer] == 4) { 
         //angone
-		_players[currentPlayer]->act(actiontype[currentPlayer], actionparameter[currentPlayer], dumdum, mjcol);
+		//TODO
+        //_players[currentPlayer]->act(actiontype[currentPlayer], actionparameter[currentPlayer], dumdum, mjcol);
         //After angone, need to decide which tile to play
-        _players[currentPlayer]->strategy(currentPos, dumdum, actiontype[currentPlayer], actionparameter[currentPlayer]);
+        //_players[currentPlayer]->strategy(currentPos, dumdum, actiontype[currentPlayer], actionparameter[currentPlayer]);
     }
     if (actiontype[currentPlayer] == 8) { 
         cout << "Bookmaker decides what tile to play." << endl;
@@ -289,12 +293,21 @@ void MJstage::mainGame(int& rounds) {
     cout << "Initially, bookmaker plays:" << endl;
 	cout << t;
 	// cin.get();
-
+    
+    actiontype[currentPlayer] = 0;
+    actionparameter[currentPlayer] = 0;
 	// 正式開局！
 	while (mjcol.size() != 0) {
 		cout << "Enter while loop. Rounds " << ++rounds << "." << endl;
 		cout << "Currently is _players[" << currentPlayer << "](position " << currentPos
 		     << ")'s turn." << endl;
+		
+        int current_action_type = 0;
+		int current_action_param = 0;
+		for (int i = 0; i < 4; i++) {
+			actiontype[i] = 0;
+			actionparameter[i] = 0;
+		}
 
 		// 其他三家要傳進那張丟出來的牌看能不能有 strategy
 		// cout << "Other players decide strategy." << endl;
@@ -315,12 +328,10 @@ void MJstage::mainGame(int& rounds) {
 		// cin.get();
 
 		// Checking Actions: gone > pong > eat
-		int current_action_type = 0;
-		int current_action_param = 0;
 		// decide which player's action is executed
 		int player_to_act = -1;
 		for (int i = 0; i < 4; i++) {
-			if (actiontype[i] == -1) {
+			if (actiontype[i] == 7) {
 				_players[i]->act(actiontype[i], actionparameter[i], t, mjcol);
 				cout << "\n***** _players[" << i << "] huother! *****" << endl;
 				// cin.get();
@@ -371,14 +382,8 @@ void MJstage::mainGame(int& rounds) {
 		} else {
 			// player_to_act 不為 0，即至少有人有動作
 			_players[player_to_act]->act(current_action_type, current_action_param, t, mjcol);
-			current_action_type = 0;
-			current_action_param = 0;
-			for (int i = 0; i < 4; i++) {
-				actiontype[i] = 0;
-				actionparameter[i] = 0;
-			}
-
-			// currentPlayer 換到剛剛有動作的人
+			
+            // currentPlayer 換到剛剛有動作的人
 			currentPos = playerToPos[player_to_act];
 			currentPlayer = player_to_act;
 			cout << "\nIt is _player[" << currentPlayer << "]'s turn." << endl;
