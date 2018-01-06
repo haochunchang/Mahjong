@@ -163,6 +163,10 @@ MJstage::MJstage(int n_human, int AIkind) {
 			_players.push_back(new MJCustomAIplayer);
 		}
 	}
+	for (int i = 0; i < 4; i++) {
+		playerToPos[i] = 0;
+		posToPlayer[i] = 0;
+    }	
 }
 
 
