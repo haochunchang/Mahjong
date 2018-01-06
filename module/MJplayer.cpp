@@ -1,5 +1,6 @@
 #include <iostream>
 #include <map>
+#include <vector>
 #include "MJplayer.h"
 #include "MJhand.h"
 #include "MJcollection.h"
@@ -131,37 +132,97 @@ void MJplayer::act(int type, int param, MJtile& t, MJcollection& mjcol) {
 void MJplayer::strategy(int position, MJtile t, int &actiontype, int &actionparameter) {
     // call after every play
     // This one is for human player
-
+    int method = 0;
+    map<int, string> action_map;
+    action_map[0] = "play";
+    action_map[1] = "eat";
+    action_map[2] = "pong";
+    action_map[3] = "minggone";
+    action_map[5] = "bugone";
+    action_map[7] = "hu";
+    vector<bool> avail(8, false); // Indicator of available actions
+    avail[0] = true;
     // if 現在出牌的人是上家, check if caneat
     if (previousPlayer[_position] == position) {
         cout << "check if caneat: ";
-        (_hand.caneat(t)) ? (cout << "true" << endl) : (cout << "false" << endl);
+        if (_hand.caneat(t)) { 
+            avail[1] = true; 
+            method = _hand.caneat(t);
+        	switch (method) {
+				case 3:
+					method = 1;
+					break;
+				case 5:
+					method = 1;
+					break;
+				case 6:
+					method = 2;
+					break;
+				case 7:
+					method = 1;
+					break;
+			}
+        }
     }
     // check if canpong
     cout << "check if canpong: ";
-    (_hand.canpong(t)) ? (cout << "true" << endl) : (cout << "false" << endl);
+    if (_hand.canpong(t)) {
+        avail[2] = true;    
+    }
 
     // check if canminggone
     cout << "check if canminggone: ";
-    (_hand.canminggone(t)) ? (cout << "true" << endl) : (cout << "false" << endl);
+    if (_hand.canminggone(t)) {
+        avail[3] = true;    
+    }
 
     // check if canbugone
     // not sure if angone is needed
     cout << "check if canbugone: ";
-    (_hand.canbugone(t)) ? (cout << "true" << endl) : (cout << "false" << endl);
+    if (_hand.canbugone(t)) {
+        avail[5] = true;    
+    }
 
     // check if canhu
     cout << "check if canhu: ";
-    (_hand.canhu(t)) ? (cout << "true" << endl) : (cout << "false" << endl);
+    if (_hand.canhu(t)) {
+        avail[7] = true;
+    }
 
+    // Prompt user to choose from available actions
+    for (int i = 7; i >= 0; i--) {
+        fprintf(stdout, "You can do the following actions:\n");
+        if (avail[i]) {
+            fprintf(stdout, "%d: %s\n", i, action_map[i].c_str());    
+        }
+    }
+    int a = 0;
+    fprintf(stdout, "Please choose one of the actions above:\n");
+    fscanf(stdin, "%d", &a);
+    if (a > 7 || a < 0 || !avail[a]) {
+        fprintf(stdout, "Invalid action: (0~7) and available\n");
+        fprintf(stdout, "Default: play a tile\n");
+        a = 0;
+    }
+    if (a == 0) {
+        actiontype = 8;
+        int index = this->decidePlay();
+	    int number = index - this->faceup_len() + 1;
+        actionparameter = number;
+    } else if (a == 1) {
+        actiontype = a;
+        actionparameter = method;
+    } else {
+        actiontype = a;    
+    }
     return;
 }
 
 
 int MJplayer::decidePlay(void) {
     int pos = 0;
-    cout << _hand;
     cout << "Which tile do you want to play?" << endl;
+    cout << _hand;
     cin >> pos;
     return pos;
 }
