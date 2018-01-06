@@ -247,17 +247,15 @@ void MJplayer::getinfo(int position, int type, MJtile* ts, int tiles_num) {
     } else if (type == 1) { 
         // someone eat
         if (tiles_num == 1) { // (001)
-            out[suit-1][rank-1] += 1;
             out[suit-1][rank-2] += 1;
             out[suit-1][rank-3] += 1;
         } else { // (010)
-            out[suit-1][rank-1] += 1;
             out[suit-1][rank] += 1;
             out[suit-1][rank-2] += 1;           
         }
     } else if (type == 2) { 
         // someone pong
-        out[suit-1][rank-1] += 3;
+        out[suit-1][rank-1] += 2;
     } else if (type == 3 || type == 5) { 
         // someone minggone or bugone
         out[suit-1][rank-1] = 4;
