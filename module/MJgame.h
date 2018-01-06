@@ -19,7 +19,7 @@ public:
     ~MJgame();
 
     void start();
-    void setting();
+    //void setting();
     void end();
 private:
     int rounds;
@@ -35,13 +35,8 @@ MJgame::MJgame() {
     cout << endl;
     rounds = 0;
     valueofpoints = 1;
-    MJstage stage;
-};
-
-MJgame::~MJgame() {
-};
-
-void MJgame::setting() {
+    
+    cout << "Start Game Setting..." << endl;
     int human = -1;
     while (human > 4 || human < 0) {
         fprintf(stdout, "How many human players? (0~4)\n");
@@ -59,9 +54,16 @@ void MJgame::setting() {
         fprintf(stdout, "1: GreedyAI, 0: CustomAI\n");
         fscanf(stdin, "%d", &isAIgreedy);
     }
-    stage = MJstage(human, isAIgreedy);
+    MJstage stage(human, isAIgreedy);
     return;
-}
+};
+
+MJgame::~MJgame() {
+};
+
+//void MJgame::setting() {
+
+//}
 
 void MJgame::start() {
     stage.pickSeat();
