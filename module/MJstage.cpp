@@ -397,10 +397,17 @@ void MJstage::mainGame(int& rounds) {
 			currentPos = playerToPos[player_to_act];
 			currentPlayer = player_to_act;
 			cout << "\nIt is _player[" << currentPlayer << "]'s turn." << endl;
-            (current_action_type == 1 || current_action_type == 2) ? (tiles_num = 3) : (tiles_num = 4); 
-		    for (int i = 0; i < 4; i++) {
+            if (current_action_type == 1) {
+                // Bring eat method into getinfo
+                tiles_num = current_action_param;
+            } else if (current_action_type == 2) {
+                tiles_num = 3;
+            } else {
+                tiles_num = 4;    
+            }
+		    
+            for (int i = 0; i < 4; i++) {
 			    if (i != currentPlayer) {
-                    // cannot get full information of eat QAQ
 				    _players[i]->getinfo(currentPos, actiontype[currentPlayer], &t, tiles_num);
                 }
 		    }
