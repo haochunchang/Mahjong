@@ -1,6 +1,7 @@
 #ifndef MJPLAYER
 #define MJPLAYER
 #include <map>
+#include <vector>
 #include <iostream>
 #include "MJhand.h"
 using namespace std;
@@ -39,5 +40,10 @@ protected :
 	int _money;
 	map<int, int> previousPlayer;
 	map<int, int> oppositePlayer;
+
+    // Used for deciding strategy: store MJtile suit/rank
+    // Tiles played out: out[i][j] = count of suit i, rank j
+    vector<vector<int> > out;//(4, vector<int>(9, 0));
+    int count_angone;
 };
 #endif

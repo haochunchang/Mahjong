@@ -12,6 +12,8 @@ MJplayer::MJplayer() {
     _position = 0;
     _money = 0;
     _hand = MJhand();
+    count_angone = 0;
+    vector<vector<int> > out(4, vector<int>(9, 0));
 
     // 1 的上家是 4，2 的上家是 1，3 的上家是 2，4 的上家是 3
     previousPlayer[1] = 4;
@@ -237,6 +239,32 @@ void MJplayer::showhandtoothers(void) {
 void MJplayer::getinfo(int position, int type, MJtile* ts, int tiles_num) {
     // type: eat=1 pong=2 minggone=3 angone=4 bugone=5 applique=6
     // call after any type above
+    int suit = ts->suit();
+    int rank = ts->rank();   
+    if (type == 8) { 
+        // someone play a tile
+        out[suit-1][rank-1] += 1;
+    } else if (type == 1) { 
+        // someone eat
+        if (tiles_num == 1) { // (001)
+            out[suit-1][rank-1] += 1;
+            out[suit-1][rank-2] += 1;
+            out[suit-1][rank-3] += 1;
+        } else { // (010)
+            out[suit-1][rank-1] += 1;
+            out[suit-1][rank] += 1;
+            out[suit-1][rank-2] += 1;           
+        }
+    } else if (type == 2) { 
+        // someone pong
+        out[suit-1][rank-1] += 3;
+    } else if (type == 3 || type == 5) { 
+        // someone minggone or bugone
+        out[suit-1][rank-1] = 4;
+    } else if (type == 4) {
+        // someone angone
+        count_angone += 1;
+    }
     return;
 }
 
