@@ -38,16 +38,19 @@ MJgame::MJgame() {
     
     cout << "Start Game Setting..." << endl;
     int human = -1;
-    while (human > 4 || human < 0) {
+    int times = 0;
+    while ((human > 4 || human < 0) && times < 5) {
         fprintf(stdout, "How many human players? (0~4)\n");
         fscanf(stdin, "%d", &human);
         if (human < 0) {
             fprintf(stdout, "Too few human players, please input 0~4\n");
+            times++;
         } else if (human > 4) {
             fprintf(stdout, "Too many human players, please input 0~4\n");
+            times++;
         }
     }
-
+    if (times == 5) { fprintf(stdout, "I am out of patience...\n"); return; }
     int isAIgreedy = 1;
     if (human != 4) {
         fprintf(stdout, "There will be %d AI players\n What kind of AI do you want?\n", 4 - human);
