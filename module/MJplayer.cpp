@@ -13,7 +13,7 @@ MJplayer::MJplayer() {
     _money = 0;
     _hand = MJhand();
     count_angone = 0;
-    vector<vector<int> > out(4, vector<int>(9, 0));
+    out = vector<vector<int> >(4, vector<int>(9, 0));
 
     // 1 的上家是 4，2 的上家是 1，3 的上家是 2，4 的上家是 3
     previousPlayer[1] = 4;
@@ -33,6 +33,8 @@ MJplayer::MJplayer(int pos, int money, MJtile* t, int n) {
     _position = pos;
     _money = money;
     _hand = MJhand(t, n);
+    count_angone = 0;
+    out = vector<vector<int> >(4, vector<int>(9, 0));
 
     // 1 的上家是 4，2 的上家是 1，3 的上家是 2，4 的上家是 3
     previousPlayer[1] = 4;
