@@ -228,6 +228,12 @@ int MJplayer::decidePlay(void) {
 }
 
 
+void MJplayer::showhandtoothers(void) {
+    _hand.showhandtoothers();
+    return;
+}
+
+
 void MJplayer::getinfo(int position, int type, MJtile* ts, int tiles_num) {
     // type: eat=1 pong=2 minggone=3 angone=4 bugone=5 applique=6
     // call after any type above
