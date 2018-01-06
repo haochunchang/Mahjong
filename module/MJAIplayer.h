@@ -86,7 +86,7 @@ public:
             // 以上動作皆沒有，出牌囉
             actiontype = 8;
             int index = this->decidePlay();
-	        int number = index - this->faceup_len() + 1;
+	        int number = index - _hand.faceup_len() + 1;
             actionparameter = number;
 		}
 		return;
