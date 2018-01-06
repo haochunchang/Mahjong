@@ -303,7 +303,7 @@ void MJstage::mainGame(int& rounds) {
     actiontype[currentPlayer] = 0;
     actionparameter[currentPlayer] = 0;
 	// 正式開局！
-	while (mjcol.size() != 0) {
+	while (mjcol.size() > 16) { // 留下八墩(16張)牌
 		cout << "Enter while loop. Rounds " << ++rounds << "." << endl;
 		cout << "Currently is _players[" << currentPlayer << "](position " << currentPos
 		     << ")'s turn." << endl;
