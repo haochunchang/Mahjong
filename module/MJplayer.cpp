@@ -28,6 +28,29 @@ MJplayer::MJplayer() {
     oppositePlayer[4] = 2;
 }
 
+
+MJplayer::MJplayer(int money) {
+    // cout << "Call MJplayer constructor." << endl;
+    _position = 0;
+    _money = money;
+    _hand = MJhand();
+    count_angone = 0;
+    out = vector<vector<int> >(4, vector<int>(9, 0));
+
+    // 1 的上家是 4，2 的上家是 1，3 的上家是 2，4 的上家是 3
+    previousPlayer[1] = 4;
+    previousPlayer[2] = 1;
+    previousPlayer[3] = 2;
+    previousPlayer[4] = 3;
+
+    // 1 的對家是 3，3 的對家是 1，2 的對家是 4，4 的對家是 2
+    oppositePlayer[1] = 3;
+    oppositePlayer[3] = 1;
+    oppositePlayer[2] = 4;
+    oppositePlayer[4] = 2;
+}
+
+
 MJplayer::MJplayer(int pos, int money, MJtile* t, int n) {
     cout << "Call MJplayer constructor with input value." << endl;
     _position = pos;

@@ -8,7 +8,8 @@ using namespace std;
 class MJplayer {
 public :
 	MJplayer();
-	MJplayer(int, int, MJtile*, int); // position, money, tiles, num_tiles
+	MJplayer(int); // money
+    MJplayer(int, int, MJtile*, int); // position, money, tiles, num_tiles
 	~MJplayer();
 
 	void Set_Pos(int);
