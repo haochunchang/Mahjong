@@ -30,12 +30,13 @@ public:
 	MJstage(void);				// 還不確定要怎寫
 	MJstage(int, int, int);
     ~MJstage(void);
+    void clear(void);
     void pickSeat(void);		// done
 	void pickBookmaker(void);	// done
 	void nextBookmaker(void);
     void getTiles(void);		// done
 	void initiate(void);		// done
-	void mainGame(int&);
+	bool mainGame(int&);        // true if 流局 else false
 	void countTai(void);
 
 private:
