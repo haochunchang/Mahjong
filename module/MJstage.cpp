@@ -144,7 +144,7 @@ MJstage::MJstage() {
 }
 
 
-MJstage::MJstage(int n_human, int AIkind) {
+MJstage::MJstage(int n_human, int AIkind, int money) {
 	cout << "Call MJstage constructor." << endl;
 
 	Shuffler s;
@@ -154,19 +154,19 @@ MJstage::MJstage(int n_human, int AIkind) {
 	mjcol = MJcollection(mjtiles);
 
 	for (int i = 0; i < n_human; i++) {
-		_players.push_back(new MJplayer);
+		_players.push_back(new MJplayer(money));
 	}
 	for (int i = 0; i < 4 - n_human; i++) {
 		if (AIkind == 1) {
-			_players.push_back(new MJGreedyAIplayer);
+			_players.push_back(new MJGreedyAIplayer(money));
 		} else {
-			_players.push_back(new MJCustomAIplayer);
+			_players.push_back(new MJCustomAIplayer(money));
 		}
 	}
 	for (int i = 0; i < 4; i++) {
 		playerToPos[i] = 0;
 		posToPlayer[i] = 0;
-    }	
+    }
 }
 
 
@@ -205,6 +205,12 @@ void MJstage::pickSeat(void) {
 void MJstage::pickBookmaker(void) {
 	srand(time(NULL));
 	_bookmaker = rand() % 4;
+	cout << "_players[" << _bookmaker << "] is the bookmaker" << endl;
+}
+
+
+void MJstage::nextBookmaker(void) {
+	(_bookmaker == 4) ? ( _bookmaker = 1 ) : ( _bookmaker += 1);
 	cout << "_players[" << _bookmaker << "] is the bookmaker" << endl;
 }
 

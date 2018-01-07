@@ -28,11 +28,12 @@ using namespace std;
 class MJstage {
 public:
 	MJstage(void);				// 還不確定要怎寫
-	MJstage(int, int);
+	MJstage(int, int, int);
     ~MJstage(void);
     void pickSeat(void);		// done
 	void pickBookmaker(void);	// done
-	void getTiles(void);		// done
+	void nextBookmaker(void);
+    void getTiles(void);		// done
 	void initiate(void);		// done
 	void mainGame(int&);
 	void countTai(void);
