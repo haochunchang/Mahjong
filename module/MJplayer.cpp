@@ -110,6 +110,7 @@ MJtile MJplayer::play(int index) {
 
 // actiontype: nothing=0 eat=1 pong=2 minggone=3 angone=4 bugone=5 hu=7
 void MJplayer::act(int type, int param, MJtile& t, MJcollection& mjcol) {
+    int index = _hand.total_len() - _hand.faceup_len();
     switch (type) {
     case 7:
         if (param == 2)
@@ -125,6 +126,12 @@ void MJplayer::act(int type, int param, MJtile& t, MJcollection& mjcol) {
         break;
     case 3:
         _hand.minggone(t, mjcol);
+        break;
+    case 4:
+        _hand.angone(index, mjcol);
+        break;
+    case 5:
+        _hand.bugone(index, mjcol);
         break;
     default:
         return;
