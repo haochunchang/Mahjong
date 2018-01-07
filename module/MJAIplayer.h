@@ -6,9 +6,12 @@ using namespace std;
 
 class MJGreedyAIplayer: public MJplayer {
 public:
-	MJGreedyAIplayer() {
-		// cout << "Call MJGreedyAIplayer constructor." << endl;
-	}
+	MJGreedyAIplayer() : MJplayer() {
+		cout << "Call MJGreedyAIplayer constructor." << endl;
+    }
+	MJGreedyAIplayer(int money) : MJplayer(money) {
+		cout << "Call MJGreedyAIplayer constructor with money." << endl;
+    }
 	
     // There are two cases that strategy is called:
 	//      1. Other player played a tile
@@ -254,7 +257,16 @@ public:
 
 
 class MJCustomAIplayer: public MJplayer {
-	void strategy(int position, MJtile t, int &actiontype, int &actionparameter) {
+	
+public:
+    MJCustomAIplayer() : MJplayer() {
+		cout << "Call MJCustomAIplayer constructor." << endl;
+    }
+	MJCustomAIplayer(int money) : MJplayer(money) {
+		cout << "Call MJCustomAIplayer constructor with money." << endl;
+    }
+	
+    void strategy(int position, MJtile t, int &actiontype, int &actionparameter) {
 		// Use information from getinfo to decide
 		//TODO
 	};
