@@ -82,20 +82,24 @@ void MJgame::start() {
     cout << endl;
     stage.pickBookmaker();
     cout << endl;
+    int init_book = stage.getBookmaker();
     int num_rounds = 0;
     int winner = -1;
-    for (int i = 0; i < rounds*4; i++) {
-        stage.getTiles();
-        cout << endl;
-        stage.initiate();
-        cout << endl;
-        winner = stage.mainGame(num_rounds);
-        if (winner != stage.getBookmaker()){    
-            stage.nextBookmaker();
+    for (int i = 0; i < rounds; i++) {
+        while (true) {
+            stage.getTiles();
+            cout << endl;
+            stage.initiate();
+            cout << endl;
+            winner = stage.mainGame(num_rounds);
+            if (winner != stage.getBookmaker() && winner != -1){    
+                stage.nextBookmaker();
+                if (stage.getBookmaker() == init_book) { break; }
+            }
+            winner = -1;
+            num_rounds = 0;
+            stage.clear();
         }
-        winner = -1;
-        num_rounds = 0;
-        stage.clear();
     }
     return;
 }
