@@ -33,11 +33,13 @@ public:
     void clear(void);
     void pickSeat(void);		// done
 	void pickBookmaker(void);	// done
-	void nextBookmaker(void);
+	void nextBookmaker(void);   // done
+    int getBookmaker(void);     // done
     void getTiles(void);		// done
 	void initiate(void);		// done
-	bool mainGame(int&);        // true if 流局 else false
+	int mainGame(int&);         // return winner's index
 	void countTai(void);
+    int get_money(int);
 
 private:
 	vector<MJplayer*> _players;

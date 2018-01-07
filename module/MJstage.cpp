@@ -220,8 +220,13 @@ void MJstage::pickBookmaker(void) {
 
 
 void MJstage::nextBookmaker(void) {
-	(_bookmaker == 4) ? ( _bookmaker = 1 ) : ( _bookmaker += 1);
+	(_bookmaker == 3) ? ( _bookmaker = 0 ) : ( _bookmaker += 1);
 	cout << "_players[" << _bookmaker << "] is the bookmaker" << endl;
+}
+
+
+int MJstage::getBookmaker(void) {
+    return _bookmaker;    
 }
 
 
@@ -260,7 +265,12 @@ void MJstage::initiate(void) {
 }
 
 
-bool MJstage::mainGame(int& rounds) {
+int MJstage::get_money(int index) {
+    return _players[index]->Get_Mon();    
+}
+
+
+int MJstage::mainGame(int& rounds) {
 	// greedy algorithm
 	cout << "Enter mainGame:" << endl;
 	int currentPos = 0;
@@ -293,7 +303,7 @@ bool MJstage::mainGame(int& rounds) {
 		_players[currentPlayer]->act(7, 1, dumdum, mjcol);
 		// cin.get();
 		writeRemainCol(mjcol.size());
-		return false;
+		return currentPlayer;
     }
     if (actiontype[currentPlayer] == 4) { 
         //angone
@@ -357,7 +367,7 @@ bool MJstage::mainGame(int& rounds) {
 				cout << "\n***** _players[" << i << "] huother! *****" << endl;
 				// cin.get();
 				writeRemainCol(mjcol.size());
-				return false;
+				return i;
 			} else { // 優先順序：gone > pong > eat，同時有人同樣動作就由玩家index小的先？應該要由下家優先
 				if (actiontype[i] > current_action_type) {
 					player_to_act = i;
@@ -385,7 +395,7 @@ bool MJstage::mainGame(int& rounds) {
 				_players[currentPlayer]->act(7, 1, dummy, mjcol);
 				// cin.get();
 				writeRemainCol(mjcol.size());
-				return false;
+				return currentPlayer;
 			}
 			// printHands(_players);
 
@@ -437,7 +447,7 @@ bool MJstage::mainGame(int& rounds) {
 				_players[currentPlayer]->act(7, 1, dummy, mjcol);
 				// cin.get();
 				writeRemainCol(mjcol.size());
-				return false;
+				return currentPlayer;
 			}
 			// printHands(_players);
 
@@ -460,6 +470,7 @@ bool MJstage::mainGame(int& rounds) {
 	}
 
 	writeRemainCol(mjcol.size());
-    return true;
+    return -1;
 }
+
 
