@@ -281,10 +281,9 @@ void MJstage::mainGame(int& rounds) {
     }
     if (actiontype[currentPlayer] == 4) { 
         //angone
-		//TODO
-        //_players[currentPlayer]->act(actiontype[currentPlayer], actionparameter[currentPlayer], dumdum, mjcol);
+        _players[currentPlayer]->act(actiontype[currentPlayer], actionparameter[currentPlayer], dumdum, mjcol);
         //After angone, need to decide which tile to play
-        //_players[currentPlayer]->strategy(currentPos, dumdum, actiontype[currentPlayer], actionparameter[currentPlayer]);
+        _players[currentPlayer]->strategy(currentPos, dumdum, actiontype[currentPlayer], actionparameter[currentPlayer]);
     }
     if (actiontype[currentPlayer] == 8) { 
         cout << "Bookmaker decides what tile to play." << endl;
@@ -375,8 +374,11 @@ void MJstage::mainGame(int& rounds) {
 			// printHands(_players);
 
 			cout << "_players[" << currentPlayer << "] decides what tile to play." << endl;
-            
-            assert(actiontype[currentPlayer] == 8);
+            // 輪到自己，可能會補槓、暗槓，最後一定要出牌 
+            while (actiontype[currentPlayer] != 8) {
+			    _players[currentPlayer]->act(current_action_type, current_action_param, dummy, mjcol);
+			    _players[currentPlayer]->strategy(currentPos, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
+            }
             t = _players[currentPlayer]->play(actionparameter[currentPlayer]);
 	        tiles_num = 1;
             for (int i = 0; i < 4; i++) {
