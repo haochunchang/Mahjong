@@ -28,6 +28,8 @@ private:
     int rounds; // 圈數
     int valueofpoints; // 每台多少錢
     MJstage stage;
+    // count of hu
+    vector<int> hu_count;
 };
 
 MJgame::MJgame() {
@@ -85,6 +87,7 @@ void MJgame::start() {
     int init_book = stage.getBookmaker();
     int num_rounds = 0;
     int winner = -1;
+    vector<int> hu(4, 0);
     for (int i = 0; i < rounds; i++) {
         while (true) {
             stage.getTiles();
@@ -92,7 +95,8 @@ void MJgame::start() {
             stage.initiate();
             cout << endl;
             winner = stage.mainGame(num_rounds);
-            if (winner != stage.getBookmaker() && winner != -1){    
+            if (winner != -1) { hu[winner] += 1; }
+            if (winner != stage.getBookmaker() && winner != -1){
                 stage.nextBookmaker();
                 if (stage.getBookmaker() == init_book) { break; }
             }
@@ -101,6 +105,10 @@ void MJgame::start() {
             stage.clear();
         }
     }
+
+    for (int i = 0; i < hu.size(); i++) {
+        hu_count.push_back(hu[i]);    
+    }
     return;
 }
 
@@ -108,7 +116,7 @@ void MJgame::end() {
     cout << "Game End." << endl;
     cout << "===== Final Result =====" << endl;
     for (int i = 0; i < 4; i++) {
-        fprintf(stdout, "Player %d: $ %d\n", i, stage.get_money(i));    
+        fprintf(stdout, "Player %d: $ %d, #hu: %d\n", i, stage.get_money(i), hu_count[i]);    
     }
     cout << "============" << endl;
     // cin.get();
