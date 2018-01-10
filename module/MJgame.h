@@ -9,6 +9,7 @@
 #include <iostream>
 #include <vector>
 #include <limits>
+#include <conio.h>
 using namespace std;
 #include "MJplayer.h"
 #include "MJstage.h"
@@ -20,19 +21,30 @@ class MJgame {
 public:
     MJgame();
     ~MJgame();
-
     void start();
     //void setting();
     void end();
+
 private:
-    int rounds; // 圈數
-    int valueofpoints; // 每台多少錢
+    int rounds;             // 圈數
+    int valueofpoints;      // 每台多少錢
+    vector<int> hu_count;   // count of hu
+
     MJstage stage;
-    // count of hu
-    vector<int> hu_count;
 };
 
+void clear_screen()
+{
+#ifdef WINDOWS
+    std::system("cls");
+#else
+    // Assume POSIX
+    std::system ("clear");
+#endif
+}
+
 MJgame::MJgame() {
+    clear_screen();
     cout << endl;
     cout << "************************************" << endl;
     cout << "******Welcome to Taiwan Mahjong*****" << endl;
@@ -40,38 +52,75 @@ MJgame::MJgame() {
     cout << endl;
     rounds = 0;
     valueofpoints = 1;
-    
+
     cout << "Start Game Setting..." << endl;
     int human = -1;
     int times = 0;
+    int isAIgreedy = -1;
+    int money = 0;
+
+    // set human number
     while ((human > 4 || human < 0) && times < 5) {
-        fprintf(stdout, "How many human players? (0~4)\n");
+        fprintf(stdout, "How many human players? (0-4)  ");
         fscanf(stdin, "%d", &human);
         if (human < 0) {
-            fprintf(stdout, "Too few human players, please input 0~4\n");
             times++;
+            if (times == 5) {
+                fprintf(stdout, "I am out of patience...\n");
+                exit(1);
+            }
+            fprintf(stdout, "Too few human players, please input 0-4.\n\n");
         } else if (human > 4) {
-            fprintf(stdout, "Too many human players, please input 0~4\n");
             times++;
+            if (times == 5) {
+                fprintf(stdout, "I am out of patience...\n");
+                exit(1);
+            }
+            fprintf(stdout, "Too many human players, please input 0-4.\n\n");
         }
     }
-    if (times == 5) { fprintf(stdout, "I am out of patience...\n"); return; }
-    int isAIgreedy = 1;
+
+
+    // set AI players number
+    times = 0;
     if (human != 4) {
-        fprintf(stdout, "There will be %d AI players\n What kind of AI do you want?\n", 4 - human);
-        fprintf(stdout, "1: GreedyAI, 0: CustomAI\n");
-        fscanf(stdin, "%d", &isAIgreedy);
+        fprintf(stdout, "There will be %d AI players.\n\nWhat kind of AI do you want?\n", 4 - human);
+        while (!(isAIgreedy == 0 || isAIgreedy == 1) && times < 5) {
+            fprintf(stdout, "(1: GreedyAI, 0: CustomAI)  ");
+            fscanf(stdin, "%d", &isAIgreedy);
+            if (!(isAIgreedy == 0 || isAIgreedy == 1)) {
+                times++;
+                if (times == 5) {
+                    fprintf(stdout, "I am out of patience...\n");
+                    exit(1);
+                }
+                fprintf(stdout, "Invalid input. Please input 0 or 1.\n\n");
+            }
+        }
     }
 
-    int money = 0;
-    fprintf(stdout, "How many rounds do you want to play? (default: 1)\n");
+
+    // set rounds
+    fprintf(stdout, "How many rounds do you want to play? (default: 1)  ");
     fscanf(stdin, "%d", &rounds);
-    if (rounds <= 0 || rounds > MAX) { rounds = 1; }
-    fprintf(stdout, "How much money do every player has? (default: 10000)\n");
+    if (rounds <= 0 || rounds > MAX) {
+        cout << "Invalid input. Automatically set rounds to 1.\n";
+        rounds = 1;
+    }
+
+    // set money
+    fprintf(stdout, "How much money do every player has? (default: 10000)  ");
     fscanf(stdin, "%d", &money);
-    if (money <= 0 || money > MAX) { money = 10000; }
+    if (money <= 0 || money > MAX) {
+        cout << "Invalid input. Automatically set money to 10000.\n";
+        money = 10000;
+    }
 
     MJstage stage(human, isAIgreedy, money);
+    cout << "Press any key to continue...";
+    cin.sync();
+    cin.get();
+
     return;
 };
 
@@ -96,7 +145,7 @@ void MJgame::start() {
             cout << endl;
             winner = stage.mainGame(num_rounds);
             if (winner != -1) { hu[winner] += 1; }
-            if (winner != stage.getBookmaker() && winner != -1){
+            if (winner != stage.getBookmaker() && winner != -1) {
                 stage.nextBookmaker();
                 if (stage.getBookmaker() == init_book) { break; }
             }
@@ -107,7 +156,7 @@ void MJgame::start() {
     }
 
     for (int i = 0; i < hu.size(); i++) {
-        hu_count.push_back(hu[i]);    
+        hu_count.push_back(hu[i]);
     }
     return;
 }
@@ -116,7 +165,7 @@ void MJgame::end() {
     cout << "Game End." << endl;
     cout << "===== Final Result =====" << endl;
     for (int i = 0; i < 4; i++) {
-        fprintf(stdout, "Player %d: $ %d, #hu: %d\n", i, stage.get_money(i), hu_count[i]);    
+        fprintf(stdout, "Player %d: $ %d, #hu: %d\n", i, stage.get_money(i), hu_count[i]);
     }
     cout << "============" << endl;
     // cin.get();

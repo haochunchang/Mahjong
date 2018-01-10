@@ -7,10 +7,10 @@ using namespace std;
 class MJGreedyAIplayer: public MJplayer {
 public:
 	MJGreedyAIplayer() : MJplayer() {
-		cout << "Call MJGreedyAIplayer constructor." << endl;
+		// cout << "Call MJGreedyAIplayer constructor." << endl;
     }
 	MJGreedyAIplayer(int money) : MJplayer(money) {
-		cout << "Call MJGreedyAIplayer constructor with money." << endl;
+		// cout << "Call MJGreedyAIplayer constructor with money." << endl;
     }
 	
     // There are two cases that strategy is called:

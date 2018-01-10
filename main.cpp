@@ -22,12 +22,12 @@ void testAngone(void);
 void testInitEatPong(void);
 
 int main() {
-	testhu();
+	// testhu();
 
 	// while (true) {
 	// 	mainGame();
 	// }
-	// mainGame();
+	mainGame();
 	return 0;
 }
 

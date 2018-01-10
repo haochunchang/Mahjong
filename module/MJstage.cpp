@@ -145,7 +145,7 @@ MJstage::MJstage() {
 
 
 MJstage::MJstage(int n_human, int AIkind, int money) {
-	cout << "Call MJstage constructor." << endl;
+	// cout << "Call MJstage constructor." << endl;
 
 	Shuffler s;
 	MJtile mjtiles[144];
