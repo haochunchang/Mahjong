@@ -10,7 +10,7 @@ public:
 		// cout << "Call MJGreedyAIplayer constructor." << endl;
 	}
 	MJGreedyAIplayer(int money) : MJplayer(money) {
-		// cout << "Call MJGreedyAIplayer constructor with money." << endl;
+		cout << "Call MJGreedyAIplayer constructor with money." << endl;
 		// cout << "this->Get_Mon(): " << this->Get_Mon() << endl;
 	}
 

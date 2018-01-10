@@ -116,7 +116,9 @@ MJgame::MJgame() {
         money = 10000;
     }
 
-    MJstage stage(human, isAIgreedy, money);
+    // 原來的錯誤寫法
+    // MJstage stage(human, isAIgreedy, money);
+    stage = MJstage(human, isAIgreedy, money);
     cout << "Press any key to continue...";
     cin.sync();
     cin.get();
@@ -136,8 +138,10 @@ MJgame::MJgame(int human, int isAIgreedy, int round_in, int money) {
     cout << "\trounds = " << round_in << endl;
     cout << "\tmoney = " << money << endl;
     rounds = round_in;
-    MJstage stage(human, isAIgreedy, money);
-        
+    // 原來的錯誤寫法
+    // MJstage stage(human, isAIgreedy, money);
+    stage = MJstage(human, isAIgreedy, money);
+
     cout << "\nPress any key to continue...";
     cin.sync();
     cin.get();

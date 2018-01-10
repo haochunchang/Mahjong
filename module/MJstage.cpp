@@ -130,7 +130,7 @@ void writeRemainCol(int remain) {
 
 //============ MJstage Class Methods =================
 MJstage::MJstage() {
-	// cout << "Call MJstage constructor." << endl;
+	cout << "Call MJstage constructor." << endl;
 
 	Shuffler s;
 	MJtile mjtiles[144];
@@ -145,7 +145,7 @@ MJstage::MJstage() {
 
 
 MJstage::MJstage(int n_human, int AIkind, int money) {
-	// cout << "Call MJstage constructor." << endl;
+	cout << "Call MJstage constructor." << endl;
 	// cout << "Money test in MJstage. Input money is " << money << endl;
 
 	Shuffler s;
@@ -224,9 +224,9 @@ void MJstage::pickBookmaker(void) {
 
 
 void MJstage::nextBookmaker(void) {
-	// 東南西北輪的話，pos 依序是 0 1 2 3
+	// 東南西北輪的話，pos 依序是 1 2 3 4
 	int bookmaker_pos = playerToPos[_bookmaker];
-	(bookmaker_pos == 3) ? (bookmaker_pos = 0) : (bookmaker_pos += 1);
+	(bookmaker_pos == 4) ? (bookmaker_pos = 1) : (bookmaker_pos += 1);
 	_bookmaker = posToPlayer[bookmaker_pos];
 	cout << "_players[" << _bookmaker << "] is the bookmaker" << endl;
 	return;
