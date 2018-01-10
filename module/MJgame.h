@@ -20,9 +20,9 @@ class MJgame {
     friend ostream& operator << (ostream&, const MJhand&);
 public:
     MJgame();
+    MJgame(int, int, int, int);
     ~MJgame();
     void start();
-    //void setting();
     void end();
 
 private:
@@ -39,7 +39,7 @@ void clear_screen()
     std::system("cls");
 #else
     // Assume POSIX
-    std::system ("clear");
+    std::system("clear");
 #endif
 }
 
@@ -47,7 +47,7 @@ MJgame::MJgame() {
     clear_screen();
     cout << endl;
     cout << "************************************" << endl;
-    cout << "******Welcome to Taiwan Mahjong*****" << endl;
+    cout << "***** Welcome to Taiwan Mahjong ****" << endl;
     cout << "************************************" << endl;
     cout << endl;
     rounds = 0;
@@ -101,7 +101,7 @@ MJgame::MJgame() {
 
 
     // set rounds
-    fprintf(stdout, "How many rounds do you want to play? (default: 1)  ");
+    fprintf(stdout, "\nHow many rounds do you want to play? (default: 1)  ");
     fscanf(stdin, "%d", &rounds);
     if (rounds <= 0 || rounds > MAX) {
         cout << "Invalid input. Automatically set rounds to 1.\n";
@@ -120,9 +120,30 @@ MJgame::MJgame() {
     cout << "Press any key to continue...";
     cin.sync();
     cin.get();
-
-    return;
+    cout << endl;
 };
+
+MJgame::MJgame(int human, int isAIgreedy, int round_in, int money) {
+    clear_screen();
+    cout << endl;
+    cout << "************************************" << endl;
+    cout << "***** Welcome to Taiwan Mahjong ****" << endl;
+    cout << "************************************" << endl;
+    cout << endl;
+
+    cout << "  Set\thuman = " << human << endl;
+    cout << "\tisAIgreedy = " << isAIgreedy << endl;
+    cout << "\trounds = " << round_in << endl;
+    cout << "\tmoney = " << money << endl;
+    rounds = round_in;
+    MJstage stage(human, isAIgreedy, money);
+        
+    cout << "\nPress any key to continue...";
+    cin.sync();
+    cin.get();
+    cout << endl;
+}
+
 
 MJgame::~MJgame() {
 };
@@ -130,24 +151,32 @@ MJgame::~MJgame() {
 
 void MJgame::start() {
     stage.pickSeat();
-    cout << endl;
+    cin.get();
+    // cout << endl;
+
     stage.pickBookmaker();
-    cout << endl;
+    cin.get();
+    // cout << endl;
+
     int init_book = stage.getBookmaker();
     int num_rounds = 0;
     int winner = -1;
     vector<int> hu(4, 0);
+
     for (int i = 0; i < rounds; i++) {
         while (true) {
             stage.getTiles();
             cout << endl;
+
             stage.initiate();
-            cout << endl;
+            cin.get();
+            // cout << endl;
+
             winner = stage.mainGame(num_rounds);
-            if (winner != -1) { hu[winner] += 1; }
+            if (winner != -1) hu[winner] += 1;
             if (winner != stage.getBookmaker() && winner != -1) {
                 stage.nextBookmaker();
-                if (stage.getBookmaker() == init_book) { break; }
+                if (stage.getBookmaker() == init_book) break;
             }
             winner = -1;
             num_rounds = 0;
@@ -167,7 +196,7 @@ void MJgame::end() {
     for (int i = 0; i < 4; i++) {
         fprintf(stdout, "Player %d: $ %d, #hu: %d\n", i, stage.get_money(i), hu_count[i]);
     }
-    cout << "============" << endl;
+    cout << "========================" << endl;
     // cin.get();
     return;
 }

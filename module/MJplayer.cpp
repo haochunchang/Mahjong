@@ -33,6 +33,8 @@ MJplayer::MJplayer(int money) {
     // cout << "Call MJplayer constructor." << endl;
     _position = 0;
     _money = money;
+    // cout << "Money test in MJplayer." << _money << endl;
+
     _hand = MJhand();
     count_angone = 0;
     out = vector<vector<int> >(4, vector<int>(9, 0));
@@ -52,7 +54,7 @@ MJplayer::MJplayer(int money) {
 
 
 MJplayer::MJplayer(int pos, int money, MJtile* t, int n) {
-    cout << "Call MJplayer constructor with input value." << endl;
+    // cout << "Call MJplayer constructor with input value." << endl;
     _position = pos;
     _money = money;
     _hand = MJhand(t, n);
@@ -95,6 +97,7 @@ void MJplayer::Set_Mon(int money) {
 
 
 int MJplayer::Get_Mon() const {
+    // cout << "Money test in MJplayer::Get_Mon." << _money << endl;
     return _money;
 }
 
@@ -179,42 +182,42 @@ void MJplayer::strategy(int position, MJtile t, int &actiontype, int &actionpara
     // if 現在出牌的人是上家, check if caneat
     if (previousPlayer[_position] == position) {
         cout << "check if caneat: ";
-        if (_hand.caneat(t)) { 
-            avail[1] = true; 
+        if (_hand.caneat(t)) {
+            avail[1] = true;
             method = _hand.caneat(t);
-        	switch (method) {
-				case 3:
-					method = 1;
-					break;
-				case 5:
-					method = 1;
-					break;
-				case 6:
-					method = 2;
-					break;
-				case 7:
-					method = 1;
-					break;
-			}
+            switch (method) {
+            case 3:
+                method = 1;
+                break;
+            case 5:
+                method = 1;
+                break;
+            case 6:
+                method = 2;
+                break;
+            case 7:
+                method = 1;
+                break;
+            }
         }
     }
     // check if canpong
     cout << "check if canpong: ";
     if (_hand.canpong(t)) {
-        avail[2] = true;    
+        avail[2] = true;
     }
 
     // check if canminggone
     cout << "check if canminggone: ";
     if (_hand.canminggone(t)) {
-        avail[3] = true;    
+        avail[3] = true;
     }
 
     // check if canbugone
     // not sure if angone is needed
     cout << "check if canbugone: ";
     if (_hand.canbugone(t)) {
-        avail[5] = true;    
+        avail[5] = true;
     }
 
     // check if canhu
@@ -227,7 +230,7 @@ void MJplayer::strategy(int position, MJtile t, int &actiontype, int &actionpara
     for (int i = 7; i >= 0; i--) {
         fprintf(stdout, "You can do the following actions:\n");
         if (avail[i]) {
-            fprintf(stdout, "%d: %s\n", i, action_map[i].c_str());    
+            fprintf(stdout, "%d: %s\n", i, action_map[i].c_str());
         }
     }
     int a = 0;
@@ -241,13 +244,13 @@ void MJplayer::strategy(int position, MJtile t, int &actiontype, int &actionpara
     if (a == 0) {
         actiontype = 8;
         int index = this->decidePlay();
-	    int number = index - this->faceup_len() + 1;
+        int number = index - this->faceup_len() + 1;
         actionparameter = number;
     } else if (a == 1) {
         actiontype = a;
         actionparameter = method;
     } else {
-        actiontype = a;    
+        actiontype = a;
     }
     return;
 }
@@ -272,25 +275,25 @@ void MJplayer::getinfo(int position, int type, MJtile* ts, int tiles_num) {
     // type: eat=1 pong=2 minggone=3 angone=4 bugone=5 applique=6
     // call after any type above
     int suit = ts->suit();
-    int rank = ts->rank();   
-    if (type == 8) { 
+    int rank = ts->rank();
+    if (type == 8) {
         // someone play a tile
-        out[suit-1][rank-1] += 1;
-    } else if (type == 1) { 
+        out[suit - 1][rank - 1] += 1;
+    } else if (type == 1) {
         // someone eat
         if (tiles_num == 1) { // (001)
-            out[suit-1][rank-2] += 1;
-            out[suit-1][rank-3] += 1;
+            out[suit - 1][rank - 2] += 1;
+            out[suit - 1][rank - 3] += 1;
         } else { // (010)
-            out[suit-1][rank] += 1;
-            out[suit-1][rank-2] += 1;           
+            out[suit - 1][rank] += 1;
+            out[suit - 1][rank - 2] += 1;
         }
-    } else if (type == 2) { 
+    } else if (type == 2) {
         // someone pong
-        out[suit-1][rank-1] += 2;
-    } else if (type == 3 || type == 5) { 
+        out[suit - 1][rank - 1] += 2;
+    } else if (type == 3 || type == 5) {
         // someone minggone or bugone
-        out[suit-1][rank-1] = 4;
+        out[suit - 1][rank - 1] = 4;
     } else if (type == 4) {
         // someone angone
         count_angone += 1;

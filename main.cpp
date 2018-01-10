@@ -51,7 +51,7 @@ int main() {
 // }
 
 void mainGame(void) {
-	MJgame mygame;
+	MJgame mygame(0, 1, 1, 10000);
 	// mygame.setting();
 	mygame.start();
 	mygame.end();

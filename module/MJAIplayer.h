@@ -8,12 +8,13 @@ class MJGreedyAIplayer: public MJplayer {
 public:
 	MJGreedyAIplayer() : MJplayer() {
 		// cout << "Call MJGreedyAIplayer constructor." << endl;
-    }
+	}
 	MJGreedyAIplayer(int money) : MJplayer(money) {
 		// cout << "Call MJGreedyAIplayer constructor with money." << endl;
-    }
-	
-    // There are two cases that strategy is called:
+		// cout << "this->Get_Mon(): " << this->Get_Mon() << endl;
+	}
+
+	// There are two cases that strategy is called:
 	//      1. Other player played a tile
 	//      2. One must decide which tile to play
 	// actiontype: nothing=0 eat=1 pong=2 minggone=3 angone=4 bugone=5 hu=7 play=8
@@ -86,11 +87,11 @@ public:
 				actiontype = 4;
 				return;
 			}
-            // 以上動作皆沒有，出牌囉
-            actiontype = 8;
-            int index = this->decidePlay();
-	        int number = index - _hand.faceup_len() + 1;
-            actionparameter = number;
+			// 以上動作皆沒有，出牌囉
+			actiontype = 8;
+			int index = this->decidePlay();
+			int number = index - _hand.faceup_len() + 1;
+			actionparameter = number;
 		}
 		return;
 	};
@@ -257,16 +258,16 @@ public:
 
 
 class MJCustomAIplayer: public MJplayer {
-	
+
 public:
-    MJCustomAIplayer() : MJplayer() {
+	MJCustomAIplayer() : MJplayer() {
 		cout << "Call MJCustomAIplayer constructor." << endl;
-    }
+	}
 	MJCustomAIplayer(int money) : MJplayer(money) {
 		cout << "Call MJCustomAIplayer constructor with money." << endl;
-    }
-	
-    void strategy(int position, MJtile t, int &actiontype, int &actionparameter) {
+	}
+
+	void strategy(int position, MJtile t, int &actiontype, int &actionparameter) {
 		// Use information from getinfo to decide
 		//TODO
 	};
