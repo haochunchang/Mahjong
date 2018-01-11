@@ -1,5 +1,7 @@
 #ifndef MJSTAGE
 #define MJSTAGE
+
+#include <memory>
 #include "MJcollection.h"
 #include "Shuffler.h"
 #include "MJplayer.h"
@@ -29,6 +31,7 @@ class MJstage {
 public:
 	MJstage(void);				// 還不確定要怎寫
 	MJstage(int, int, int);
+    //MJstage(MJstage&);    // copy constructor
     ~MJstage(void);
     void clear(void);
     void pickSeat(void);		// done
@@ -40,9 +43,10 @@ public:
 	int mainGame(int&);         // return winner's index
 	void countTai(void);
     int get_money(int);
+    MJstage& operator=(MJstage&&);
 
 private:
-	vector<MJplayer*> _players;
+	vector<unique_ptr<MJplayer> > _players;
 	// It's a vector by TA originally
 	int _bookmaker;
 	// player index (0 - 3), not position (1 - 4)

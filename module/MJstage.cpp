@@ -4,7 +4,12 @@
 #include <map>
 #include <cassert>
 #include <fstream>
+#include <typeinfo>
 
+#include "MJcollection.h"
+#include "Shuffler.h"
+#include "MJplayer.h"
+#include "MJAIplayer.h"
 #include "MJstage.h"
 
 using namespace std;
@@ -107,7 +112,7 @@ void printAction(int player_to_act, int current_action_type, int current_action_
 }
 
 
-void printHands(vector<MJplayer*> _players) {
+void printHands(const vector<unique_ptr<MJplayer> > &_players) {
 	cout << "Print all players' hand." << endl;
 	for (int i = 0; i < 4; i++) {
 		cout << "_players[" << i << "]'s hand is: " << endl;
@@ -139,7 +144,8 @@ MJstage::MJstage() {
 	mjcol = MJcollection(mjtiles);
 
 	for (int i = 0; i < 4; i++) {
-		_players.push_back(new MJGreedyAIplayer);
+        unique_ptr<MJplayer> ptr(new MJGreedyAIplayer);
+		_players.push_back(move(ptr));
 	}
 }
 
@@ -155,13 +161,16 @@ MJstage::MJstage(int n_human, int AIkind, int money) {
 	mjcol = MJcollection(mjtiles);
 
 	for (int i = 0; i < n_human; i++) {
-		_players.push_back(new MJplayer(money));
+        unique_ptr<MJplayer> ptr(new MJplayer(money));
+        _players.push_back(move(ptr));
 	}
 	for (int i = 0; i < 4 - n_human; i++) {
 		if (AIkind == 1) {
-			_players.push_back(new MJGreedyAIplayer(money));
+            unique_ptr<MJplayer> ptr(new MJGreedyAIplayer(money));
+            _players.push_back(move(ptr));
 		} else {
-			_players.push_back(new MJCustomAIplayer(money));
+            unique_ptr<MJplayer> ptr(new MJCustomAIplayer(money));
+			_players.push_back(move(ptr));
 		}
 	}
 	for (int i = 0; i < 4; i++) {
@@ -173,9 +182,35 @@ MJstage::MJstage(int n_human, int AIkind, int money) {
 
 
 MJstage::~MJstage() {
-	for (int i = 0; i < 4; i++) {
-		delete _players[i];
-	}
+	//for (int i = 0; i < 4; i++) {
+	//	delete _players[i];
+	//}
+}
+
+/*
+MJstage::MJstage(MJstage& other) {
+    _bookmaker = other._bookmaker;
+    mjcol = other.mjcol;
+    playerToPos = other.playerToPos;
+    posToPlayer = other.posToPlayer;
+    for (int i = 0; i < 4; i++) {
+        _players[i].swap(other._players[i]);    
+    }   
+}
+*/
+
+MJstage& MJstage::operator=(MJstage&& other ) {
+    _bookmaker = other._bookmaker;
+    mjcol = other.mjcol;
+    playerToPos = other.playerToPos;
+    posToPlayer = other.posToPlayer;
+    
+    for (int i = 0; i < 4; i++) {
+        // set unique_ptr by providing raw pointer and deleter
+        _players[i].swap(other._players[i]);
+        //_players[i] = unique_ptr<MJplayer>(move(other._players[i].get()), move(other._players[i].get_deleter()));    
+    }
+    return *this;
 }
 
 
@@ -307,8 +342,10 @@ int MJstage::mainGame(int& rounds) {
 
 	// 出牌前先判斷莊家有沒有胡、暗槓，因為剛開局根本沒有槓過，所以不可能補槓
 	MJtile dumdum;
-	_players[currentPlayer]->strategy(currentPos, dumdum, actiontype[currentPlayer], actionparameter[currentPlayer]);
-	if (actiontype[currentPlayer] == 7 && actionparameter[currentPlayer] == 1) {
+    //cout << "Who are you?" << endl;
+    //_players[currentPlayer]->whoIam();
+    _players[currentPlayer]->strategy(currentPos, dumdum, actiontype[currentPlayer], actionparameter[currentPlayer]);
+    if (actiontype[currentPlayer] == 7 && actionparameter[currentPlayer] == 1) {
 		//huown
 		cout << "***** _player[" << currentPlayer << "] huown! *****" << endl;
 		_players[currentPlayer]->act(7, 1, dumdum, mjcol);
@@ -334,7 +371,7 @@ int MJstage::mainGame(int& rounds) {
 	}
 	cout << "Initially, bookmaker plays:" << endl;
 	cout << t;
-	cin.get();
+	//cin.get();
 
 	actiontype[currentPlayer] = 0;
 	actionparameter[currentPlayer] = 0;
@@ -367,7 +404,7 @@ int MJstage::mainGame(int& rounds) {
 		}
 		cout << endl;
 		printStrategy(actiontype, actionparameter);
-		cin.get();
+		//cin.get();
 
 		// Checking Actions: gone > pong > eat
 		// decide which player's action is executed
@@ -389,7 +426,7 @@ int MJstage::mainGame(int& rounds) {
 		}
 
 		printAction(player_to_act, current_action_type, current_action_param);
-		cin.get();
+		//cin.get();
 
 		// Assign actions on players
 		MJtile dummy;
@@ -430,7 +467,7 @@ int MJstage::mainGame(int& rounds) {
 
 			cout << "_players[" << currentPlayer << "] plays:" << endl;
 			cout << t;
-			cin.get();
+			//cin.get();
 
 		} else {
 			// player_to_act 不為 0，即至少有人有動作
@@ -481,7 +518,7 @@ int MJstage::mainGame(int& rounds) {
 			}
 			cout << "_players[" << currentPlayer << "] plays:" << endl;
 			cout << t;
-			cin.get();
+			//cin.get();
 		}
 		cout << "Finish a loop. Now the remain mjcol is at size " << mjcol.size() << endl;
 		cout << "\n--------------------------------------------------\n" << endl;
