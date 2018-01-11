@@ -155,7 +155,6 @@ MJstage::MJstage() {
 
 MJstage::MJstage(int n_human, int AIkind, int money) {
 	cout << "Call MJstage constructor." << endl;
-	// cout << "Money test in MJstage. Input money is " << money << endl;
 
 	Shuffler s;
 	MJtile mjtiles[144];
@@ -180,14 +179,14 @@ MJstage::MJstage(int n_human, int AIkind, int money) {
 		playerToPos[i] = 0;
 		posToPlayer[i] = 0;
 	}
-	// cout << "Money test in MJstage. After push_back, player[0] has " << _players[0]->Get_Mon() << endl;
 }
 
 
 MJstage::~MJstage() {
-	//for (int i = 0; i < 4; i++) {
-	//	delete _players[i];
-	//}
+	// smart pointer is smart thus no need to delete it.
+	// for (int i = 0; i < 4; i++) {
+	// 	delete _players[i];
+	// }
 }
 
 /*
