@@ -107,6 +107,9 @@ void printAction(int player_to_act, int current_action_type, int current_action_
 	case 5:
 		cout << "bugone" << endl;
 		break;
+    case 8:
+        cout << "play a tile" << endl;
+        break;
 	}
 	return;
 }
@@ -314,7 +317,6 @@ int MJstage::get_money(int index) {
 
 
 int MJstage::mainGame(int& rounds) {
-	// greedy algorithm
 	cout << "Enter mainGame:" << endl;
 	int currentPos = 0;
 	int currentPlayer = 0;
@@ -325,56 +327,29 @@ int MJstage::mainGame(int& rounds) {
 	currentPlayer = _bookmaker;
 	currentPos = playerToPos[_bookmaker];
 
-	/*
-	// 這裡要判斷開局時莊家有沒有胡，跟之後摸一張牌、別人出牌時的寫法應該會不一樣（有一張傳入的牌）
-	// 補充：因為開局只可能是胡，之後摸一張牌還可能是補槓暗槓
-	// 我覺得是可以直接不寫因為機率太低了
-	*/
-
 	MJtile t;
 	int tiles_num = 0;
 	// 抽牌從 initiate 移來這裡
 	cout << "It is bookmaker (_player[" << currentPlayer << "])'s turn." << endl;
 	cout << "Bookmaker draw the 17th tile." << endl;
-	_players[_bookmaker]->draw(mjcol);
+	_players[currentPlayer]->draw(mjcol);
 	cout << "\nNow bookmaker's hand is " << endl;
 	_players[currentPlayer]->Print_Hand();
 
 	// 出牌前先判斷莊家有沒有胡、暗槓，因為剛開局根本沒有槓過，所以不可能補槓
-	MJtile dumdum;
+	MJtile dummy;
     //cout << "Who are you?" << endl;
     //_players[currentPlayer]->whoIam();
-    _players[currentPlayer]->strategy(currentPos, dumdum, actiontype[currentPlayer], actionparameter[currentPlayer]);
+    _players[currentPlayer]->strategy(currentPos, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
     if (actiontype[currentPlayer] == 7 && actionparameter[currentPlayer] == 1) {
 		//huown
 		cout << "***** _player[" << currentPlayer << "] huown! *****" << endl;
-		_players[currentPlayer]->act(7, 1, dumdum, mjcol);
+		_players[currentPlayer]->act(7, 1, dummy, mjcol);
 		// cin.get();
 		writeRemainCol(mjcol.size());
 		return currentPlayer;
 	}
-	if (actiontype[currentPlayer] == 4) {
-		//angone
-		_players[currentPlayer]->act(actiontype[currentPlayer], actionparameter[currentPlayer], dumdum, mjcol);
-		//After angone, need to decide which tile to play
-		_players[currentPlayer]->strategy(currentPos, dumdum, actiontype[currentPlayer], actionparameter[currentPlayer]);
-	}
-	if (actiontype[currentPlayer] == 8) {
-		cout << "Bookmaker decides what tile to play." << endl;
-		t = _players[currentPlayer]->play(actionparameter[currentPlayer]);
-		tiles_num = 1;
-		for (int i = 0; i < 4; i++) {
-			if (i != currentPlayer) {
-				_players[i]->getinfo(currentPos, actiontype[currentPlayer], &t, tiles_num);
-			}
-		}
-	}
-	cout << "Initially, bookmaker plays:" << endl;
-	cout << t;
-	//cin.get();
 
-	actiontype[currentPlayer] = 0;
-	actionparameter[currentPlayer] = 0;
 	// 正式開局！
 	while (mjcol.size() > 16) { // 留下八墩(16張)牌
 		cout << "Enter while loop in rounds " << ++rounds << "." << endl;
@@ -387,9 +362,28 @@ int MJstage::mainGame(int& rounds) {
 			actiontype[i] = 0;
 			actionparameter[i] = 0;
 		}
+		
+		cout << "_players[" << currentPlayer << "] decides what tile to play." << endl;
+        while (actiontype[currentPlayer] != 8) {
+				_players[currentPlayer]->act(current_action_type, current_action_param, dummy, mjcol);
+				_players[currentPlayer]->strategy(currentPos, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
+		}
+      	if (actiontype[currentPlayer] == 8) {
+		    //cout << "Bookmaker decides what tile to play." << endl;
+		    t = _players[currentPlayer]->play(actionparameter[currentPlayer]);
+		    cout << "_players[" << currentPlayer << "] play:" << endl;
+            cout << t;
+            tiles_num = 1;
+		    for (int i = 0; i < 4; i++) {
+			    if (i != currentPlayer) {
+				    _players[i]->getinfo(currentPos, actiontype[currentPlayer], &t, tiles_num);
+			    }
+		    }
+	    }   
+	  
 
 		// 其他三家要傳進那張丟出來的牌看能不能有 strategy
-		// cout << "Other players decide strategy." << endl;
+		cout << "Other players decide strategy." << endl;
 		for (int i = 0; i < 4; i++) {
 			// cout << "\nEnter tested for loop. i = " << i << "." << endl;
 			if (i != currentPlayer) {
@@ -400,7 +394,10 @@ int MJstage::mainGame(int& rounds) {
 				_players[i]->strategy(currentPos, t, actiontype[i], actionparameter[i]);
 
 				// cout << "_players[" << i << "] has decided the strategy." << endl;
-			}
+			} else {
+                actiontype[i] = 0;
+                actionparameter[i] = 0;
+            }
 		}
 		cout << endl;
 		printStrategy(actiontype, actionparameter);
@@ -429,7 +426,6 @@ int MJstage::mainGame(int& rounds) {
 		//cin.get();
 
 		// Assign actions on players
-		MJtile dummy;
 		if (player_to_act == -1) { // 大家都沒有動作，直接換下一位
 			(currentPos == 1) ? (currentPos = 4) : (currentPos -= 1);
 			currentPlayer = posToPlayer[currentPos];
@@ -449,35 +445,15 @@ int MJstage::mainGame(int& rounds) {
 				writeRemainCol(mjcol.size());
 				return currentPlayer;
 			}
-			// printHands(_players);
-
-			cout << "_players[" << currentPlayer << "] decides what tile to play." << endl;
-			// 輪到自己，可能會補槓、暗槓，最後一定要出牌
-			while (actiontype[currentPlayer] != 8) {
-				_players[currentPlayer]->act(current_action_type, current_action_param, dummy, mjcol);
-				_players[currentPlayer]->strategy(currentPos, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
-			}
-			t = _players[currentPlayer]->play(actionparameter[currentPlayer]);
-			tiles_num = 1;
-			for (int i = 0; i < 4; i++) {
-				if (i != currentPlayer) {
-					_players[i]->getinfo(currentPos, actiontype[currentPlayer], &t, tiles_num);
-				}
-			}
-
-			cout << "_players[" << currentPlayer << "] plays:" << endl;
-			cout << t;
-			//cin.get();
-
-		} else {
+	    } else {
 			// player_to_act 不為 0，即至少有人有動作
 			_players[player_to_act]->act(current_action_type, current_action_param, t, mjcol);
 
 			// currentPlayer 換到剛剛有動作的人
 			currentPos = playerToPos[player_to_act];
 			currentPlayer = player_to_act;
-			cout << "It is _player[" << currentPlayer << "](position " << currentPos
-			     << ")'s turn." << endl;
+			//cout << "It is _player[" << currentPlayer << "](position " << currentPos
+			//     << ")'s turn." << endl;
 			if (current_action_type == 1) {
 				// Bring eat method into getinfo
 				tiles_num = current_action_param;
@@ -486,7 +462,7 @@ int MJstage::mainGame(int& rounds) {
 			} else {
 				tiles_num = 4;
 			}
-
+            // 其他玩家紀錄這次動作
 			for (int i = 0; i < 4; i++) {
 				if (i != currentPlayer) {
 					_players[i]->getinfo(currentPos, actiontype[currentPlayer], &t, tiles_num);
@@ -506,19 +482,6 @@ int MJstage::mainGame(int& rounds) {
 
 			cout << "Now _player[" << currentPlayer << "]'s hand is " << endl;
 			_players[currentPlayer]->Print_Hand();
-			cout << "_players[" << currentPlayer << "] decides what tile to play." << endl;
-
-			assert(actiontype[currentPlayer] == 8);
-			t = _players[currentPlayer]->play(actionparameter[currentPlayer]);
-			tiles_num = 1;
-			for (int i = 0; i < 4; i++) {
-				if (i != currentPlayer) {
-					_players[i]->getinfo(currentPos, actiontype[currentPlayer], &t, tiles_num);
-				}
-			}
-			cout << "_players[" << currentPlayer << "] plays:" << endl;
-			cout << t;
-			//cin.get();
 		}
 		cout << "Finish a loop. Now the remain mjcol is at size " << mjcol.size() << endl;
 		cout << "\n--------------------------------------------------\n" << endl;
