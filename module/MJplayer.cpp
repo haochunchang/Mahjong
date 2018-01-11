@@ -181,7 +181,7 @@ void MJplayer::strategy(int position, MJtile t, int &actiontype, int &actionpara
     avail[0] = true;
     // if 現在出牌的人是上家, check if caneat
     if (previousPlayer[_position] == position) {
-        cout << "check if caneat: ";
+        //cout << "check if caneat: ";
         if (_hand.caneat(t)) {
             avail[1] = true;
             method = _hand.caneat(t);
@@ -202,26 +202,22 @@ void MJplayer::strategy(int position, MJtile t, int &actiontype, int &actionpara
         }
     }
     // check if canpong
-    cout << "check if canpong: ";
     if (_hand.canpong(t)) {
         avail[2] = true;
     }
 
     // check if canminggone
-    cout << "check if canminggone: ";
     if (_hand.canminggone(t)) {
         avail[3] = true;
     }
 
     // check if canbugone
     // not sure if angone is needed
-    cout << "check if canbugone: ";
     if (_hand.canbugone(t)) {
         avail[5] = true;
     }
 
     // check if canhu
-    cout << "check if canhu: ";
     if (_hand.canhu(t)) {
         avail[7] = true;
     }
@@ -301,4 +297,6 @@ void MJplayer::getinfo(int position, int type, MJtile* ts, int tiles_num) {
     return;
 }
 
-
+void MJplayer::whoIam(void) {
+    cout << "I am human!" << endl;    
+}

@@ -20,7 +20,7 @@ public:
 	// actiontype: nothing=0 eat=1 pong=2 minggone=3 angone=4 bugone=5 hu=7 play=8
 	// actionparameter: huown=1 huother=2 play=index
 	void strategy(int position, MJtile t, int &actiontype, int &actionparameter) {
-		// Naive and greedy strategy
+        // Naive and greedy strategy
 		// cout << "Call MJGreedyAIplayer::strategy." << endl;
 		// 上家出的牌才能吃
 		if (previousPlayer[_position] == position) {
@@ -254,6 +254,9 @@ public:
 		// 沒其他判斷方式了，就 return 第一張牌吧
 		return _hand.faceup_len();
 	}
+    void whoIam(void) {
+        cout << "I am Greedy~" << endl;    
+    }
 };
 
 
@@ -271,6 +274,10 @@ public:
 		// Use information from getinfo to decide
 		//TODO
 	};
+
+    void whoIam(void) {
+        cout << "I am the Best!!" << endl;    
+    }
 };
 
 

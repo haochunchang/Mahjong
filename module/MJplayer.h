@@ -34,6 +34,7 @@ public :
     virtual void getinfo(int position, int type, MJtile* ts, int tiles_num);
 	// type: eat=1 pong=2 minggone=3 angone=4 bugone=5 applique=6
 	// call after any type above
+    virtual void whoIam(void);
 
 protected :
 	MJhand _hand;
