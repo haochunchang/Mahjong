@@ -222,9 +222,9 @@ void MJplayer::strategy(int position, MJtile t, int &actiontype, int &actionpara
         avail[7] = true;
     }
 
-    // Prompt user to choose from available actions
+    // Prompt user to choose from available actions 
+    fprintf(stdout, "You can do the following actions:\n");
     for (int i = 7; i >= 0; i--) {
-        fprintf(stdout, "You can do the following actions:\n");
         if (avail[i]) {
             fprintf(stdout, "%d: %s\n", i, action_map[i].c_str());
         }
