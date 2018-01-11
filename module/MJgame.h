@@ -9,9 +9,9 @@
 #include <iostream>
 #include <vector>
 #include <limits>
-#include <conio.h>
 using namespace std;
 #include "MJplayer.h"
+#include "MJAIplayer.h"
 #include "MJstage.h"
 
 int MAX = numeric_limits<int>::max();
