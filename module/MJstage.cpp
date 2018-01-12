@@ -210,7 +210,7 @@ MJstage& MJstage::operator=(MJstage&& other ) {
     
     for (int i = 0; i < 4; i++) {
         // set unique_ptr by providing raw pointer and deleter
-        _players[i].swap(other._players[i]);
+        _players[i] = move(other._players[i]);
         //_players[i] = unique_ptr<MJplayer>(move(other._players[i].get()), move(other._players[i].get_deleter()));    
     }
     return *this;
@@ -350,20 +350,17 @@ int MJstage::mainGame(int& rounds) {
 		return currentPlayer;
 	}
 
-	// 正式開局！
+	int current_action_type = 0;
+	int current_action_param = 0;
+    // 正式開局！
 	while (mjcol.size() > 16) { // 留下八墩(16張)牌
 		cout << "Enter while loop in rounds " << ++rounds << "." << endl;
 		cout << "Currently is _players[" << currentPlayer << "](position " << currentPos
 		     << ")'s turn." << endl;
-
-		int current_action_type = 0;
-		int current_action_param = 0;
-		for (int i = 0; i < 4; i++) {
-			actiontype[i] = 0;
-			actionparameter[i] = 0;
-		}
-		
-		cout << "_players[" << currentPlayer << "] decides what tile to play." << endl;
+       
+        current_action_type = 0;
+        current_action_param = 0;
+		//cout << "_players[" << currentPlayer << "] decides what tile to play." << endl;
         while (actiontype[currentPlayer] != 8) {
 				_players[currentPlayer]->act(current_action_type, current_action_param, dummy, mjcol);
 				_players[currentPlayer]->strategy(currentPos, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
@@ -375,9 +372,7 @@ int MJstage::mainGame(int& rounds) {
             cout << t;
             tiles_num = 1;
 		    for (int i = 0; i < 4; i++) {
-			    if (i != currentPlayer) {
-				    _players[i]->getinfo(currentPos, actiontype[currentPlayer], &t, tiles_num);
-			    }
+				_players[i]->getinfo(currentPos, actiontype[currentPlayer], &t, tiles_num);
 		    }
 	    }   
 	  
@@ -410,16 +405,21 @@ int MJstage::mainGame(int& rounds) {
 			if (actiontype[i] == 7) {
 				_players[i]->act(actiontype[i], actionparameter[i], t, mjcol);
 				cout << "***** _players[" << i << "] huother! *****" << endl;
-				cin.get();
+				//cin.get();
 				writeRemainCol(mjcol.size());
 				return i;
 			} else { // 優先順序：gone > pong > eat，同時有人同樣動作就由玩家index小的先？應該要由下家優先
 				if (actiontype[i] > current_action_type) {
-					player_to_act = i;
+                    player_to_act = i;
 					current_action_type = actiontype[i];
 					current_action_param = actionparameter[i];
 				}
 			}
+		}
+	    
+        for (int i = 0; i < 4; i++) {
+			actiontype[i] = 0;
+			actionparameter[i] = 0;
 		}
 
 		printAction(player_to_act, current_action_type, current_action_param);
@@ -431,7 +431,7 @@ int MJstage::mainGame(int& rounds) {
 			currentPlayer = posToPlayer[currentPos];
 			cout << "It is _player[" << currentPlayer << "](position " << currentPos
 			     << ")'s turn." << endl;
-			cout << "_player[" << currentPlayer << "] draw a tile." << endl;
+			//cout << "_player[" << currentPlayer << "] draw a tile." << endl;
 			_players[currentPlayer]->draw(mjcol);
 			cout << "Now _player[" << currentPlayer << "]'s hand is " << endl;
 			_players[currentPlayer]->Print_Hand();
@@ -441,7 +441,7 @@ int MJstage::mainGame(int& rounds) {
 				// huown
 				cout << "***** _player[" << currentPlayer << "] huown! *****" << endl;
 				_players[currentPlayer]->act(7, 1, dummy, mjcol);
-				cin.get();
+				//cin.get();
 				writeRemainCol(mjcol.size());
 				return currentPlayer;
 			}
