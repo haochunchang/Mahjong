@@ -138,7 +138,7 @@ void writeRemainCol(int remain) {
 
 //============ MJstage Class Methods =================
 MJstage::MJstage() {
-	cout << "Call MJstage constructor." << endl;
+	// cout << "Call MJstage constructor." << endl;
 
 	Shuffler s;
 	MJtile mjtiles[144];
@@ -154,7 +154,7 @@ MJstage::MJstage() {
 
 
 MJstage::MJstage(int n_human, int AIkind, int money) {
-	cout << "Call MJstage constructor." << endl;
+	// cout << "Call MJstage constructor." << endl;
 
 	Shuffler s;
 	MJtile mjtiles[144];
@@ -344,14 +344,14 @@ int MJstage::mainGame(int& rounds) {
 		//huown
 		cout << "***** _player[" << currentPlayer << "] huown! *****" << endl;
 		_players[currentPlayer]->act(7, 1, dummy, mjcol);
-		// cin.get();
+		cin.get();
 		writeRemainCol(mjcol.size());
 		return currentPlayer;
 	}
 
 	// 正式開局！
 	while (mjcol.size() > 16) { // 留下八墩(16張)牌
-		cout << "Enter while loop in rounds " << ++rounds << "." << endl;
+		cout << "\nEnter while loop in rounds " << ++rounds << "." << endl;
 		cout << "Currently is _players[" << currentPlayer << "](position " << currentPos
 		     << ")'s turn." << endl;
 
@@ -384,15 +384,11 @@ int MJstage::mainGame(int& rounds) {
 		// 其他三家要傳進那張丟出來的牌看能不能有 strategy
 		cout << "Other players decide strategy." << endl;
 		for (int i = 0; i < 4; i++) {
-			// cout << "\nEnter tested for loop. i = " << i << "." << endl;
 			if (i != currentPlayer) {
-				// cout << "Enter tested if statement." << endl;
 				// cout << "The tile is \n" << t;
 				// cout << "The tile in hand is \n";
 				// _players[i]->Print_Hand();
 				_players[i]->strategy(currentPos, t, actiontype[i], actionparameter[i]);
-
-				// cout << "_players[" << i << "] has decided the strategy." << endl;
 			} else {
                 actiontype[i] = 0;
                 actionparameter[i] = 0;
@@ -400,7 +396,7 @@ int MJstage::mainGame(int& rounds) {
 		}
 		cout << endl;
 		printStrategy(actiontype, actionparameter);
-		//cin.get();
+		cin.get();
 
 		// Checking Actions: gone > pong > eat
 		// decide which player's action is executed

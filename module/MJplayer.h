@@ -19,8 +19,11 @@ public :
 	int Get_Mon() const;
 
 	int faceup_len() const;
+
+	void Set_Hand(MJhand&); // tiles, num_tiles
 	void Set_Hand(MJtile*, int); // tiles, num_tiles
 	void Print_Hand() const;
+
 	void initiate(MJcollection&);
 	void draw(MJcollection&);
     MJtile play(int);
