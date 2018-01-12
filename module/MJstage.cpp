@@ -126,7 +126,6 @@ void printHands(const vector<unique_ptr<MJplayer> > &_players) {
 }
 
 
-
 void writeRemainCol(int remain) {
 	ofstream myfile;
 	myfile.open ("data/20180103test.txt", fstream::in | fstream::out | fstream::app);
@@ -210,7 +209,6 @@ MJstage& MJstage::operator=(MJstage&& other ) {
     for (int i = 0; i < 4; i++) {
         // set unique_ptr by providing raw pointer and deleter
         _players[i] = move(other._players[i]);
-        //_players[i] = unique_ptr<MJplayer>(move(other._players[i].get()), move(other._players[i].get_deleter()));    
     }
     return *this;
 }
@@ -290,13 +288,6 @@ void MJstage::getTiles(void) {
 	for (int i = 0; i < 4; i++) {
 		_players[i]->Set_Hand(&mjtiles_for_player[i][0], 16);
 	}
-
-	/*
-	for (int i = 0; i < 4; i++) {
-		cout << "_players[" << i << "]'s hand is: " << endl;
-		_players[i]->Print_Hand();
-	}
-	*/
 	return;
 }
 
@@ -344,7 +335,7 @@ int MJstage::mainGame(int& rounds) {
 		//huown
 		cout << "***** _player[" << currentPlayer << "] huown! *****" << endl;
 		_players[currentPlayer]->act(7, 1, dummy, mjcol);
-		cin.get();
+		//cin.get();
 		writeRemainCol(mjcol.size());
 		return currentPlayer;
 	}
@@ -437,7 +428,7 @@ int MJstage::mainGame(int& rounds) {
 				cout << "***** _player[" << currentPlayer << "] huown! *****" << endl;
 				_players[currentPlayer]->act(7, 1, dummy, mjcol);
 				//cin.get();
-				writeRemainCol(mjcol.size());
+                writeRemainCol(mjcol.size());
 				return currentPlayer;
 			}
 	    } else {
