@@ -505,11 +505,12 @@ void MJhand::showhandtoothers() {
         if (!noreveal[i]) {
             t[i] = _tiles[i];
         } else {
-            t[i] = MJtile();    
+            t[i] = MJtile(0);    
         }
     }
     MJhand print(t, _total_len);
     cout << print;
+    return;
 }
 
 
@@ -898,7 +899,8 @@ ostream& operator << (ostream& os, const MJhand& h) {
 				os << " 9";
 				break;
 			default:
-				assert(false);
+				os << " X";
+                //assert(false);
 			}
 		}
 		os << "|";
@@ -950,7 +952,8 @@ ostream& operator << (ostream& os, const MJhand& h) {
 					os << "Ju";
 					break;
 				default:
-					assert(false);
+					os << " X";
+                    //assert(false);
 				}
 				break;
 			case 9:
@@ -968,11 +971,13 @@ ostream& operator << (ostream& os, const MJhand& h) {
 					os << "Wi";
 					break;
 				default:
-					assert(false);
+					os << " X";
+                    //assert(false);
 				}
 				break;
 			default:
-				assert(false);
+				os << " X";
+                //assert(false);
 			}
 		else {
 			switch (h._tiles[i].suit()) {
@@ -986,7 +991,8 @@ ostream& operator << (ostream& os, const MJhand& h) {
 				os << " W";
 				break;
 			default:
-				assert(false);
+				os << " X";
+                //assert(false);
 			}
 		}
 		os << "|";
