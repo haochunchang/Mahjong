@@ -171,15 +171,16 @@ void MJplayer::strategy(int position, MJtile t, int &actiontype, int &actionpara
     // This one is for human player
     int method = 0;
     map<int, string> action_map;
-    action_map[0] = "play";
+    action_map[0] = "nothing";
     action_map[1] = "eat";
     action_map[2] = "pong";
     action_map[3] = "minggone";
     action_map[5] = "bugone";
     action_map[7] = "hu";
-    vector<bool> avail(8, false); // Indicator of available actions
-    avail[0] = true;
+    action_map[8] = "play";
+    vector<bool> avail(9, false); // Indicator of available actions
     // if 現在出牌的人是上家, check if caneat
+    avail[0] = true;
     if (previousPlayer[_position] == position) {
         //cout << "check if caneat: ";
         if (_hand.caneat(t)) {
@@ -222,9 +223,18 @@ void MJplayer::strategy(int position, MJtile t, int &actiontype, int &actionpara
         avail[7] = true;
     }
 
+    // your turn, you can play
+    if (position == _position) {
+        avail[8] = true;
+        // draw stage, you must play
+        if (_hand.stage() == 1) {
+            avail[0] = false;    
+        }
+    }
+
     // Prompt user to choose from available actions 
     fprintf(stdout, "You can do the following actions:\n");
-    for (int i = 7; i >= 0; i--) {
+    for (int i = 8; i >= 0; i--) {
         if (avail[i]) {
             fprintf(stdout, "%d: %s\n", i, action_map[i].c_str());
         }
@@ -232,15 +242,19 @@ void MJplayer::strategy(int position, MJtile t, int &actiontype, int &actionpara
     int a = 0;
     fprintf(stdout, "Please choose one of the actions above:\n");
     fscanf(stdin, "%d", &a);
-    if (a > 7 || a < 0 || !avail[a]) {
-        fprintf(stdout, "Invalid action: (0~7) and available\n");
-        fprintf(stdout, "Default: play a tile\n");
-        a = 0;
+    if (a > 8 || a < 0 || !avail[a]) {
+        fprintf(stdout, "Valid actions: (0~8) and available\n");
+        if (position == _position) {
+            fprintf(stdout, "Default: play a tile\n");
+            a = 8;
+        } else {
+            fprintf(stdout, "Default: do nothing\n");
+            a = 0;
+        }
     }
-    if (a == 0) {
+    if (a == 8) {
         actiontype = 8;
-        int index = this->decidePlay();
-        int number = index - this->faceup_len() + 1;
+        int number = this->decidePlay();
         actionparameter = number;
     } else if (a == 1) {
         actiontype = a;
@@ -257,6 +271,9 @@ int MJplayer::decidePlay(void) {
     cout << "Which tile do you want to play?" << endl;
     cout << _hand;
     cin >> pos;
+    if (pos < 1 || pos > _hand.total_len() + _hand.stage()) {
+        pos = 1;    
+    }
     return pos;
 }
 
