@@ -246,10 +246,19 @@ void MJplayer::strategy(int position, MJtile t, int &actiontype, int &actionpara
         }
     }
     int a = 0;
-    fprintf(stdout, "Please choose one of the actions above:\n");
-    fscanf(stdin, "%d", &a);
+    int action_count = -1; // 0 if only_one_action else count of available actions
+
+    for (int i = 0; i < avail.size(); i++) {
+        if (avail[i]) action_count++;
+    }
+
+    if (action_count) {
+        fprintf(stdout, "Please choose one of the actions above:\n");
+        fscanf(stdin, "%d", &a);
+    }
+
+    // Default actions in case of invalid input
     if (a > 8 || a < 0 || !avail[a]) {
-        fprintf(stdout, "Valid actions: (0~8) and available\n");
         if (position == _position) {
             fprintf(stdout, "Default: play a tile\n");
             a = 8;
