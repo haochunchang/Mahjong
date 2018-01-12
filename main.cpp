@@ -9,6 +9,7 @@
 #include "module/MJcollection.h"
 #include "module/MJplayer.h"
 #include "module/MJgame.h"
+#include "module/Debug.h"
 
 using std::cout;
 using std::cin;
@@ -22,12 +23,15 @@ void testBugone(void);
 void testAngone(void);
 void testInitEatPong(void);
 
+bool is_holding = true;
+
 int main() {
-	testStrategy();
+	mainGame();
 	return 0;
 }
 
-// mainGame();
+// testStrategy();
+
 
 // testhu();
 
@@ -52,6 +56,7 @@ void mainGame(void) {
 	// human, isAIgreedy, round_in, money
 	MJgame mygame(0, 1, 1, 10000);
 	// mygame.setting();
+	hold();
 	mygame.start();
 	mygame.end();
 	return;
