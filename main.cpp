@@ -9,29 +9,31 @@
 #include "module/MJcollection.h"
 #include "module/MJplayer.h"
 #include "module/MJgame.h"
+#include "module/Debug.h"
 
 using std::cout;
 using std::cin;
 using std::endl;
 
 void mainGame(void);
+void testStrategy(void);
 void testhu(void);
 void testMinggone(void);
 void testBugone(void);
 void testAngone(void);
 void testInitEatPong(void);
 
-int main() {
-	// testhu();
+bool is_holding = true;
 
-	// while (true) {
-	// 	mainGame();
-	// }
+int main() {
 	mainGame();
 	return 0;
 }
 
+// testStrategy();
 
+
+// testhu();
 
 // testInitEatPongMinggone();
 
@@ -51,12 +53,55 @@ int main() {
 // }
 
 void mainGame(void) {
+	// human, isAIgreedy, round_in, money
 	MJgame mygame(0, 1, 1, 10000);
 	// mygame.setting();
+	hold();
 	mygame.start();
 	mygame.end();
 	return;
 }
+
+
+void testStrategy(void) {
+	// set ids and faceup_len
+	int ids[] = {127, 109, 110, 111, 29, 30, 31, 37, 21, 53, 81, 97, 69, 101, 133, 9, 10};
+	int draw = 97;
+	int faceup_len = 10;
+
+	// fill into mjtiles and print
+	MJtile mjtiles[144];
+	int hand_len = sizeof(ids) / sizeof(ids[0]);
+	for (int i = 0; i < hand_len; i++) {
+		mjtiles[i] = MJtile(ids[i]);
+		// cout << mjtiles[i];
+	}
+	MJhand myhand = MJhand(mjtiles, hand_len);
+	myhand.set_faceup_len(faceup_len);
+	MJtile t(draw);
+	myhand.draw(t);
+	// cout << myhand;
+
+	MJGreedyAIplayer test_player;
+	test_player.Set_Hand(myhand);
+	cout << "Set the hand:" << endl;
+	test_player.Print_Hand();
+
+	// decide what tile to play
+	MJtile dummy;
+	int actiontype, actionparameter;
+	test_player.strategy(test_player.Get_Pos(), dummy, actiontype, actionparameter);
+	// cout << actiontype << '\t' << actionparameter << endl;
+	MJtile play;
+	if (actiontype == 8) {
+		play = test_player.play(actionparameter);
+	}
+	cout << "MJGreedyAIplayer decide to play" << endl;
+	cout << play;
+
+	return;
+}
+
 
 void testhu(void) {
 	Shuffler s;

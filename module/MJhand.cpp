@@ -406,6 +406,13 @@ void MJhand::draw(MJcollection& mjcol) {
 		applique(_total_len, mjcol);
 }
 
+
+void MJhand::draw(MJtile& t) {
+	// do not input a flower!
+	_stage = 1;
+	_tiles[_total_len] = t;
+}
+
 MJtile MJhand::play(int index) {
 
 	if (index >= _total_len + _stage - _faceup_len + 1 || index < 1) {

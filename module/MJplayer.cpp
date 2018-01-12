@@ -106,6 +106,12 @@ int MJplayer::faceup_len() const {
     return _hand.faceup_len();
 }
 
+
+void MJplayer::Set_Hand(MJhand& input){
+    _hand = input;
+    return;
+}
+
 void MJplayer::Set_Hand(MJtile* mjtiles, int number) {
     _hand = MJhand(mjtiles, number);
     return;

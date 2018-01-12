@@ -38,6 +38,7 @@ public:
 
 	void arrange();
 	void draw(MJcollection&);
+	void draw(MJtile&);
 	MJtile play(int);
 	void faceup(int);
 	void applique(int, MJcollection&);
