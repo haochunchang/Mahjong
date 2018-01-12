@@ -119,7 +119,15 @@ void MJplayer::Set_Hand(MJtile* mjtiles, int number) {
 
 
 void MJplayer::Print_Hand() const {
+    // public showing
     cout << _hand;
+    return;
+}
+
+
+void MJplayer::showhandtoothers(void) {
+    // only show faceup
+    _hand.showhandtoothers();
     return;
 }
 
@@ -290,12 +298,6 @@ int MJplayer::decidePlay(void) {
         pos = 1;    
     }
     return pos;
-}
-
-
-void MJplayer::showhandtoothers(void) {
-    _hand.showhandtoothers();
-    return;
 }
 
 
