@@ -318,6 +318,7 @@ void MJplayer::getinfo(int position, int type, MJtile* ts, int tiles_num) {
         // someone angone
         count_angone += 1;
     }
+    previousTile = *ts; 
     return;
 }
 
