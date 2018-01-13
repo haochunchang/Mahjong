@@ -221,6 +221,9 @@ void MJstage::clear(void) {
 	s.init();
 	s.fill(mjtiles);
 	mjcol = MJcollection(mjtiles);
+    for (int i = 0; i < 4; i++) {
+        _players[i]->clear_info();    
+    }    
 }
 
 
