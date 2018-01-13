@@ -50,7 +50,6 @@ public:
 
 private:
 	vector<unique_ptr<MJplayer> > _players;
-	vector<bool> is_human;
     // It's a vector by TA originally
 	int _bookmaker;
 	int seed;

@@ -149,7 +149,6 @@ MJstage::MJstage() {
 	s.init();
 	s.fill(mjtiles);
 	mjcol = MJcollection(mjtiles);
-	is_human = {false, false, false, false};
 
 	for (int i = 0; i < 4; i++) {
 		unique_ptr<MJplayer> ptr(new MJGreedyAIplayer);
@@ -166,12 +165,10 @@ MJstage::MJstage(int n_human, int AIkind, int money) {
 	s.init();
 	s.fill(mjtiles);
 	mjcol = MJcollection(mjtiles);
-	is_human = {false, false, false, false};
 
 	for (int i = 0; i < n_human; i++) {
 		unique_ptr<MJplayer> ptr(new MJplayer(money));
 		_players.push_back(move(ptr));
-		is_human[i] = true;
 	}
 	for (int i = 0; i < 4 - n_human; i++) {
 		if (AIkind == 1) {
@@ -196,34 +193,18 @@ MJstage::~MJstage() {
 	// }
 }
 
-/*
-MJstage::MJstage(MJstage& other) {
-    _bookmaker = other._bookmaker;
-    mjcol = other.mjcol;
-    playerToPos = other.playerToPos;
-    posToPlayer = other.posToPlayer;
-    for (int i = 0; i < 4; i++) {
-        _players[i].swap(other._players[i]);
-    }
-}
-*/
 
 MJstage& MJstage::operator=(MJstage&& other ) {
 	_bookmaker = other._bookmaker;
 	mjcol = other.mjcol;
 	playerToPos = other.playerToPos;
 	posToPlayer = other.posToPlayer;
-
-	for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++) {
 		// set unique_ptr by providing raw pointer and deleter
 		_players[i] = move(other._players[i]);
 	}
 	return *this;
 }
-
-
-
-
 
 
 void MJstage::clear(void) {
@@ -333,9 +314,6 @@ void MJstage::initiate(void) {
 }
 
 
-
-
-
 int MJstage::mainGame(int& rounds) {
 	extern bool print_mainGame_info;
 	extern bool print_mainGame_singleHands;
@@ -387,15 +365,10 @@ int MJstage::mainGame(int& rounds) {
 		current_action_type = 0;
 		current_action_param = 0;
 		//cout << "_players[" << currentPlayer << "] decides what tile to play." << endl;
-		while (actiontype[currentPlayer] != 8) {
+        while (actiontype[currentPlayer] != 8) {
 			_players[currentPlayer]->act(current_action_type, current_action_param, dummy, mjcol);
 			_players[currentPlayer]->strategy(currentPos, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
-			if (is_human[currentPlayer]) {
-				for (int i = 0; i < 4; i++) {
-					if (currentPlayer != i) _players[i]->showhandtoothers();
-				}
-			}
-		}
+	    }
 		if (actiontype[currentPlayer] == 8) {
 			//cout << "Bookmaker decides what tile to play." << endl;
 			t = _players[currentPlayer]->play(actionparameter[currentPlayer]);
@@ -465,7 +438,14 @@ int MJstage::mainGame(int& rounds) {
 				cout << "Now _player[" << currentPlayer << "]'s hand is " << endl;
 				_players[currentPlayer]->Print_Hand();
 			}
-			// 檢查是否胡牌
+            // 看其他玩家faceup的牌
+            if (_players[currentPlayer]->is_human()) {
+                cout << "Other players faceup hands." << endl;
+                for (int i = 0; i < 4; i++) {
+                    if (currentPlayer != i) _players[i]->showhandtoothers();
+                }
+            }
+            // 檢查是否胡牌
 			_players[currentPlayer]->strategy(currentPos, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
 			if (actiontype[currentPlayer] == 7 && actionparameter[currentPlayer] == 1) {
 				// huown
@@ -496,7 +476,14 @@ int MJstage::mainGame(int& rounds) {
 			for (int i = 0; i < 4; i++) {
 				_players[i]->getinfo(currentPos, actiontype[currentPlayer], &t, tiles_num);
 			}
-			// 有吃碰槓的動作就是直接出一張，不用抽
+			// 看其他玩家faceup的牌
+            if (_players[currentPlayer]->is_human()) {
+                cout << "Other players faceup hands." << endl;
+                for (int i = 0; i < 4; i++) {
+                    if (currentPlayer != i) _players[i]->showhandtoothers();
+                }
+            }
+            // 有吃碰槓的動作就是直接出一張，不用抽
 			_players[currentPlayer]->strategy(currentPos, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
 			if (actiontype[currentPlayer] == 7 && actionparameter[currentPlayer] == 1) {
 				// huown
