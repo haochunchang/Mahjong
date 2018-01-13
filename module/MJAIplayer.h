@@ -446,9 +446,100 @@ public:
 	}
 
 	void strategy(int position, MJtile t, int &actiontype, int &actionparameter) {
-		// Use information from getinfo to decide
-		//TODO
+        // Use information from getinfo to decide
+        vector<bool> avail(9, false); // Indicator of available actions
+        avail = get_avail_actions(position, t);
+        
+        int suit = t.suit();
+        int rank = t.rank();
+        // hu
+        if (avail[7]) { actiontype = 7; return; }
+        // minggone & pong
+        if (avail[3]) {
+            // can minggone -> can pong
+            // pong first, but minggone first if one of them can form 順
+            
+        } else if (avail[2]) {
+            
+        }
+        // eat
+        if (avail[1]) {
+            
+        }
+        // play
+        if (avail[8]) {
+            actiontype = 8;
+            actionparameter = this->decidePlay();
+            return;
+        }
+        // nothing
+        return;
 	};
+
+    
+    int decidePlay(void) {
+             
+    }
+
+
+    vector<bool> get_avail_actions(int position, MJtile t) {
+        
+        vector<bool> avail(9, false); // Indicator of available actions
+        // if 現在出牌的人是上家, check if caneat
+        avail[0] = true;
+        if (previousPlayer[_position] == position) {
+            //cout << "check if caneat: ";
+            if (_hand.caneat(t)) {
+                avail[1] = true;
+                method = _hand.caneat(t);
+                switch (method) {
+                    case 3:
+                        method = 1;
+                        break;
+                    case 5:
+                        method = 1;
+                        break;
+                    case 6:
+                        method = 2;
+                        break;
+                    case 7:
+                        method = 1;
+                        break;
+                }
+            }
+        }
+        // check if canpong
+        if (_hand.canpong(t)) {
+            avail[2] = true;
+        }
+
+        // check if canminggone
+        if (_hand.canminggone(t)) {
+            avail[3] = true;
+        }
+
+        // check if canbugone
+        // not sure if angone is needed
+        if (_hand.canbugone(t)) {
+            avail[5] = true;
+        }
+
+        // check if canhu
+        if (_hand.canhu(t)) {
+            avail[7] = true;
+        }
+
+        // your turn, you can play
+        if (position == _position) {
+            avail[8] = true;
+            // draw stage, you must play
+            if (_hand.stage() == 1) {
+                avail[0] = false;    
+            }
+        }
+        return avail;
+    };
+
 
 	void whoIam(void) {
 		cout << "I am the Best!!" << endl;
