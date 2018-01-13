@@ -30,7 +30,8 @@ public :
     void act(int, int, MJtile&, MJcollection&);
 
     void showhandtoothers(void);
-	// actiontype: hu=-1 nothing=0 eat=1 pong=2 minggone=3 angone=4 bugone=5
+	void clear_info(void);
+    // actiontype: hu=-1 nothing=0 eat=1 pong=2 minggone=3 angone=4 bugone=5
 	virtual void strategy(int position, MJtile t, int &actiontype, int &actionparameter);
 	// call after every play
 	virtual int decidePlay(void);
