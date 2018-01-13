@@ -28,6 +28,7 @@ void printStrategy(int* actiontype, int* actionparameter) {
 	// actionparameter: huown=1 huother=2 play=index
 	extern bool print_strategy;
 	if (print_strategy) {
+		cout << endl;
 		for (int i = 0; i < 4; i++) {
 			cout << "_player[" << i << "]: ";
 			switch (actiontype[i]) {
@@ -357,7 +358,7 @@ int MJstage::mainGame(int& rounds) {
 	if (print_mainGame_info) cout << "Bookmaker draw the 17th tile." << endl;
 	_players[currentPlayer]->draw(mjcol);
 	if (print_mainGame_others) {
-		cout << "\nNow bookmaker's hand is " << endl;
+		cout << "\nNow bookmaker (_player[" << currentPlayer << "])'s hand is " << endl;
 		_players[currentPlayer]->Print_Hand();
 	}
 	// 出牌前先判斷莊家有沒有胡、暗槓，因為剛開局根本沒有槓過，所以不可能補槓
@@ -416,7 +417,6 @@ int MJstage::mainGame(int& rounds) {
 				actionparameter[i] = 0;
 			}
 		}
-		cout << endl;
 		printStrategy(actiontype, actionparameter);
 		hold();
 

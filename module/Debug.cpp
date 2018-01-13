@@ -8,7 +8,7 @@ void hold(void) {
 		cin.sync();
 		cin.get();
 	} else {
-		cout << std::endl;
+		// cout << std::endl;
 	}
 	return;
 }
