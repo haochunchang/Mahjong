@@ -11,6 +11,22 @@
 ## 程式結構圖
 ![Dependency](/images/dependency.jpeg)
 
+## Report
+1. 程式結構圖，講解每個cpp大概做什麼
+
+2. AIplayer的策略
+
+3. 後面附遊戲畫面
+
+4. 跑很多場的比賽紀錄(greedy v.s. custom)
+
+## TODO-List
+1. CustomAIplayer
+2. Human showhandtoothers
+3. GreedyAI vs CustomAI --> Record data --> Run experiments by changing strategy.
+
+4. (optional) Listen?
+
 ## Git tutorial
 
 * To clone from scratch
