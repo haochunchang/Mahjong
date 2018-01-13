@@ -468,9 +468,9 @@ public:
 		// 沒其他判斷方式了，就 return 第一張牌吧
 		return _hand.faceup_len();
 	}
-	void whoIam(void) {
-		cout << "I am Greedy~" << endl;
-	}
+	bool is_human(void) {
+	    return false;
+    }
 };
 
 
@@ -664,9 +664,9 @@ public:
 	};
 
 
-	void whoIam(void) {
-		cout << "I am the Best!!" << endl;
-	}
+	bool is_human(void) {
+	    return false;
+    }
 	
 };
 

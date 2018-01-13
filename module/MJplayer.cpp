@@ -322,6 +322,6 @@ void MJplayer::getinfo(int position, int type, MJtile* ts, int tiles_num) {
     return;
 }
 
-void MJplayer::whoIam(void) {
-    cout << "I am human!" << endl;    
+bool MJplayer::is_human(void) {
+    return true;
 }
