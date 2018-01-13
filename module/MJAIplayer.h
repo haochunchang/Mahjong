@@ -99,16 +99,18 @@ public:
 	int decidePlay(void) {
 		extern bool greedyAIPlayer_decidePlay_checkPoint;
 		bool condition[10];
+		string decide_strategy;
 		// 目前策略：
-		// 先找落單的東西北中發白
-		// 再找 rank 是 1 或 9，如果落單先打，定義是非 1, 1... 或 1, 2... 或 1, 3...
-		// 再從第一張開始找任何 rank 是落單的
-		// 只有 Fa Fa 應先丟，因為只能等 Fa，但應先確定手牌是不是 Fa Fa Fa 以免丟掉
-		// 如果只有 7W 9W 或 1W 3W 先丟 9W 或 1W
-		// 如果只有 6W 8W 應先丟，因為只能等 7W
-		// 然後丟 6W 6W 這種，但要先確定是不是 6W 6W 6W
-		// 然後才丟 8W 9W 或 1W 2W 這種，但要先確定不是 789 或 123
-		// 然後 3W 4W 這種，但要先確定不是 234 或 345
+		// 以下策略請在手牌數量 >= 5 時做，目前 <5 仍無策略
+		// 先找落單的東西北中發白 (singleSuit4, id = 1)
+		// 再找 rank 是 1 或 9，如果落單先打，定義是非 1, 1... 或 1, 2... 或 1, 3... (singleRank19, id = 2)
+		// 再從第一張開始找任何 rank 是落單的 (singleTile, id = 3)
+		// 只有 Fa Fa 應先丟，因為只能等 Fa，但應先確定手牌是不是 Fa Fa Fa 以免丟掉 (pairSuit4, id = 4)
+		// 如果只有 7W 9W 或 1W 3W 先丟 9W 或 1W (gapSuit123Rank19, id = 5)
+		// 如果只有 6W 8W 應先丟，因為只能等 7W (gapSuit123, id = 6)
+		// 然後丟 6W 6W 這種，但要先確定是不是 6W 6W 6W (pairSuit123) 
+		// 然後才丟 8W 9W 或 1W 2W 這種，但要先確定不是 789 或 123 (contiSuit123Rank19, id = 7)
+		// 然後 3W 4W 這種，但要先確定不是 234 或 345 (contiSuit123, id = 8)
 		// 都不是前述狀況的話打第一張牌
 
 		// 目前問題：

@@ -561,8 +561,8 @@ void MJstage::writeInfo(void) {
 	myfile.close();
 
 	myfile.open(filename, fstream::in | fstream::out | fstream::app);
-	// cout << seed << endl;
-	// myfile << remain << "\n";
+	if(!file_exist) myfile << "seed, strategy, remain mycol tiles" << endl;
+	myfile << seed << endl;
 	myfile.close();
 	return;
 }
