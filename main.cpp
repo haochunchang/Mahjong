@@ -2,7 +2,6 @@
 #include <ctime>
 #include <cstdlib>
 //#include <Windows.h>
-
 #include "module/MJtile.h"
 #include "module/Shuffler.h"
 #include "module/MJhand.h"
@@ -23,12 +22,18 @@ void testBugone(void);
 void testAngone(void);
 void testInitEatPong(void);
 
-bool is_holding = true;
+
+bool is_holding = false;
 
 int main() {
 	mainGame();
 	return 0;
 }
+
+
+
+
+
 
 // testStrategy();
 
@@ -56,7 +61,6 @@ void mainGame(void) {
 	// human, isAIgreedy, round_in, money
 	MJgame mygame(0, 1, 1, 10000);
 	// mygame.setting();
-	hold();
 	mygame.start();
 	mygame.end();
 	return;

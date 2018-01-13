@@ -13,6 +13,7 @@ using namespace std;
 #include "MJplayer.h"
 #include "MJAIplayer.h"
 #include "MJstage.h"
+#include "Debug.h"
 
 int MAX = numeric_limits<int>::max();
 
@@ -120,8 +121,7 @@ MJgame::MJgame() {
     // MJstage stage(human, isAIgreedy, money);
     stage = MJstage(human, isAIgreedy, money);
     cout << "Press any key to continue...";
-    cin.sync();
-    cin.get();
+    hold();
     cout << endl;
 };
 
@@ -143,8 +143,7 @@ MJgame::MJgame(int human, int isAIgreedy, int round_in, int money) {
     stage = MJstage(human, isAIgreedy, money);
 
     cout << "\nPress any key to continue...";
-    cin.sync();
-    cin.get();
+    hold();
     cout << endl;
 }
 
@@ -155,11 +154,11 @@ MJgame::~MJgame() {
 
 void MJgame::start() {
     stage.pickSeat();
-    cin.get();
+    hold();
     // cout << endl;
 
     stage.pickBookmaker();
-    cin.get();
+    hold();
     // cout << endl;
 
     int init_book = stage.getBookmaker();
@@ -173,7 +172,7 @@ void MJgame::start() {
             cout << endl;
 
             stage.initiate();
-            cin.get();
+            hold();
             // cout << endl;
 
             winner = stage.mainGame(num_rounds);
@@ -201,7 +200,7 @@ void MJgame::end() {
         fprintf(stdout, "Player %d: $ %d, #hu: %d\n", i, stage.get_money(i), hu_count[i]);
     }
     cout << "========================" << endl;
-    // cin.get();
+    // hold();
     return;
 }
 #endif

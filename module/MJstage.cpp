@@ -335,7 +335,7 @@ int MJstage::mainGame(int& rounds) {
 		//huown
 		cout << "***** _player[" << currentPlayer << "] huown! *****" << endl;
 		_players[currentPlayer]->act(7, 1, dummy, mjcol);
-		//cin.get();
+		//hold();
 		writeRemainCol(mjcol.size());
 		return currentPlayer;
 	}
@@ -382,7 +382,7 @@ int MJstage::mainGame(int& rounds) {
 		}
 		cout << endl;
 		printStrategy(actiontype, actionparameter);
-		cin.get();
+		hold();
 
 		// Checking Actions: gone > pong > eat
 		// decide which player's action is executed
@@ -391,7 +391,7 @@ int MJstage::mainGame(int& rounds) {
 			if (actiontype[i] == 7) {
 				_players[i]->act(actiontype[i], actionparameter[i], t, mjcol);
 				cout << "***** _players[" << i << "] huother! *****" << endl;
-				//cin.get();
+				//hold();
 				writeRemainCol(mjcol.size());
 				return i;
 			} else { // 優先順序：gone > pong > eat，同時有人同樣動作就由玩家index小的先？應該要由下家優先
@@ -409,7 +409,7 @@ int MJstage::mainGame(int& rounds) {
 		}
 
 		printAction(player_to_act, current_action_type, current_action_param);
-		//cin.get();
+		//hold();
 
 		// Assign actions on players
 		if (player_to_act == -1) { // 大家都沒有動作，直接換下一位
@@ -427,7 +427,7 @@ int MJstage::mainGame(int& rounds) {
 				// huown
 				cout << "***** _player[" << currentPlayer << "] huown! *****" << endl;
 				_players[currentPlayer]->act(7, 1, dummy, mjcol);
-				//cin.get();
+				//hold();
                 writeRemainCol(mjcol.size());
 				return currentPlayer;
 			}
@@ -460,7 +460,7 @@ int MJstage::mainGame(int& rounds) {
 				// huown
 				cout << "***** _player[" << currentPlayer << "] huown! *****" << endl;
 				_players[currentPlayer]->act(7, 1, dummy, mjcol);
-				// cin.get();
+				// hold();
 				writeRemainCol(mjcol.size());
 				return currentPlayer;
 			}
