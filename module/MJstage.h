@@ -44,6 +44,8 @@ public:
 	int mainGame(int&);         // return winner's index
 	void countTai(void);
     int get_money(int);
+    int get_seed(void);
+    void writeInfo(void);
     MJstage& operator=(MJstage&&);
 
 private:
@@ -51,6 +53,7 @@ private:
 	vector<bool> is_human;
     // It's a vector by TA originally
 	int _bookmaker;
+	int seed;
 	// player index (0 - 3), not position (1 - 4)
 	MJcollection mjcol;
 	map<int, int> playerToPos;

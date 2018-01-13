@@ -5,6 +5,8 @@
 #include <cassert>
 #include <fstream>
 #include <typeinfo>
+#include <locale>
+#include <string>
 
 #include "MJcollection.h"
 #include "Shuffler.h"
@@ -13,7 +15,6 @@
 #include "MJstage.h"
 
 using namespace std;
-
 
 void swapInt(int& a, int& b) {
 	int c = a;
@@ -136,13 +137,7 @@ void printAllHands(const vector<unique_ptr<MJplayer> > &_players) {
 }
 
 
-void writeRemainCol(int remain) {
-	ofstream myfile;
-	myfile.open ("data/20180103test.txt", fstream::in | fstream::out | fstream::app);
-	myfile << remain << "\n";
-	myfile.close();
-	return;
-}
+
 
 
 //============ MJstage Class Methods =================
@@ -154,7 +149,7 @@ MJstage::MJstage() {
 	s.init();
 	s.fill(mjtiles);
 	mjcol = MJcollection(mjtiles);
-    is_human = {false, false, false, false};
+	is_human = {false, false, false, false};
 
 	for (int i = 0; i < 4; i++) {
 		unique_ptr<MJplayer> ptr(new MJGreedyAIplayer);
@@ -171,12 +166,12 @@ MJstage::MJstage(int n_human, int AIkind, int money) {
 	s.init();
 	s.fill(mjtiles);
 	mjcol = MJcollection(mjtiles);
-    is_human = {false, false, false, false};
+	is_human = {false, false, false, false};
 
 	for (int i = 0; i < n_human; i++) {
 		unique_ptr<MJplayer> ptr(new MJplayer(money));
 		_players.push_back(move(ptr));
-        is_human[i] = true;
+		is_human[i] = true;
 	}
 	for (int i = 0; i < 4 - n_human; i++) {
 		if (AIkind == 1) {
@@ -227,6 +222,10 @@ MJstage& MJstage::operator=(MJstage&& other ) {
 }
 
 
+
+
+
+
 void MJstage::clear(void) {
 	extern bool print_stage;
 	if (print_stage) cout << "Do clear." << endl;
@@ -235,6 +234,7 @@ void MJstage::clear(void) {
 	MJtile mjtiles[144];
 	s.init();
 	s.fill(mjtiles);
+	seed = s.getSeed();
 	mjcol = MJcollection(mjtiles);
 	for (int i = 0; i < 4; i++) {
 		_players[i]->clear_info();
@@ -333,9 +333,7 @@ void MJstage::initiate(void) {
 }
 
 
-int MJstage::get_money(int index) {
-	return _players[index]->Get_Mon();
-}
+
 
 
 int MJstage::mainGame(int& rounds) {
@@ -374,7 +372,7 @@ int MJstage::mainGame(int& rounds) {
 		if (print_mainGame_info) cout << "***** _player[" << currentPlayer << "] huown! *****" << endl;
 		_players[currentPlayer]->act(7, 1, dummy, mjcol);
 		//hold();
-		writeRemainCol(mjcol.size());
+		// writeRemainCol(mjcol.size()); wait
 		return currentPlayer;
 	}
 
@@ -393,14 +391,14 @@ int MJstage::mainGame(int& rounds) {
 			_players[currentPlayer]->act(current_action_type, current_action_param, dummy, mjcol);
 			_players[currentPlayer]->strategy(currentPos, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
 			if (is_human[currentPlayer]) {
-                for (int i = 0; i < 4; i++) {
-                    if (currentPlayer != i) _players[i]->showhandtoothers();    
-                }           
-            }
-        }
+				for (int i = 0; i < 4; i++) {
+					if (currentPlayer != i) _players[i]->showhandtoothers();
+				}
+			}
+		}
 		if (actiontype[currentPlayer] == 8) {
 			//cout << "Bookmaker decides what tile to play." << endl;
-            t = _players[currentPlayer]->play(actionparameter[currentPlayer]);
+			t = _players[currentPlayer]->play(actionparameter[currentPlayer]);
 			if (print_mainGame_others) {
 				cout << "_players[" << currentPlayer << "] play:" << endl;
 				cout << t;
@@ -436,7 +434,7 @@ int MJstage::mainGame(int& rounds) {
 				_players[i]->act(actiontype[i], actionparameter[i], t, mjcol);
 				if (print_mainGame_info) cout << "***** _players[" << i << "] huother! *****" << endl;
 				//hold();
-				writeRemainCol(mjcol.size());
+				// writeRemainCol(mjcol.size()); wait
 				return i;
 			} else { // 優先順序：gone > pong > eat，同時有人同樣動作就由玩家index小的先？應該要由下家優先
 				if (actiontype[i] > current_action_type) {
@@ -474,7 +472,7 @@ int MJstage::mainGame(int& rounds) {
 				if (print_mainGame_info) cout << "***** _player[" << currentPlayer << "] huown! *****" << endl;
 				_players[currentPlayer]->act(7, 1, dummy, mjcol);
 				//hold();
-				writeRemainCol(mjcol.size());
+				// writeRemainCol(mjcol.size()); wait
 				return currentPlayer;
 			}
 		} else {
@@ -505,7 +503,7 @@ int MJstage::mainGame(int& rounds) {
 				if (print_mainGame_info) cout << "***** _player[" << currentPlayer << "] huown! *****" << endl;
 				_players[currentPlayer]->act(7, 1, dummy, mjcol);
 				// hold();
-				writeRemainCol(mjcol.size());
+				// writeRemainCol(mjcol.size()); wait
 				return currentPlayer;
 			}
 			// printAllHands(_players);
@@ -521,8 +519,50 @@ int MJstage::mainGame(int& rounds) {
 			cout << "\n--------------------------------------------------\n" << endl;
 	}
 
-	writeRemainCol(mjcol.size());
+	// writeRemainCol(mjcol.size()); wait
+	writeInfo();
 	return -1;
 }
 
 
+int MJstage::get_money(int index) {
+	return _players[index]->Get_Mon();
+}
+
+
+int MJstage::get_seed(void) {
+	return seed;
+}
+
+
+void MJstage::writeInfo(void) {
+	time_t timer = time(NULL);
+	char buffer[80];
+	// May third = 0503
+	strftime(buffer, sizeof(buffer), "%m%d", localtime(&timer));
+	// cout << buffer << endl;
+	string buffer_s;
+	buffer_s = buffer;
+
+	string filename = string("data/") + buffer_s + string("test.txt");
+	// cout << filename << endl;
+
+	ofstream myfile;
+	// check file exist
+	myfile.open(filename, fstream::in);
+	bool file_exist;
+	if (myfile.is_open()) {
+		// cout << "hey is open." << endl;
+		file_exist = true;
+	} else {
+		// cout << "hey not open." << endl;
+		file_exist = false;
+	}
+	myfile.close();
+
+	myfile.open(filename, fstream::in | fstream::out | fstream::app);
+	// cout << seed << endl;
+	// myfile << remain << "\n";
+	myfile.close();
+	return;
+}

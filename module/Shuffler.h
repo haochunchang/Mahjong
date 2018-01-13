@@ -7,26 +7,29 @@
 #include <Windows.h>
 
 
-class Shuffler{
+class Shuffler {
 private:
 	MJtile rand_mj[144];
+	int seed;
 public:
 	Shuffler() {}
 
 	~Shuffler() {}
 
 	void init() {
-		// random seed
-		// srand((time(NULL)));
-		srand(GetTickCount());
+		// seed = time(NULL);
+		seed = GetTickCount(); // in Windows.h
+		// cout << seed << endl;
+		srand(seed);
+
 		// generate 144 MJtile in order
-		for(int i=0; i<144; i++){
-			rand_mj[i] = MJtile(i+1);
+		for (int i = 0; i < 144; i++) {
+			rand_mj[i] = MJtile(i + 1);
 		}
 
 		// random swap in order
-		
-		for(int j=0; j<144; j++){
+
+		for (int j = 0; j < 144; j++) {
 			int r = rand() % 144;
 			MJtile temp = rand_mj[j];
 			rand_mj[j] = rand_mj[r];
@@ -40,9 +43,13 @@ public:
 	}
 
 	void fill(MJtile mj[]) {
-		for(int i=0; i<144; i++){
+		for (int i = 0; i < 144; i++) {
 			mj[i] = rand_mj[i];
 		}
+	}
+
+	int getSeed(void){
+		return seed;
 	}
 
 };
