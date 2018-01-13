@@ -497,8 +497,12 @@ void MJhand::showhandtoothers() {
 	// print the hand on the screen.
 	// Only the faceup tiles will be shown.
 	// Needs the gap between faceup and facedown tiles.
-	for (int i = _faceup_len; i < _total_len; i++) {
-        noreveal[i] = true;
+	for (int i = 0; i < _total_len; i++) {
+        if (i >= _faceup_len) {
+            noreveal[i] = true;
+        } else {
+            noreveal[i] = false;    
+        }
     }
     MJtile t[30];
     for (int i = 0; i < _total_len; i++) {
