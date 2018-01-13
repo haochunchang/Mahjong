@@ -90,6 +90,7 @@ public:
 			// 以上動作皆沒有，出牌囉
 			actiontype = 8;
 			int index = this->decidePlay();
+			cout << "out decidePlay" << endl;
 			int number = index - _hand.faceup_len() + 1;
 			actionparameter = number;
 		}
@@ -97,6 +98,7 @@ public:
 	};
 
 	int decidePlay(void) {
+		extern bool greedyPalyer_decidePlay_checkPoint;
 		bool condition[10];
 		// 目前策略：
 		// 先找落單的東西北中發白
@@ -106,13 +108,13 @@ public:
 		// 如果只有 7W 9W 或 1W 3W 先丟 9W 或 1W
 		// 如果只有 6W 8W 應先丟，因為只能等 7W
 		// 然後丟 6W 6W 這種，但要先確定是不是 6W 6W 6W
+		// 然後才丟 8W 9W 或 1W 2W 這種，但要先確定不是 789 或 123
 		// 都不是前述狀況的話打第一張牌
 
 		// 目前問題：
 		// 如果有成組的牌在手牌，還是有可能被打出去
 
 		// 接下來如果都不是前述情況，可能會再這樣寫：
-		// 然後才丟 8W 9W 或 1W 2W 這種，但要先確定不是 789 或 123
 		// 然後 3W 4W 這種，但要先確定不是 234 或 345
 
 		// 這樣的缺點是無法處理 445566，但這機率低就算了
@@ -127,7 +129,7 @@ public:
 
 		if (_hand.total_len() - _hand.faceup_len() >= 5) {
 			// ***** 處理落單的東南西北中發白 *****
-			cout << "Check: suit is 4." << endl;
+			if(greedyPalyer_decidePlay_checkPoint) cout << "Check: suit is 4." << endl;
 			// 看第一張，如果下一張跟自己不一樣就回傳這張
 			int i = _hand.faceup_len();
 			int suit = _hand[i].suit();
@@ -152,7 +154,7 @@ public:
 
 			// ***** 處理落單的 1 和 9 *****
 			// 檢查第一張牌，如果是 rank 1，則下一張 rank 要是 1 or 2 or 3
-			cout << "Check: rank is 1 or 9." << endl;
+			if(greedyPalyer_decidePlay_checkPoint) cout << "Check: rank is 1 or 9." << endl;
 			i = _hand.faceup_len();
 			suit = _hand[i].suit();
 			rank = _hand[i].rank();
@@ -196,7 +198,7 @@ public:
 
 
 			// ***** 處理其他落單的牌 *****
-			cout << "Check: lonely tile." << endl;
+			if(greedyPalyer_decidePlay_checkPoint) cout << "Check: lonely tile." << endl;
 			// 從 faceup_len + 1 到 total_len - 1 找落單的，即左右兩邊都沒有跟自己一樣或 rank 加減 1, 2 的
 			// cout << "Next find the lonely tile." << endl;
 			// 檢查第一張牌
@@ -239,7 +241,7 @@ public:
 			}
 
 			// ***** 處理只有兩個 suit 4 (Fa Fa) 這種狀況 *****
-			cout << "Check: Fa Fa condition." << endl;
+			if(greedyPalyer_decidePlay_checkPoint) cout << "Check: Fa Fa condition." << endl;
 			// 先直接看最後兩張是不是這種狀況
 			i = _hand.total_len() - 1;
 			if (_hand[i].suit() == 4 && _hand[i + 1] == 4) {
@@ -256,7 +258,7 @@ public:
 			}
 
 			// ***** 處理只有 7W 9W 或 1W 3W ，應先丟 9W 或 1W *****
-			cout << "Check: 7W 9W or 1W 3W condition." << endl;
+			if(greedyPalyer_decidePlay_checkPoint) cout << "Check: 7W 9W or 1W 3W condition." << endl;
 			// 先 1W 3W 這種
 			// 看第一張
 			i = _hand.faceup_len();
@@ -298,7 +300,7 @@ public:
 
 
 			// ***** 處理如果只有 6W 8W 應先丟，因為只能等 7W *****
-			cout << "Check: 6W 8W condition." << endl;
+			if(greedyPalyer_decidePlay_checkPoint) cout << "Check: 6W 8W condition." << endl;
 			// 先直接看最後兩張是不是這種狀況
 			i = _hand.total_len();
 			if (_hand[i].suit() != 4 && _hand[i].suit() == _hand[i - 1].suit()) {
@@ -325,7 +327,7 @@ public:
 			}
 
 			// ***** 處理 6W 6W 這種，但要先確定是不是 6W 6W 6W *****
-			cout << "Check: 6W 6W condition." << endl;
+			if(greedyPalyer_decidePlay_checkPoint) cout << "Check: 6W 6W condition." << endl;
 			// 先看最後兩個
 			i = _hand.total_len();
 			if (_hand[i].suit() != 4) {
@@ -353,7 +355,7 @@ public:
 
 			// ***** 然後才丟 8W 9W 或 1W 2W 這種，但要先確定不是 789 或 123 *****
 			// 先 1W 2W
-			cout << "Check: 1W 2W or 8W 9W condition." << endl;
+			if(greedyPalyer_decidePlay_checkPoint) cout << "Check: 1W 2W or 8W 9W condition." << endl;
 			// 看第一張
 			i = _hand.faceup_len();
 			// 條件一：suit 不為 4 ，rank 是 1
@@ -384,7 +386,7 @@ public:
 				condition[4] = !(_hand[i].suit() == _hand[i + 2].suit() && _hand[i + 2].rank() == 3);
 				if (condition[1] && condition[2] && condition[3] && condition[4]) return i;
 			}
-
+			// cout << "finish 1W 2W" << endl;
 
 			// 再 8W 9W 這種
 			// 看最後一張
@@ -392,9 +394,9 @@ public:
 			// 條件一：suit 不為 4 ，rank 是 9
 			condition[1] = _hand[i].suit() != 4 && _hand[i].rank() == 9;
 			// 條件二：倒數第二張是 8W
-			condition[2] = _hand[i].suit() == _hand[i + 1].suit() && _hand[i + 1].rank() == 8;
+			condition[2] = _hand[i].suit() == _hand[i - 1].suit() && _hand[i - 1].rank() == 8;
 			// 條件三：倒數第三張不是 7W
-			condition[3] = !(_hand[i].suit() == _hand[i + 2].suit() && _hand[i + 2].rank() == 7);
+			condition[3] = !(_hand[i].suit() == _hand[i - 2].suit() && _hand[i - 2].rank() == 7);
 			if (condition[1] && condition[2] && condition[3]) return i;
 
 			// 看第二張
@@ -423,7 +425,7 @@ public:
 
 
 
-		cout << "Not the above method. Return first tile." << endl;
+		if(greedyPalyer_decidePlay_checkPoint) cout << "Not the above method. Return first tile." << endl;
 		// 沒其他判斷方式了，就 return 第一張牌吧
 		return _hand.faceup_len();
 	}
