@@ -22,12 +22,20 @@ void testBugone(void);
 void testAngone(void);
 void testInitEatPong(void);
 
+bool print_pickSeat = false;
+bool print_pickBookmaker = false;
 
 bool is_holding = false;
+
+bool print_stage = true;
 bool print_strategy = false;
 bool print_action = false;
-bool print_hands = false;
-bool greedyPalyer_decidePlay_checkPoint = false;
+bool print_mainGame_info = false;
+bool print_mainGame_allHands = false;
+bool print_mainGame_singleHands = false;
+bool print_mainGame_others = true;
+
+bool greedyAIPlayer_decidePlay_checkPoint = false;
 
 
 int main() {
@@ -35,42 +43,16 @@ int main() {
 	return 0;
 }
 
-
-
-
-
-
 // testStrategy();
-
-
-// testhu();
-
-// testInitEatPongMinggone();
-
-// while(true){
-//     testMinggone();
-//     Sleep(1);
-// }
-
-// while(true){
-//     testBugone();
-//     Sleep(1);
-//  }
-
-// while(true){
-//     testAngone();
-//     Sleep(1);
-// }
 
 void mainGame(void) {
 	// human, isAIgreedy, round_in, money
-	MJgame mygame(0, 1, 5, 10000);
+	MJgame mygame(0, 1, 1, 10000);
 	// mygame.setting();
 	mygame.start();
 	mygame.end();
 	return;
 }
-
 
 void testStrategy(void) {
 	// set ids and faceup_len

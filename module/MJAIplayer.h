@@ -90,7 +90,6 @@ public:
 			// 以上動作皆沒有，出牌囉
 			actiontype = 8;
 			int index = this->decidePlay();
-			cout << "out decidePlay" << endl;
 			int number = index - _hand.faceup_len() + 1;
 			actionparameter = number;
 		}
@@ -98,7 +97,7 @@ public:
 	};
 
 	int decidePlay(void) {
-		extern bool greedyPalyer_decidePlay_checkPoint;
+		extern bool greedyAIPlayer_decidePlay_checkPoint;
 		bool condition[10];
 		// 目前策略：
 		// 先找落單的東西北中發白
@@ -109,13 +108,12 @@ public:
 		// 如果只有 6W 8W 應先丟，因為只能等 7W
 		// 然後丟 6W 6W 這種，但要先確定是不是 6W 6W 6W
 		// 然後才丟 8W 9W 或 1W 2W 這種，但要先確定不是 789 或 123
+		// 然後 3W 4W 這種，但要先確定不是 234 或 345
 		// 都不是前述狀況的話打第一張牌
 
 		// 目前問題：
 		// 如果有成組的牌在手牌，還是有可能被打出去
 
-		// 接下來如果都不是前述情況，可能會再這樣寫：
-		// 然後 3W 4W 這種，但要先確定不是 234 或 345
 
 		// 這樣的缺點是無法處理 445566，但這機率低就算了
 
@@ -129,7 +127,7 @@ public:
 
 		if (_hand.total_len() - _hand.faceup_len() >= 5) {
 			// ***** 處理落單的東南西北中發白 *****
-			if(greedyPalyer_decidePlay_checkPoint) cout << "Check: suit is 4." << endl;
+			if (greedyAIPlayer_decidePlay_checkPoint) cout << "Check: suit is 4." << endl;
 			// 看第一張，如果下一張跟自己不一樣就回傳這張
 			int i = _hand.faceup_len();
 			int suit = _hand[i].suit();
@@ -154,7 +152,7 @@ public:
 
 			// ***** 處理落單的 1 和 9 *****
 			// 檢查第一張牌，如果是 rank 1，則下一張 rank 要是 1 or 2 or 3
-			if(greedyPalyer_decidePlay_checkPoint) cout << "Check: rank is 1 or 9." << endl;
+			if (greedyAIPlayer_decidePlay_checkPoint) cout << "Check: rank is 1 or 9." << endl;
 			i = _hand.faceup_len();
 			suit = _hand[i].suit();
 			rank = _hand[i].rank();
@@ -198,7 +196,7 @@ public:
 
 
 			// ***** 處理其他落單的牌 *****
-			if(greedyPalyer_decidePlay_checkPoint) cout << "Check: lonely tile." << endl;
+			if (greedyAIPlayer_decidePlay_checkPoint) cout << "Check: lonely tile." << endl;
 			// 從 faceup_len + 1 到 total_len - 1 找落單的，即左右兩邊都沒有跟自己一樣或 rank 加減 1, 2 的
 			// cout << "Next find the lonely tile." << endl;
 			// 檢查第一張牌
@@ -241,7 +239,7 @@ public:
 			}
 
 			// ***** 處理只有兩個 suit 4 (Fa Fa) 這種狀況 *****
-			if(greedyPalyer_decidePlay_checkPoint) cout << "Check: Fa Fa condition." << endl;
+			if (greedyAIPlayer_decidePlay_checkPoint) cout << "Check: Fa Fa condition." << endl;
 			// 先直接看最後兩張是不是這種狀況
 			i = _hand.total_len() - 1;
 			if (_hand[i].suit() == 4 && _hand[i + 1] == 4) {
@@ -258,7 +256,7 @@ public:
 			}
 
 			// ***** 處理只有 7W 9W 或 1W 3W ，應先丟 9W 或 1W *****
-			if(greedyPalyer_decidePlay_checkPoint) cout << "Check: 7W 9W or 1W 3W condition." << endl;
+			if (greedyAIPlayer_decidePlay_checkPoint) cout << "Check: 7W 9W or 1W 3W condition." << endl;
 			// 先 1W 3W 這種
 			// 看第一張
 			i = _hand.faceup_len();
@@ -300,7 +298,7 @@ public:
 
 
 			// ***** 處理如果只有 6W 8W 應先丟，因為只能等 7W *****
-			if(greedyPalyer_decidePlay_checkPoint) cout << "Check: 6W 8W condition." << endl;
+			if (greedyAIPlayer_decidePlay_checkPoint) cout << "Check: 6W 8W condition." << endl;
 			// 先直接看最後兩張是不是這種狀況
 			i = _hand.total_len();
 			if (_hand[i].suit() != 4 && _hand[i].suit() == _hand[i - 1].suit()) {
@@ -327,7 +325,7 @@ public:
 			}
 
 			// ***** 處理 6W 6W 這種，但要先確定是不是 6W 6W 6W *****
-			if(greedyPalyer_decidePlay_checkPoint) cout << "Check: 6W 6W condition." << endl;
+			if (greedyAIPlayer_decidePlay_checkPoint) cout << "Check: 6W 6W condition." << endl;
 			// 先看最後兩個
 			i = _hand.total_len();
 			if (_hand[i].suit() != 4) {
@@ -355,7 +353,7 @@ public:
 
 			// ***** 然後才丟 8W 9W 或 1W 2W 這種，但要先確定不是 789 或 123 *****
 			// 先 1W 2W
-			if(greedyPalyer_decidePlay_checkPoint) cout << "Check: 1W 2W or 8W 9W condition." << endl;
+			if (greedyAIPlayer_decidePlay_checkPoint) cout << "Check: 1W 2W or 8W 9W condition." << endl;
 			// 看第一張
 			i = _hand.faceup_len();
 			// 條件一：suit 不為 4 ，rank 是 1
@@ -419,13 +417,55 @@ public:
 				condition[4] = !(_hand[i].suit() == _hand[i - 2].suit() && _hand[i - 2].rank() == 7);
 				if (condition[1] && condition[2] && condition[3] && condition[4]) return i;
 			}
+
+
+
+			// ***** 處理 3W 4W 這種，但要先確定不是 234 或 345 *****
+
+			if (greedyAIPlayer_decidePlay_checkPoint) cout << "Check: 3W 4W condition." << endl;
+			// 先最後兩張
+			i = _hand.total_len() - 1;
+			// 條件一：suit 不為 4
+			condition[1] = !_hand[i].suit() == 4;
+			// 條件二：下一張是 4W
+			condition[2] = _hand[i].suit() == _hand[i + 1].suit() && _hand[i + 1].rank() == _hand[i].rank() + 1;
+			// 條件三：前一張不是 2W
+			condition[3] = !(_hand[i].suit() == _hand[i - 1].suit() && _hand[i - 1].rank() == _hand[i].rank() - 1);
+			// 條件四：前一張不是 3W
+			condition[4] = !(_hand[i].suit() == _hand[i - 1].suit() && _hand[i - 1].rank() == _hand[i].rank());
+			if (condition[1] && condition[2] && condition[3] && condition[4]) return i;
+
+			// 處理第一張
+			i = _hand.faceup_len();
+			// 條件一：suit 不為 4
+			condition[1] = !_hand[i].suit() == 4;
+			// 條件二：下一張是 4W
+			condition[2] = _hand[i].suit() == _hand[i + 1].suit() && _hand[i + 1].rank() == _hand[i].rank() + 1;
+			// 條件三：下二張不是 4W
+			condition[3] = !(_hand[i].suit() == _hand[i + 2].suit() && _hand[i + 2].rank() == _hand[i].rank() + 1);
+			// 條件四：下二張不是 5W
+			condition[4] = !(_hand[i].suit() == _hand[i + 2].suit() && _hand[i + 2].rank() == _hand[i].rank() + 2);
+			if (condition[1] && condition[2] && condition[3] && condition[4]) return i;
+
+			// 處理其他張
+			for (i = _hand.faceup_len() + 1; i < _hand.total_len() - 1; i++) {
+				// 條件一：不是 suit 4
+				condition[1] = !_hand[i].suit() == 4;
+				// 條件二：下一張是自己 4W
+				condition[2] = _hand[i].suit() == _hand[i + 1].suit() && _hand[i + 1].rank() == _hand[i].rank() + 1;
+				// 條件三：前一張不是 2W
+				condition[3] = !(_hand[i].suit() == _hand[i - 1].suit() && _hand[i - 1].rank() == _hand[i].rank() - 1);
+				// 條件四：前一張不是 3W
+				condition[4] = !(_hand[i].suit() == _hand[i - 1].suit() && _hand[i - 1].rank() == _hand[i].rank());
+				// 條件五：下二張不是 4W
+				condition[5] = !(_hand[i].suit() == _hand[i + 2].suit() && _hand[i + 2].rank() == _hand[i].rank() + 1);
+				// 條件六：下二張不是 5W
+				condition[6] = !(_hand[i].suit() == _hand[i + 2].suit() && _hand[i + 2].rank() == _hand[i].rank() + 2);
+				if (condition[1] && condition[2] && condition[3] && condition[4] && condition[5] && condition[6]) return i;
+			}
 		}
 
-
-
-
-
-		if(greedyPalyer_decidePlay_checkPoint) cout << "Not the above method. Return first tile." << endl;
+		if (greedyAIPlayer_decidePlay_checkPoint) cout << "Not the above method. Return first tile." << endl;
 		// 沒其他判斷方式了，就 return 第一張牌吧
 		return _hand.faceup_len();
 	}
@@ -444,106 +484,107 @@ public:
 	MJCustomAIplayer(int money) : MJplayer(money) {
 		// cout << "Call MJCustomAIplayer constructor with money." << endl;
 	}
-
+	/*
 	void strategy(int position, MJtile t, int &actiontype, int &actionparameter) {
-        // Use information from getinfo to decide
-        vector<bool> avail(9, false); // Indicator of available actions
-        avail = get_avail_actions(position, t);
-        
-        int suit = t.suit();
-        int rank = t.rank();
-        // hu
-        if (avail[7]) { actiontype = 7; return; }
-        // minggone & pong
-        if (avail[3]) {
-            // can minggone -> can pong
-            // pong first, but minggone first if one of them can form 順
-            
-        } else if (avail[2]) {
-            
-        }
-        // eat
-        if (avail[1]) {
-            
-        }
-        // play
-        if (avail[8]) {
-            actiontype = 8;
-            actionparameter = this->decidePlay();
-            return;
-        }
-        // nothing
-        return;
+		// Use information from getinfo to decide
+		vector<bool> avail(9, false); // Indicator of available actions
+		avail = get_avail_actions(position, t);
+
+		int suit = t.suit();
+		int rank = t.rank();
+		// hu
+		if (avail[7]) { actiontype = 7; return; }
+		// minggone & pong
+		if (avail[3]) {
+			// can minggone -> can pong
+			// pong first, but minggone first if one of them can form 順
+
+		} else if (avail[2]) {
+
+		}
+		// eat
+		if (avail[1]) {
+
+		}
+		// play
+		if (avail[8]) {
+			actiontype = 8;
+			actionparameter = this->decidePlay();
+			return;
+		}
+		// nothing
+		return;
 	};
 
-    
-    int decidePlay(void) {
-             
-    }
+
+	int decidePlay(void) {
+
+	}
 
 
-    vector<bool> get_avail_actions(int position, MJtile t) {
-        
-        vector<bool> avail(9, false); // Indicator of available actions
-        // if 現在出牌的人是上家, check if caneat
-        avail[0] = true;
-        if (previousPlayer[_position] == position) {
-            //cout << "check if caneat: ";
-            if (_hand.caneat(t)) {
-                avail[1] = true;
-                method = _hand.caneat(t);
-                switch (method) {
-                    case 3:
-                        method = 1;
-                        break;
-                    case 5:
-                        method = 1;
-                        break;
-                    case 6:
-                        method = 2;
-                        break;
-                    case 7:
-                        method = 1;
-                        break;
-                }
-            }
-        }
-        // check if canpong
-        if (_hand.canpong(t)) {
-            avail[2] = true;
-        }
+	vector<bool> get_avail_actions(int position, MJtile t) {
 
-        // check if canminggone
-        if (_hand.canminggone(t)) {
-            avail[3] = true;
-        }
+		vector<bool> avail(9, false); // Indicator of available actions
+		// if 現在出牌的人是上家, check if caneat
+		avail[0] = true;
+		if (previousPlayer[_position] == position) {
+			//cout << "check if caneat: ";
+			if (_hand.caneat(t)) {
+				avail[1] = true;
+				method = _hand.caneat(t);
+				switch (method) {
+				case 3:
+					method = 1;
+					break;
+				case 5:
+					method = 1;
+					break;
+				case 6:
+					method = 2;
+					break;
+				case 7:
+					method = 1;
+					break;
+				}
+			}
+		}
+		// check if canpong
+		if (_hand.canpong(t)) {
+			avail[2] = true;
+		}
 
-        // check if canbugone
-        // not sure if angone is needed
-        if (_hand.canbugone(t)) {
-            avail[5] = true;
-        }
+		// check if canminggone
+		if (_hand.canminggone(t)) {
+			avail[3] = true;
+		}
 
-        // check if canhu
-        if (_hand.canhu(t)) {
-            avail[7] = true;
-        }
+		// check if canbugone
+		// not sure if angone is needed
+		if (_hand.canbugone(t)) {
+			avail[5] = true;
+		}
 
-        // your turn, you can play
-        if (position == _position) {
-            avail[8] = true;
-            // draw stage, you must play
-            if (_hand.stage() == 1) {
-                avail[0] = false;    
-            }
-        }
-        return avail;
-    };
+		// check if canhu
+		if (_hand.canhu(t)) {
+			avail[7] = true;
+		}
+
+		// your turn, you can play
+		if (position == _position) {
+			avail[8] = true;
+			// draw stage, you must play
+			if (_hand.stage() == 1) {
+				avail[0] = false;
+			}
+		}
+		return avail;
+	};
 
 
 	void whoIam(void) {
 		cout << "I am the Best!!" << endl;
 	}
+	*/
 };
 
 

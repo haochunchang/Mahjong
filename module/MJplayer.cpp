@@ -131,9 +131,11 @@ MJtile MJplayer::play(int index) {
 }
 
 
+/*
 void MJplayer::clear_info(void) {
     out = vector<vector<int> >(4, vector<int>(9, 0));
 }
+*/
 
 
 // actiontype: nothing=0 eat=1 pong=2 minggone=3 angone=4 bugone=5 hu=7
