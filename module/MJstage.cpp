@@ -233,7 +233,7 @@ void MJstage::clear(void) {
 	s.fill(mjtiles);
 	mjcol = MJcollection(mjtiles);
 	for (int i = 0; i < 4; i++) {
-		// _players[i]->clear_info();
+	    _players[i]->clear_info();
 	}
 }
 
