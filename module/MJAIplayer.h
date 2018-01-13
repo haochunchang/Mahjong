@@ -113,10 +113,7 @@ public:
 
 		// 目前問題：
 		// 如果有成組的牌在手牌，還是有可能被打出去
-
-
 		// 這樣的缺點是無法處理 445566，但這機率低就算了
-
 
 		// 這時手中應該會比 total len 多一張牌，所以 arrange 時不會排到最後這張
 		_hand.set_total_len(_hand.total_len() + 1);
@@ -478,13 +475,47 @@ public:
 class MJCustomAIplayer: public MJplayer {
 
 public:
-	MJCustomAIplayer() : MJplayer() {
+    MJCustomAIplayer() : MJplayer() {
 		// cout << "Call MJCustomAIplayer constructor." << endl;
 	}
 	MJCustomAIplayer(int money) : MJplayer(money) {
 		// cout << "Call MJCustomAIplayer constructor with money." << endl;
 	}
 	
+	bool defensive = false; // 如果開局牌太爛就優先跟打牌
+    void initiate(MJcollection& mjcol) {
+        _hand.initial(mjcol);
+        int count_lonely = 0;
+
+        int i = _hand.faceup_len();
+        int suit = _hand[i].suit();
+        int rank = _hand[i].rank();
+        if (suit != 4) {
+            if (!(_hand[i + 1].fromsuitrank(suit, rank)) &&
+                    !(_hand[i + 1].fromsuitrank(suit, rank + 1)) &&
+                    !(_hand[i + 1].fromsuitrank(suit, rank + 2))) count_lonely++; 
+        } else {
+            if (!_hand[i + 1].fromsuitrank(suit, rank)) { count_lonely++; }
+        }
+        for (int i = _hand.faceup_len() + 1; i < _hand.total_len(); i++) {
+            suit = _hand[i].suit();
+            rank = _hand[i].rank();
+            if ((suit == 1 || suit == 2 || suit == 3)) {
+                bool previousTile = _hand[i - 1].fromsuitrank(suit, rank - 2) ||
+                    _hand[i - 1].fromsuitrank(suit, rank - 1) ||
+                    _hand[i - 1].fromsuitrank(suit, rank);
+                bool nextTile = _hand[i + 1].fromsuitrank(suit, rank) ||
+                    _hand[i + 1].fromsuitrank(suit, rank + 1) ||
+                    _hand[i + 1].fromsuitrank(suit, rank + 2);
+                if (!previousTile && !nextTile) count_lonely++;
+            } else { // suit == 4
+                if (!_hand[i + 1].fromsuitrank(suit, rank)) { count_lonely++; }
+            }
+        }
+        if (count_lonely > 7) { defensive = true; }
+        return;
+    }
+
 	void strategy(int position, MJtile t, int &actiontype, int &actionparameter) {
 		// Use information from getinfo to decide
         vector<bool> condition(4, false);
@@ -551,13 +582,43 @@ public:
 
 
 	int decidePlay(void) {
-        // Decide which tile to play out
         // We have current count of playout tiles.
+        _hand.set_total_len(_hand.total_len() + 1);
+		_hand.arrange();
+		_hand.set_total_len(_hand.total_len() - 1);
+	
+        // 記錄每張手牌在場上已經出現的次數
+        vector<int> hand_occur(30, 0); // hand_occur[i] = i_th tile in hand playout counts
+        for (int i = _hand.faceup_len(); i < _hand.total_len() + 1; i++) {
+            hand_occur[i] = out[_hand[i].suit() - 1][_hand[i].rank() - 1];
+        }
+        // 記錄手牌中哪張出現最多次
+        int max = 0;
+        int max_tile = 0;
+        for (int i = _hand.faceup_len(); i < _hand.total_len() + 1; i++) {
+            if (hand_occur[i] > max) { 
+                max = hand_occur[i]; 
+                max_tile = i;
+            }
+        }
+ 
+        if (defensive) {
+            // 打前一張一樣的牌>打出現過最多次的牌
+            for (int i = _hand.faceup_len(); i < _hand.total_len() + 1; i++) {
+                if (_hand[i].fromsuitrank(previousTile.suit(), previousTile.rank())) {
+                    return i;    
+                }
+            }
+            return max_tile;
+        }
+
+        //大部分應該都跟Greedy策略類似 
         //TODO
-        return _hand.faceup_len();
+
+        return max_tile;
 	}
 
-
+    
 	vector<bool> get_avail_actions(int position, MJtile t) {
 		vector<bool> avail(9, false); // Indicator of available actions
 		// if 現在出牌的人是上家, check if caneat
