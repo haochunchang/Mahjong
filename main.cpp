@@ -24,6 +24,11 @@ void testInitEatPong(void);
 
 
 bool is_holding = false;
+bool print_strategy = false;
+bool print_action = false;
+bool print_hands = false;
+bool greedyPalyer_decidePlay_checkPoint = false;
+
 
 int main() {
 	mainGame();
@@ -59,7 +64,7 @@ int main() {
 
 void mainGame(void) {
 	// human, isAIgreedy, round_in, money
-	MJgame mygame(0, 1, 1, 10000);
+	MJgame mygame(0, 1, 5, 10000);
 	// mygame.setting();
 	mygame.start();
 	mygame.end();

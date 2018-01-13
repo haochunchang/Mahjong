@@ -26,26 +26,78 @@ void swapInt(int& a, int& b) {
 void printStrategy(int* actiontype, int* actionparameter) {
 	// actiontype: nothing=0 eat=1 pong=2 minggone=3 angone=4 bugone=5 hu=7 play=8
 	// actionparameter: huown=1 huother=2 play=index
-	for (int i = 0; i < 4; i++) {
-		cout << "_player[" << i << "]: ";
-		switch (actiontype[i]) {
+	extern bool print_strategy;
+	if (print_strategy) {
+		for (int i = 0; i < 4; i++) {
+			cout << "_player[" << i << "]: ";
+			switch (actiontype[i]) {
+			case 7:
+				if (actionparameter[i] == 1) cout << "huown" << endl;
+				if (actionparameter[i] == 2) cout << "huother" << endl;
+				break;
+			case 0:
+				cout << "do nothing" << endl;
+				break;
+			case 1:
+				cout << "eat ";
+				switch (actionparameter[i]) {
+				case 1: cout << "(001)" << endl; break;
+				case 2: cout << "(010)" << endl; break;
+				case 3: cout << "(001) (010)" << endl; break;
+				case 4: cout << "(100)" << endl; break;
+				case 5: cout << "(001) (100)" << endl; break;
+				case 6: cout << "(010) (100)" << endl; break;
+				case 7: cout << "(001) (010) (100)" << endl; break;
+				}
+				break;
+			case 2:
+				cout << "pong" << endl;
+				break;
+			case 3:
+				cout << "minggone" << endl;
+				break;
+			case 4:
+				cout << "angone" << endl;
+				break;
+			case 5:
+				cout << "bugone" << endl;
+				break;
+			case 8:
+				cout << "play: " << actionparameter[i] << endl;
+				break;
+			}
+		}
+	}
+	return;
+}
+
+
+void printAction(int player_to_act, int current_action_type, int current_action_param) {
+	extern bool print_action;
+	if (print_action) {
+		if (player_to_act == -1) {
+			cout << "No player would like to act." << endl;
+			return;
+		}
+		cout << "_players[" << player_to_act << "] is going to ";
+		switch (current_action_type) {
 		case 7:
-			if (actionparameter[i] == 1) cout << "huown" << endl;
-			if (actionparameter[i] == 2) cout << "huother" << endl;
+			if (current_action_param == 1) cout << "huown" << endl;
+			if (current_action_param == 2) cout << "huother" << endl;
 			break;
 		case 0:
 			cout << "do nothing" << endl;
 			break;
 		case 1:
 			cout << "eat ";
-			switch (actionparameter[i]) {
-			case 1: cout << "(001)" << endl; break;
-			case 2: cout << "(010)" << endl; break;
-			case 3: cout << "(001) (010)" << endl; break;
-			case 4: cout << "(100)" << endl; break;
-			case 5: cout << "(001) (100)" << endl; break;
-			case 6: cout << "(010) (100)" << endl; break;
-			case 7: cout << "(001) (010) (100)" << endl; break;
+			switch (current_action_param) {
+			case 1: cout << "(001)"; break;
+			case 2: cout << "(010)"; break;
+			case 3: cout << "(001) (010)"; break;
+			case 4: cout << "(100)"; break;
+			case 5: cout << "(001) (100)"; break;
+			case 6: cout << "(010) (100)"; break;
+			case 7: cout << "(001) (010) (100)"; break;
 			}
 			break;
 		case 2:
@@ -61,7 +113,7 @@ void printStrategy(int* actiontype, int* actionparameter) {
 			cout << "bugone" << endl;
 			break;
 		case 8:
-			cout << "play: " << actionparameter[i] << endl;
+			cout << "play a tile" << endl;
 			break;
 		}
 	}
@@ -69,59 +121,16 @@ void printStrategy(int* actiontype, int* actionparameter) {
 }
 
 
-void printAction(int player_to_act, int current_action_type, int current_action_param) {
-	if (player_to_act == -1) {
-		cout << "No player would like to act." << endl;
-		return;
-	}
-	cout << "_players[" << player_to_act << "] is going to ";
-	switch (current_action_type) {
-	case 7:
-		if (current_action_param == 1) cout << "huown" << endl;
-		if (current_action_param == 2) cout << "huother" << endl;
-		break;
-	case 0:
-		cout << "do nothing" << endl;
-		break;
-	case 1:
-		cout << "eat ";
-		switch (current_action_param) {
-		case 1: cout << "(001)"; break;
-		case 2: cout << "(010)"; break;
-		case 3: cout << "(001) (010)"; break;
-		case 4: cout << "(100)"; break;
-		case 5: cout << "(001) (100)"; break;
-		case 6: cout << "(010) (100)"; break;
-		case 7: cout << "(001) (010) (100)"; break;
-		}
-		break;
-	case 2:
-		cout << "pong" << endl;
-		break;
-	case 3:
-		cout << "minggone" << endl;
-		break;
-	case 4:
-		cout << "angone" << endl;
-		break;
-	case 5:
-		cout << "bugone" << endl;
-		break;
-    case 8:
-        cout << "play a tile" << endl;
-        break;
-	}
-	return;
-}
-
-
 void printHands(const vector<unique_ptr<MJplayer> > &_players) {
-	cout << "Print all players' hand." << endl;
-	for (int i = 0; i < 4; i++) {
-		cout << "_players[" << i << "]'s hand is: " << endl;
-		_players[i]->Print_Hand();
+	extern bool print_hands;
+	if (print_hands) {
+		cout << "Print all players' hand." << endl;
+		for (int i = 0; i < 4; i++) {
+			cout << "_players[" << i << "]'s hand is: " << endl;
+			_players[i]->Print_Hand();
+		}
+		cout << endl;
 	}
-	cout << endl;
 	return;
 }
 
@@ -146,7 +155,7 @@ MJstage::MJstage() {
 	mjcol = MJcollection(mjtiles);
 
 	for (int i = 0; i < 4; i++) {
-        unique_ptr<MJplayer> ptr(new MJGreedyAIplayer);
+		unique_ptr<MJplayer> ptr(new MJGreedyAIplayer);
 		_players.push_back(move(ptr));
 	}
 }
@@ -162,15 +171,15 @@ MJstage::MJstage(int n_human, int AIkind, int money) {
 	mjcol = MJcollection(mjtiles);
 
 	for (int i = 0; i < n_human; i++) {
-        unique_ptr<MJplayer> ptr(new MJplayer(money));
-        _players.push_back(move(ptr));
+		unique_ptr<MJplayer> ptr(new MJplayer(money));
+		_players.push_back(move(ptr));
 	}
 	for (int i = 0; i < 4 - n_human; i++) {
 		if (AIkind == 1) {
-            unique_ptr<MJplayer> ptr(new MJGreedyAIplayer(money));
-            _players.push_back(move(ptr));
+			unique_ptr<MJplayer> ptr(new MJGreedyAIplayer(money));
+			_players.push_back(move(ptr));
 		} else {
-            unique_ptr<MJplayer> ptr(new MJCustomAIplayer(money));
+			unique_ptr<MJplayer> ptr(new MJCustomAIplayer(money));
 			_players.push_back(move(ptr));
 		}
 	}
@@ -195,22 +204,22 @@ MJstage::MJstage(MJstage& other) {
     playerToPos = other.playerToPos;
     posToPlayer = other.posToPlayer;
     for (int i = 0; i < 4; i++) {
-        _players[i].swap(other._players[i]);    
-    }   
+        _players[i].swap(other._players[i]);
+    }
 }
 */
 
 MJstage& MJstage::operator=(MJstage&& other ) {
-    _bookmaker = other._bookmaker;
-    mjcol = other.mjcol;
-    playerToPos = other.playerToPos;
-    posToPlayer = other.posToPlayer;
-    
-    for (int i = 0; i < 4; i++) {
-        // set unique_ptr by providing raw pointer and deleter
-        _players[i] = move(other._players[i]);
-    }
-    return *this;
+	_bookmaker = other._bookmaker;
+	mjcol = other.mjcol;
+	playerToPos = other.playerToPos;
+	posToPlayer = other.posToPlayer;
+
+	for (int i = 0; i < 4; i++) {
+		// set unique_ptr by providing raw pointer and deleter
+		_players[i] = move(other._players[i]);
+	}
+	return *this;
 }
 
 
@@ -328,10 +337,10 @@ int MJstage::mainGame(int& rounds) {
 
 	// 出牌前先判斷莊家有沒有胡、暗槓，因為剛開局根本沒有槓過，所以不可能補槓
 	MJtile dummy;
-    //cout << "Who are you?" << endl;
-    //_players[currentPlayer]->whoIam();
-    _players[currentPlayer]->strategy(currentPos, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
-    if (actiontype[currentPlayer] == 7 && actionparameter[currentPlayer] == 1) {
+	//cout << "Who are you?" << endl;
+	//_players[currentPlayer]->whoIam();
+	_players[currentPlayer]->strategy(currentPos, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
+	if (actiontype[currentPlayer] == 7 && actionparameter[currentPlayer] == 1) {
 		//huown
 		cout << "***** _player[" << currentPlayer << "] huown! *****" << endl;
 		_players[currentPlayer]->act(7, 1, dummy, mjcol);
@@ -342,30 +351,30 @@ int MJstage::mainGame(int& rounds) {
 
 	int current_action_type = 0;
 	int current_action_param = 0;
-    // 正式開局！
+	// 正式開局！
 	while (mjcol.size() > 16) { // 留下八墩(16張)牌
 		cout << "\nEnter while loop in rounds " << ++rounds << "." << endl;
 		cout << "Currently is _players[" << currentPlayer << "](position " << currentPos
 		     << ")'s turn." << endl;
-       
-        current_action_type = 0;
-        current_action_param = 0;
+
+		current_action_type = 0;
+		current_action_param = 0;
 		//cout << "_players[" << currentPlayer << "] decides what tile to play." << endl;
-        while (actiontype[currentPlayer] != 8) {
-				_players[currentPlayer]->act(current_action_type, current_action_param, dummy, mjcol);
-				_players[currentPlayer]->strategy(currentPos, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
+		while (actiontype[currentPlayer] != 8) {
+			_players[currentPlayer]->act(current_action_type, current_action_param, dummy, mjcol);
+			_players[currentPlayer]->strategy(currentPos, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
 		}
-      	if (actiontype[currentPlayer] == 8) {
-		    //cout << "Bookmaker decides what tile to play." << endl;
-		    t = _players[currentPlayer]->play(actionparameter[currentPlayer]);
-		    cout << "_players[" << currentPlayer << "] play:" << endl;
-            cout << t;
-            tiles_num = 1;
-		    for (int i = 0; i < 4; i++) {
+		if (actiontype[currentPlayer] == 8) {
+			//cout << "Bookmaker decides what tile to play." << endl;
+			t = _players[currentPlayer]->play(actionparameter[currentPlayer]);
+			cout << "_players[" << currentPlayer << "] play:" << endl;
+			cout << t;
+			tiles_num = 1;
+			for (int i = 0; i < 4; i++) {
 				_players[i]->getinfo(currentPos, actiontype[currentPlayer], &t, tiles_num);
-		    }
-	    }   
-	  
+			}
+		}
+
 
 		// 其他三家要傳進那張丟出來的牌看能不能有 strategy
 		cout << "Other players decide strategy." << endl;
@@ -376,9 +385,9 @@ int MJstage::mainGame(int& rounds) {
 				// _players[i]->Print_Hand();
 				_players[i]->strategy(currentPos, t, actiontype[i], actionparameter[i]);
 			} else {
-                actiontype[i] = 0;
-                actionparameter[i] = 0;
-            }
+				actiontype[i] = 0;
+				actionparameter[i] = 0;
+			}
 		}
 		cout << endl;
 		printStrategy(actiontype, actionparameter);
@@ -396,14 +405,14 @@ int MJstage::mainGame(int& rounds) {
 				return i;
 			} else { // 優先順序：gone > pong > eat，同時有人同樣動作就由玩家index小的先？應該要由下家優先
 				if (actiontype[i] > current_action_type) {
-                    player_to_act = i;
+					player_to_act = i;
 					current_action_type = actiontype[i];
 					current_action_param = actionparameter[i];
 				}
 			}
 		}
-	    
-        for (int i = 0; i < 4; i++) {
+
+		for (int i = 0; i < 4; i++) {
 			actiontype[i] = 0;
 			actionparameter[i] = 0;
 		}
@@ -428,10 +437,10 @@ int MJstage::mainGame(int& rounds) {
 				cout << "***** _player[" << currentPlayer << "] huown! *****" << endl;
 				_players[currentPlayer]->act(7, 1, dummy, mjcol);
 				//hold();
-                writeRemainCol(mjcol.size());
+				writeRemainCol(mjcol.size());
 				return currentPlayer;
 			}
-	    } else {
+		} else {
 			// player_to_act 不為 0，即至少有人有動作
 			_players[player_to_act]->act(current_action_type, current_action_param, t, mjcol);
 
@@ -448,7 +457,7 @@ int MJstage::mainGame(int& rounds) {
 			} else {
 				tiles_num = 4;
 			}
-            // 其他玩家紀錄這次動作
+			// 其他玩家紀錄這次動作
 			for (int i = 0; i < 4; i++) {
 				if (i != currentPlayer) {
 					_players[i]->getinfo(currentPos, actiontype[currentPlayer], &t, tiles_num);
