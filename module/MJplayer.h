@@ -24,7 +24,7 @@ public :
 	void Set_Hand(MJtile*, int); // tiles, num_tiles
 	void Print_Hand() const;
 
-	void initiate(MJcollection&);
+	virtual void initiate(MJcollection&);
 	void draw(MJcollection&);
     MJtile play(int);
     void act(int, int, MJtile&, MJcollection&);
@@ -50,5 +50,6 @@ protected :
     // Tiles played out: out[i][j] = count of suit i, rank j
     vector<vector<int> > out;//(4, vector<int>(9, 0));
     int count_angone;
+    MJtile previousTile;
 };
 #endif
