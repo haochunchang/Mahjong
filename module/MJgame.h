@@ -48,9 +48,9 @@ void clear_screen()
 MJgame::MJgame() {
     clear_screen();
     cout << endl;
-    cout << "====================================" << endl;
-    cout << "===== Welcome to Taiwan Mahjong ====" << endl;
-    cout << "====================================" << endl;
+    cout << "=====================================" << endl;
+    cout << "===== Welcome to Taiwan Mahjong =====" << endl;
+    cout << "=====================================" << endl;
     cout << endl;
     rounds = 0;
     valueofpoints = 1;
@@ -129,9 +129,9 @@ MJgame::MJgame() {
 MJgame::MJgame(int human, int isAIgreedy, int round_in, int money) {
     clear_screen();
     cout << endl;
-    cout << "====================================" << endl;
-    cout << "===== Welcome to Taiwan Mahjong ====" << endl;
-    cout << "====================================" << endl;
+    cout << "=====================================" << endl;
+    cout << "===== Welcome to Taiwan Mahjong =====" << endl;
+    cout << "=====================================" << endl;
     cout << endl;
 
     cout << "  Set\thuman = " << human << endl;
@@ -204,12 +204,12 @@ void MJgame::start() {
 
 void MJgame::end() {
     cout << "\nGame End." << endl;
-    cout << "====== Final Result ======" << endl;
+    cout << "============ Final Result ============" << endl;
     for (int i = 0; i < 4; i++) {
         fprintf(stdout, "Player %d: $ %d, #hu: %d, #gun: %d\n", 
                                 i, stage.get_money(i), hu_count[i], gun_count[i]);
     }
-    cout << "==========================" << endl;
+    cout << "======================================" << endl;
     // hold();
     return;
 }

@@ -39,6 +39,7 @@ bool greedyAIPlayer_decidePlay_checkPoint = false;
 
 
 int main() {
+
 	mainGame();
 	return 0;
 }
