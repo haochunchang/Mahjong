@@ -25,7 +25,6 @@
 2. Human showhandtoothers
 3. GreedyAI vs CustomAI --> Record data --> Run experiments by changing strategy.
 
-4. (optional) Listen?
 
 ## Git tutorial
 
