@@ -27,13 +27,13 @@ bool print_pickBookmaker = false;
 
 bool is_holding = false;
 
-bool print_stage = true;
+bool print_stage = false;
 bool print_strategy = false;
 bool print_action = false;
 bool print_mainGame_info = false;
 bool print_mainGame_allHands = false;
 bool print_mainGame_singleHands = false;
-bool print_mainGame_others = true;
+bool print_mainGame_others = false;
 
 bool greedyAIPlayer_decidePlay_checkPoint = false;
 

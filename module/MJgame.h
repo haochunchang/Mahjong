@@ -120,9 +120,9 @@ MJgame::MJgame() {
     // 原來的錯誤寫法
     // MJstage stage(human, isAIgreedy, money);
     stage = MJstage(human, isAIgreedy, money);
-    cout << "Press any key to continue...";
+    extern bool is_holding;
+    if(is_holding) cout << "Press any key to continue...";
     hold();
-    cout << endl;
 };
 
 MJgame::MJgame(int human, int isAIgreedy, int round_in, int money) {
@@ -141,10 +141,9 @@ MJgame::MJgame(int human, int isAIgreedy, int round_in, int money) {
     // 原來的錯誤寫法
     // MJstage stage(human, isAIgreedy, money);
     stage = MJstage(human, isAIgreedy, money);
-
-    cout << "\nPress any key to continue...";
+    extern bool is_holding;
+    if(is_holding) cout << "\nPress any key to continue...";
     hold();
-    cout << endl;
 }
 
 
@@ -169,8 +168,7 @@ void MJgame::start() {
     for (int i = 0; i < rounds; i++) {
         while (true) {
             stage.getTiles();
-            cout << endl;
-
+            hold();
             stage.initiate();
             hold();
             // cout << endl;
@@ -194,7 +192,7 @@ void MJgame::start() {
 }
 
 void MJgame::end() {
-    cout << "Game End." << endl;
+    cout << "\nGame End." << endl;
     cout << "===== Final Result =====" << endl;
     for (int i = 0; i < 4; i++) {
         fprintf(stdout, "Player %d: $ %d, #hu: %d\n", i, stage.get_money(i), hu_count[i]);
