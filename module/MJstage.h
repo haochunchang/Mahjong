@@ -48,7 +48,8 @@ public:
 
 private:
 	vector<unique_ptr<MJplayer> > _players;
-	// It's a vector by TA originally
+	vector<bool> is_human;
+    // It's a vector by TA originally
 	int _bookmaker;
 	// player index (0 - 3), not position (1 - 4)
 	MJcollection mjcol;

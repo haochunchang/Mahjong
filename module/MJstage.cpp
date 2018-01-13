@@ -154,6 +154,7 @@ MJstage::MJstage() {
 	s.init();
 	s.fill(mjtiles);
 	mjcol = MJcollection(mjtiles);
+    is_human = {false, false, false, false};
 
 	for (int i = 0; i < 4; i++) {
 		unique_ptr<MJplayer> ptr(new MJGreedyAIplayer);
@@ -170,10 +171,12 @@ MJstage::MJstage(int n_human, int AIkind, int money) {
 	s.init();
 	s.fill(mjtiles);
 	mjcol = MJcollection(mjtiles);
+    is_human = {false, false, false, false};
 
 	for (int i = 0; i < n_human; i++) {
 		unique_ptr<MJplayer> ptr(new MJplayer(money));
 		_players.push_back(move(ptr));
+        is_human[i] = true;
 	}
 	for (int i = 0; i < 4 - n_human; i++) {
 		if (AIkind == 1) {
@@ -389,10 +392,15 @@ int MJstage::mainGame(int& rounds) {
 		while (actiontype[currentPlayer] != 8) {
 			_players[currentPlayer]->act(current_action_type, current_action_param, dummy, mjcol);
 			_players[currentPlayer]->strategy(currentPos, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
-		}
+			if (is_human[currentPlayer]) {
+                for (int i = 0; i < 4; i++) {
+                    if (currentPlayer != i) _players[i]->showhandtoothers();    
+                }           
+            }
+        }
 		if (actiontype[currentPlayer] == 8) {
 			//cout << "Bookmaker decides what tile to play." << endl;
-			t = _players[currentPlayer]->play(actionparameter[currentPlayer]);
+            t = _players[currentPlayer]->play(actionparameter[currentPlayer]);
 			if (print_mainGame_others) {
 				cout << "_players[" << currentPlayer << "] play:" << endl;
 				cout << t;
@@ -486,11 +494,9 @@ int MJstage::mainGame(int& rounds) {
 			} else {
 				tiles_num = 4;
 			}
-			// 其他玩家紀錄這次動作
+			// 每位玩家紀錄這次動作
 			for (int i = 0; i < 4; i++) {
-				if (i != currentPlayer) {
-					_players[i]->getinfo(currentPos, actiontype[currentPlayer], &t, tiles_num);
-				}
+				_players[i]->getinfo(currentPos, actiontype[currentPlayer], &t, tiles_num);
 			}
 			// 有吃碰槓的動作就是直接出一張，不用抽
 			_players[currentPlayer]->strategy(currentPos, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
