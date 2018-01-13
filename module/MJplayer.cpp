@@ -20,12 +20,6 @@ MJplayer::MJplayer() {
     previousPlayer[2] = 1;
     previousPlayer[3] = 2;
     previousPlayer[4] = 3;
-
-    // 1 的對家是 3，3 的對家是 1，2 的對家是 4，4 的對家是 2
-    oppositePlayer[1] = 3;
-    oppositePlayer[3] = 1;
-    oppositePlayer[2] = 4;
-    oppositePlayer[4] = 2;
 }
 
 
@@ -44,12 +38,6 @@ MJplayer::MJplayer(int money) {
     previousPlayer[2] = 1;
     previousPlayer[3] = 2;
     previousPlayer[4] = 3;
-
-    // 1 的對家是 3，3 的對家是 1，2 的對家是 4，4 的對家是 2
-    oppositePlayer[1] = 3;
-    oppositePlayer[3] = 1;
-    oppositePlayer[2] = 4;
-    oppositePlayer[4] = 2;
 }
 
 
@@ -66,12 +54,6 @@ MJplayer::MJplayer(int pos, int money, MJtile* t, int n) {
     previousPlayer[2] = 1;
     previousPlayer[3] = 2;
     previousPlayer[4] = 3;
-
-    // 1 的對家是 3，3 的對家是 1，2 的對家是 4，4 的對家是 2
-    oppositePlayer[1] = 3;
-    oppositePlayer[3] = 1;
-    oppositePlayer[2] = 4;
-    oppositePlayer[4] = 2;
 }
 
 

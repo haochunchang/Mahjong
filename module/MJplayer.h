@@ -44,7 +44,6 @@ protected :
 	int _position;//east = 1 ,south = 2 , west = 3 , north = 4
 	int _money;
 	map<int, int> previousPlayer;
-	map<int, int> oppositePlayer;
 
     // Used for deciding strategy: store MJtile suit/rank
     // Tiles played out: out[i][j] = count of suit i, rank j
