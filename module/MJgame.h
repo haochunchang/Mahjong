@@ -30,6 +30,7 @@ private:
     int rounds;             // 圈數
     int valueofpoints;      // 每台多少錢
     vector<int> hu_count;   // count of hu
+    vector<int> gun_count;  // count of 放槍
 
     MJstage stage;
 };
@@ -162,8 +163,11 @@ void MJgame::start() {
 
     int init_book = stage.getBookmaker();
     int num_rounds = 0;
+    pair<int, int> w_and_l = make_pair(-1, -1);
     int winner = -1;
+    int loser = -1;
     vector<int> hu(4, 0);
+    vector<int> put_gun(4, 0);
 
     for (int i = 0; i < rounds; i++) {
         while (true) {
@@ -173,8 +177,11 @@ void MJgame::start() {
             hold();
             // cout << endl;
 
-            winner = stage.mainGame(num_rounds);
+            w_and_l = stage.mainGame(num_rounds);
+            winner = w_and_l.first;
+            loser = w_and_l.second;
             if (winner != -1) hu[winner] += 1;
+            if (loser != -1) put_gun[loser] += 1;
             if (winner != stage.getBookmaker() && winner != -1) {
                 stage.nextBookmaker();
                 if (stage.getBookmaker() == init_book) {
@@ -190,6 +197,7 @@ void MJgame::start() {
 
     for (int i = 0; i < hu.size(); i++) {
         hu_count.push_back(hu[i]);
+        gun_count.push_back(put_gun[i]);
     }
     return;
 }
@@ -198,7 +206,8 @@ void MJgame::end() {
     cout << "\nGame End." << endl;
     cout << "====== Final Result ======" << endl;
     for (int i = 0; i < 4; i++) {
-        fprintf(stdout, "Player %d: $ %d, #hu: %d\n", i, stage.get_money(i), hu_count[i]);
+        fprintf(stdout, "Player %d: $ %d, #hu: %d, #gun: %d\n", 
+                                i, stage.get_money(i), hu_count[i], gun_count[i]);
     }
     cout << "==========================" << endl;
     // hold();

@@ -314,7 +314,7 @@ void MJstage::initiate(void) {
 }
 
 
-int MJstage::mainGame(int& rounds) {
+pair<int, int> MJstage::mainGame(int& rounds) {
 	extern bool print_mainGame_info;
 	extern bool print_mainGame_singleHands;
 	extern bool print_mainGame_others;
@@ -351,7 +351,7 @@ int MJstage::mainGame(int& rounds) {
 		_players[currentPlayer]->act(7, 1, dummy, mjcol);
 		//hold();
 		// writeRemainCol(mjcol.size()); wait
-		return currentPlayer;
+		return make_pair(currentPlayer, -1);
 	}
 
 	int current_action_type = 0;
@@ -408,7 +408,7 @@ int MJstage::mainGame(int& rounds) {
 				if (print_mainGame_info) cout << "***** _players[" << i << "] huother! *****" << endl;
 				//hold();
 				// writeRemainCol(mjcol.size()); wait
-				return i;
+				return make_pair(i, currentPlayer);
 			} else { // 優先順序：gone > pong > eat，同時有人同樣動作就由玩家index小的先？應該要由下家優先
 				if (actiontype[i] > current_action_type) {
 					player_to_act = i;
@@ -453,7 +453,7 @@ int MJstage::mainGame(int& rounds) {
 				_players[currentPlayer]->act(7, 1, dummy, mjcol);
 				//hold();
 				// writeRemainCol(mjcol.size()); wait
-				return currentPlayer;
+				return make_pair(currentPlayer, -1);
 			}
 		} else {
 			// player_to_act 不為 0，即至少有人有動作
@@ -491,7 +491,7 @@ int MJstage::mainGame(int& rounds) {
 				_players[currentPlayer]->act(7, 1, dummy, mjcol);
 				// hold();
 				// writeRemainCol(mjcol.size()); wait
-				return currentPlayer;
+				return make_pair(currentPlayer, -1);
 			}
 			// printAllHands(_players);
 
@@ -508,7 +508,7 @@ int MJstage::mainGame(int& rounds) {
 
 	// writeRemainCol(mjcol.size()); wait
 	writeInfo();
-	return -1;
+	return make_pair(-1, -1);
 }
 
 

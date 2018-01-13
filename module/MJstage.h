@@ -41,7 +41,8 @@ public:
     int getBookmaker(void);     // done
     void getTiles(void);		// done
 	void initiate(void);		// done
-	int mainGame(int&);         // return winner's index
+    // return pair<winner, loser> index
+	pair<int, int> mainGame(int&);
 	void countTai(void);
     int get_money(int);
     int get_seed(void);
