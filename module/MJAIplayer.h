@@ -97,6 +97,7 @@ public:
 	};
 
 	int decidePlay(void) {
+		bool condition[10];
 		// 目前策略：
 		// 先找落單的東西北中發白
 		// 再找 rank 是 1 或 9，如果落單先打，定義是非 1, 1... 或 1, 2... 或 1, 3...
@@ -124,230 +125,300 @@ public:
 		// cout << "In decidePlay function. After arrange, the hand is:" << endl;
 		// cout << _hand;
 
-
-		// ***** 處理落單的東南西北中發白 *****
-		cout << "Check: suit is 4." << endl;
-		// 看第一張，如果下一張跟自己不一樣就回傳這張
-		int i = _hand.faceup_len();
-		int suit = _hand[i].suit();
-		int rank = _hand[i].rank();
-		if (suit == 4 && !(_hand[i + 1].fromsuitrank(suit, rank))) return i;
-		// 看最後一張，如果前一張跟自己不一樣就回傳這張
-		i = _hand.total_len();
-		suit = _hand[i].suit();
-		rank = _hand[i].rank();
-		if (suit == 4 && !(_hand[i - 1].fromsuitrank(suit, rank))) return i;
-		// 看中間的牌，如果前一張跟自己不一樣且後一張跟自己不一樣才會回傳
-		for (int i = _hand.faceup_len() + 1; i < _hand.total_len(); i++) {
-			suit = _hand[i].suit();
-			rank = _hand[i].rank();
-			if (suit == 4) {
-				bool previousTile = _hand[i - 1].fromsuitrank(suit, rank);
-				bool nextTile = _hand[i + 1].fromsuitrank(suit, rank);
-				if (!previousTile && !nextTile) return i;
-			}
-		}
-
-
-		// ***** 處理落單的 1 和 9 *****
-		// 檢查第一張牌，如果是 rank 1，則下一張 rank 要是 1 or 2 or 3
-		cout << "Check: rank is 1 or 9." << endl;
-		i = _hand.faceup_len();
-		suit = _hand[i].suit();
-		rank = _hand[i].rank();
-		if ((suit == 1 || suit == 2 || suit == 3) && (rank == 1)) {
-			// cout << "The very first tile is of rank 1." << endl;
-			if (!(_hand[i + 1].fromsuitrank(suit, 1)) && !(_hand[i + 1].fromsuitrank(suit, 2))
-			        && !(_hand[i + 1].fromsuitrank(suit, 3))) return i;
-		}
-		// 檢查最後一張，如果是 rank 9，則前一張 rank 要是 7 or 8 or 9
-		i = _hand.total_len();
-		suit = _hand[i].suit();
-		rank = _hand[i].rank();
-		if ((suit == 1 || suit == 2 || suit == 3) && (rank == 9)) {
-			// cout << "The very last tile is of rank 9." << endl;
-			if (!(_hand[i - 1].fromsuitrank(suit, 8)) && !(_hand[i - 1].fromsuitrank(suit, 9))
-			        && !(_hand[i - 1].fromsuitrank(suit, 7))) return i;
-		}
-		// 檢查中間其他張
-		for (i = _hand.faceup_len() + 1; i < _hand.total_len(); i++) {
-			suit = _hand[i].suit();
-			rank = _hand[i].rank();
-			// cout << "Check the tile of suit " << suit << " and rank " << rank << endl;
-			// 處理 rank 是 1，至少要前面是 1，或後面是 1 or 2 or 3
-			if ((suit == 1 || suit == 2 || suit == 3) && (rank == 1)) {
-				bool previousTile = _hand[i - 1].fromsuitrank(suit, 1);
-				bool nextTile = _hand[i + 1].fromsuitrank(suit, 1) ||
-				                _hand[i + 1].fromsuitrank(suit, 2) ||
-				                _hand[i + 1].fromsuitrank(suit, 3);
-				if (!previousTile && !nextTile) return i;
-			}
-
-			// 處理 rank 是 9，至少要前面是 7 or 8 or 9，或後面是 9
-			if ((suit == 1 || suit == 2 || suit == 3) && (rank == 9)) {
-				bool previousTile = _hand[i - 1].fromsuitrank(suit, 7) ||
-				                    _hand[i - 1].fromsuitrank(suit, 8) ||
-				                    _hand[i - 1].fromsuitrank(suit, 9);
-				bool nextTile = _hand[i + 1].fromsuitrank(suit, 9);
-				if (!previousTile && !nextTile) return i;
-			}
-		}
-
-
-		// ***** 處理其他落單的牌 *****
-		cout << "Check: lonely tile." << endl;
-		// 從 faceup_len + 1 到 total_len - 1 找落單的，即左右兩邊都沒有跟自己一樣或 rank 加減 1, 2 的
-		// cout << "Next find the lonely tile." << endl;
-		// 檢查第一張牌
-		i = _hand.faceup_len();
-		suit = _hand[i].suit();
-		rank = _hand[i].rank();
-		if ((suit == 1 || suit == 2 || suit == 3)) {
-			if (!(_hand[i + 1].fromsuitrank(suit, rank)) &&
-			        !(_hand[i + 1].fromsuitrank(suit, rank + 1)) &&
-			        !(_hand[i + 1].fromsuitrank(suit, rank + 2))) return i;
-		}
-		// 檢查最後一張
-		i = _hand.total_len();
-		suit = _hand[i].suit();
-		rank = _hand[i].rank();
-		if ((suit == 1 || suit == 2 || suit == 3)) {
-			if (!(_hand[i - 1].fromsuitrank(suit, rank)) &&
-			        !(_hand[i - 1].fromsuitrank(suit, rank - 1)) &&
-			        !(_hand[i - 1].fromsuitrank(suit, rank - 2))) return i;
-		}
-		// 檢查中間其他張
-		for (int i = _hand.faceup_len() + 1; i < _hand.total_len(); i++) {
-			// cout << "in index " << i << endl;
+		if (_hand.total_len() - _hand.faceup_len() >= 5) {
+			// ***** 處理落單的東南西北中發白 *****
+			cout << "Check: suit is 4." << endl;
+			// 看第一張，如果下一張跟自己不一樣就回傳這張
+			int i = _hand.faceup_len();
 			int suit = _hand[i].suit();
 			int rank = _hand[i].rank();
-			// cout << "suit is " << suit << " and rank is " << rank << endl;
-			if ((suit == 1 || suit == 2 || suit == 3)) {
-				bool previousTile = _hand[i - 1].fromsuitrank(suit, rank - 2) ||
-				                    _hand[i - 1].fromsuitrank(suit, rank - 1) ||
-				                    _hand[i - 1].fromsuitrank(suit, rank);
-				// cout << "previousTile is rank or rank - 1? ";
-				// (previousTile) ? (cout << "true" << endl) : (cout << "false" << endl);
-				bool nextTile = _hand[i + 1].fromsuitrank(suit, rank) ||
-				                _hand[i + 1].fromsuitrank(suit, rank + 1) ||
-				                _hand[i + 1].fromsuitrank(suit, rank + 2);
-				// cout << "nextTile is rank or rank - 1? ";
-				// (nextTile) ? (cout << "true" << endl) : (cout << "false" << endl);
-				if (!previousTile && !nextTile) return i;
+			if (suit == 4 && !(_hand[i + 1].fromsuitrank(suit, rank))) return i;
+			// 看最後一張，如果前一張跟自己不一樣就回傳這張
+			i = _hand.total_len();
+			suit = _hand[i].suit();
+			rank = _hand[i].rank();
+			if (suit == 4 && !(_hand[i - 1].fromsuitrank(suit, rank))) return i;
+			// 看中間的牌，如果前一張跟自己不一樣且後一張跟自己不一樣才會回傳
+			for (int i = _hand.faceup_len() + 1; i < _hand.total_len(); i++) {
+				suit = _hand[i].suit();
+				rank = _hand[i].rank();
+				if (suit == 4) {
+					bool previousTile = _hand[i - 1].fromsuitrank(suit, rank);
+					bool nextTile = _hand[i + 1].fromsuitrank(suit, rank);
+					if (!previousTile && !nextTile) return i;
+				}
 			}
-		}
 
-		// ***** 處理只有兩個 suit 4 (Fa Fa) 這種狀況 *****
-		cout << "Check: Fa Fa condition." << endl;
-		// 先直接看最後兩張是不是這種狀況
-		i = _hand.total_len() - 1;
-		if (_hand[i].suit() == 4 && _hand[i + 1] == 4) {
-			if (_hand[i].rank() == _hand[i + 1].rank())
-				return i;
-		}
-		// 從 faceup 開始一次看兩張，且第三張要不一樣
-		for (i = _hand.faceup_len(); i < _hand.total_len() - 1; i++) {
+
+			// ***** 處理落單的 1 和 9 *****
+			// 檢查第一張牌，如果是 rank 1，則下一張 rank 要是 1 or 2 or 3
+			cout << "Check: rank is 1 or 9." << endl;
+			i = _hand.faceup_len();
+			suit = _hand[i].suit();
+			rank = _hand[i].rank();
+			if ((suit == 1 || suit == 2 || suit == 3) && (rank == 1)) {
+				// cout << "The very first tile is of rank 1." << endl;
+				if (!(_hand[i + 1].fromsuitrank(suit, 1)) && !(_hand[i + 1].fromsuitrank(suit, 2))
+				        && !(_hand[i + 1].fromsuitrank(suit, 3))) return i;
+			}
+			// 檢查最後一張，如果是 rank 9，則前一張 rank 要是 7 or 8 or 9
+			i = _hand.total_len();
+			suit = _hand[i].suit();
+			rank = _hand[i].rank();
+			if ((suit == 1 || suit == 2 || suit == 3) && (rank == 9)) {
+				// cout << "The very last tile is of rank 9." << endl;
+				if (!(_hand[i - 1].fromsuitrank(suit, 8)) && !(_hand[i - 1].fromsuitrank(suit, 9))
+				        && !(_hand[i - 1].fromsuitrank(suit, 7))) return i;
+			}
+			// 檢查中間其他張
+			for (i = _hand.faceup_len() + 1; i < _hand.total_len(); i++) {
+				suit = _hand[i].suit();
+				rank = _hand[i].rank();
+				// cout << "Check the tile of suit " << suit << " and rank " << rank << endl;
+				// 處理 rank 是 1，至少要前面是 1，或後面是 1 or 2 or 3
+				if ((suit == 1 || suit == 2 || suit == 3) && (rank == 1)) {
+					bool previousTile = _hand[i - 1].fromsuitrank(suit, 1);
+					bool nextTile = _hand[i + 1].fromsuitrank(suit, 1) ||
+					                _hand[i + 1].fromsuitrank(suit, 2) ||
+					                _hand[i + 1].fromsuitrank(suit, 3);
+					if (!previousTile && !nextTile) return i;
+				}
+
+				// 處理 rank 是 9，至少要前面是 7 or 8 or 9，或後面是 9
+				if ((suit == 1 || suit == 2 || suit == 3) && (rank == 9)) {
+					bool previousTile = _hand[i - 1].fromsuitrank(suit, 7) ||
+					                    _hand[i - 1].fromsuitrank(suit, 8) ||
+					                    _hand[i - 1].fromsuitrank(suit, 9);
+					bool nextTile = _hand[i + 1].fromsuitrank(suit, 9);
+					if (!previousTile && !nextTile) return i;
+				}
+			}
+
+
+			// ***** 處理其他落單的牌 *****
+			cout << "Check: lonely tile." << endl;
+			// 從 faceup_len + 1 到 total_len - 1 找落單的，即左右兩邊都沒有跟自己一樣或 rank 加減 1, 2 的
+			// cout << "Next find the lonely tile." << endl;
+			// 檢查第一張牌
+			i = _hand.faceup_len();
+			suit = _hand[i].suit();
+			rank = _hand[i].rank();
+			if ((suit == 1 || suit == 2 || suit == 3)) {
+				if (!(_hand[i + 1].fromsuitrank(suit, rank)) &&
+				        !(_hand[i + 1].fromsuitrank(suit, rank + 1)) &&
+				        !(_hand[i + 1].fromsuitrank(suit, rank + 2))) return i;
+			}
+			// 檢查最後一張
+			i = _hand.total_len();
+			suit = _hand[i].suit();
+			rank = _hand[i].rank();
+			if ((suit == 1 || suit == 2 || suit == 3)) {
+				if (!(_hand[i - 1].fromsuitrank(suit, rank)) &&
+				        !(_hand[i - 1].fromsuitrank(suit, rank - 1)) &&
+				        !(_hand[i - 1].fromsuitrank(suit, rank - 2))) return i;
+			}
+			// 檢查中間其他張
+			for (int i = _hand.faceup_len() + 1; i < _hand.total_len(); i++) {
+				// cout << "in index " << i << endl;
+				int suit = _hand[i].suit();
+				int rank = _hand[i].rank();
+				// cout << "suit is " << suit << " and rank is " << rank << endl;
+				if ((suit == 1 || suit == 2 || suit == 3)) {
+					bool previousTile = _hand[i - 1].fromsuitrank(suit, rank - 2) ||
+					                    _hand[i - 1].fromsuitrank(suit, rank - 1) ||
+					                    _hand[i - 1].fromsuitrank(suit, rank);
+					// cout << "previousTile is rank or rank - 1? ";
+					// (previousTile) ? (cout << "true" << endl) : (cout << "false" << endl);
+					bool nextTile = _hand[i + 1].fromsuitrank(suit, rank) ||
+					                _hand[i + 1].fromsuitrank(suit, rank + 1) ||
+					                _hand[i + 1].fromsuitrank(suit, rank + 2);
+					// cout << "nextTile is rank or rank - 1? ";
+					// (nextTile) ? (cout << "true" << endl) : (cout << "false" << endl);
+					if (!previousTile && !nextTile) return i;
+				}
+			}
+
+			// ***** 處理只有兩個 suit 4 (Fa Fa) 這種狀況 *****
+			cout << "Check: Fa Fa condition." << endl;
+			// 先直接看最後兩張是不是這種狀況
+			i = _hand.total_len() - 1;
 			if (_hand[i].suit() == 4 && _hand[i + 1] == 4) {
 				if (_hand[i].rank() == _hand[i + 1].rank())
-					if (!_hand[i + 2].fromsuitrank(_hand[i].suit(), _hand[i].rank()))
-						return i;
+					return i;
 			}
-		}
+			// 從 faceup 開始一次看兩張，且第三張要不一樣
+			for (i = _hand.faceup_len(); i < _hand.total_len() - 1; i++) {
+				if (_hand[i].suit() == 4 && _hand[i + 1] == 4) {
+					if (_hand[i].rank() == _hand[i + 1].rank())
+						if (!_hand[i + 2].fromsuitrank(_hand[i].suit(), _hand[i].rank()))
+							return i;
+				}
+			}
 
-		// ***** 處理只有 7W 9W 或 1W 3W ，應先丟 9W 或 1W *****
-		cout << "Check: 7W 9W or 1W 3W condition." << endl;
-		// 先 1W 3W 這種
-		// 看第一張
-		i = _hand.faceup_len();
-		if (_hand[i].suit() != 4 && _hand[i].rank() == 1) {
-			if (_hand[i].suit() == _hand[i + 1].suit() && _hand[i + 1].rank() == 3) {
-				return i;
-			}
-		}
-		for (i = _hand.faceup_len() + 1; i < _hand.total_len(); i++) {
+			// ***** 處理只有 7W 9W 或 1W 3W ，應先丟 9W 或 1W *****
+			cout << "Check: 7W 9W or 1W 3W condition." << endl;
+			// 先 1W 3W 這種
+			// 看第一張
+			i = _hand.faceup_len();
 			if (_hand[i].suit() != 4 && _hand[i].rank() == 1) {
-				// 前一張不能是同一張，後一張是 3W
-				if (!_hand[i].fromsuitrank(_hand[i - 1].suit(), _hand[i-1].rank())) {
-					if (_hand[i].suit() == _hand[i + 1].suit() && _hand[i + 1].rank() == 3) {
-						return i;
-					}
-				}
-			}
-		}
-		// 再 7W 9W 這種
-		// 看最後一張
-		i = _hand.total_len();
-		if (_hand[i].suit() != 4 && _hand[i].rank() == 9){
-			if (_hand[i].suit() == _hand[i - 1].suit() && _hand[i - 1].rank() == 7){
-				return i;
-			}
-		}
-		// 從前面
-		for(i=_hand.faceup_len()+1; i<_hand.total_len(); i++){
-			if(_hand[i].suit() != 4 && _hand[i].rank() == 9){
-				// 後一張不能是同一張，前一張必須是 7W
-				if (!_hand[i].fromsuitrank(_hand[i + 1].suit(), _hand[i+1].rank())){
-					if (_hand[i].suit() == _hand[i - 1].suit() && _hand[i - 1].rank() == 7) {
-						return i;
-					}
-				}
-			}
-		}
-
-
-
-		// ***** 處理如果只有 6W 8W 應先丟，因為只能等 7W *****
-		cout << "Check: 6W 8W condition." << endl;
-		// 先直接看最後兩張是不是這種狀況
-		i = _hand.total_len();
-		if (_hand[i].suit() != 4 && _hand[i].suit() == _hand[i - 1].suit()) {
-			// 不用寫最後一張是 1，有的話在前面就應該回傳了
-			// 看最後一張 8W，前一張是 6W 就回傳，但 6W 前面有 6W 或 5W 則
-			if (_hand[i - 1].rank() == _hand[i].rank() - 2) return i;
-		}
-		// 再看第一張
-		i = _hand.faceup_len();
-		if (_hand[i].suit() != 4 && _hand[i].suit() == _hand[i + 1].suit()) {
-			if (_hand[i + 1].rank() == _hand[i].rank() + 2) return i;
-		}
-
-		// 再看中間其他張
-		for (i = _hand.faceup_len(); i < _hand.total_len(); i++) {
-			if (_hand[i].suit() != 4 && _hand[i].suit() == _hand[i + 1].suit()) {
-				// 下一張如果是自己 +2
-				// 再檢查自己的前面是否是自己或自己 -1，不是的話才回傳
-				if (_hand[i + 1].rank() == _hand[i].rank() + 2) {
-					if (_hand[i - 1].rank() != _hand[i].rank() && _hand[i - 1].rank() != _hand[i].rank() - 1)
-						return i;
-				}
-			}
-		}
-
-		// ***** 處理 6W 6W 這種，但要先確定是不是 6W 6W 6W *****
-		cout << "Check: 6W 6W condition." << endl;
-		// 先看最後兩個
-		i = _hand.total_len();
-		if (_hand[i].suit() != 4) {
-			// 如果跟前一個一樣
-			if (_hand[i].fromsuitrank(_hand[i - 1].suit(), _hand[i - 1].rank())) {
-				// 還要跟前二個不一樣
-				if (!_hand[i].fromsuitrank(_hand[i - 2].suit(), _hand[i - 2].rank())) {
+				if (_hand[i].suit() == _hand[i + 1].suit() && _hand[i + 1].rank() == 3) {
 					return i;
 				}
 			}
-		}
-		// 從第一個開始看
-		for (i = _hand.faceup_len(); i < _hand.total_len() - 1; i++) {
+			for (i = _hand.faceup_len() + 1; i < _hand.total_len(); i++) {
+				if (_hand[i].suit() != 4 && _hand[i].rank() == 1) {
+					// 前一張不能是同一張，後一張是 3W
+					if (!_hand[i].fromsuitrank(_hand[i - 1].suit(), _hand[i - 1].rank())) {
+						if (_hand[i].suit() == _hand[i + 1].suit() && _hand[i + 1].rank() == 3) {
+							return i;
+						}
+					}
+				}
+			}
+			// 再 7W 9W 這種
+			// 看最後一張
+			i = _hand.total_len();
+			if (_hand[i].suit() != 4 && _hand[i].rank() == 9) {
+				if (_hand[i].suit() == _hand[i - 1].suit() && _hand[i - 1].rank() == 7) {
+					return i;
+				}
+			}
+			// 從前面
+			for (i = _hand.faceup_len() + 1; i < _hand.total_len(); i++) {
+				if (_hand[i].suit() != 4 && _hand[i].rank() == 9) {
+					// 後一張不能是同一張，前一張必須是 7W
+					if (!_hand[i].fromsuitrank(_hand[i + 1].suit(), _hand[i + 1].rank())) {
+						if (_hand[i].suit() == _hand[i - 1].suit() && _hand[i - 1].rank() == 7) {
+							return i;
+						}
+					}
+				}
+			}
+
+
+
+			// ***** 處理如果只有 6W 8W 應先丟，因為只能等 7W *****
+			cout << "Check: 6W 8W condition." << endl;
+			// 先直接看最後兩張是不是這種狀況
+			i = _hand.total_len();
+			if (_hand[i].suit() != 4 && _hand[i].suit() == _hand[i - 1].suit()) {
+				// 不用寫最後一張是 1，有的話在前面就應該回傳了
+				// 看最後一張 8W，前一張是 6W 就回傳，但 6W 前面有 6W 或 5W 則
+				if (_hand[i - 1].rank() == _hand[i].rank() - 2) return i;
+			}
+			// 再看第一張
+			i = _hand.faceup_len();
+			if (_hand[i].suit() != 4 && _hand[i].suit() == _hand[i + 1].suit()) {
+				if (_hand[i + 1].rank() == _hand[i].rank() + 2) return i;
+			}
+
+			// 再看中間其他張
+			for (i = _hand.faceup_len(); i < _hand.total_len(); i++) {
+				if (_hand[i].suit() != 4 && _hand[i].suit() == _hand[i + 1].suit()) {
+					// 下一張如果是自己 +2
+					// 再檢查自己的前面是否是自己或自己 -1，不是的話才回傳
+					if (_hand[i + 1].rank() == _hand[i].rank() + 2) {
+						if (_hand[i - 1].rank() != _hand[i].rank() && _hand[i - 1].rank() != _hand[i].rank() - 1)
+							return i;
+					}
+				}
+			}
+
+			// ***** 處理 6W 6W 這種，但要先確定是不是 6W 6W 6W *****
+			cout << "Check: 6W 6W condition." << endl;
+			// 先看最後兩個
+			i = _hand.total_len();
 			if (_hand[i].suit() != 4) {
-				// 跟後一個一樣
-				if (_hand[i].fromsuitrank(_hand[i + 1].suit(), _hand[i + 1].rank())) {
-					// 跟後二個不一樣
-					if (!_hand[i].fromsuitrank(_hand[i + 2].suit(), _hand[i + 2].rank())) {
+				// 如果跟前一個一樣
+				if (_hand[i].fromsuitrank(_hand[i - 1].suit(), _hand[i - 1].rank())) {
+					// 還要跟前二個不一樣
+					if (!_hand[i].fromsuitrank(_hand[i - 2].suit(), _hand[i - 2].rank())) {
 						return i;
 					}
 				}
 			}
+			// 從第一個開始看
+			for (i = _hand.faceup_len(); i < _hand.total_len() - 1; i++) {
+				if (_hand[i].suit() != 4) {
+					// 跟後一個一樣
+					if (_hand[i].fromsuitrank(_hand[i + 1].suit(), _hand[i + 1].rank())) {
+						// 跟後二個不一樣
+						if (!_hand[i].fromsuitrank(_hand[i + 2].suit(), _hand[i + 2].rank())) {
+							return i;
+						}
+					}
+				}
+			}
+
+
+			// ***** 然後才丟 8W 9W 或 1W 2W 這種，但要先確定不是 789 或 123 *****
+			// 先 1W 2W
+			cout << "Check: 1W 2W or 8W 9W condition." << endl;
+			// 看第一張
+			i = _hand.faceup_len();
+			// 條件一：suit 不為 4 ，rank 是 1
+			condition[1] = _hand[i].suit() != 4 && _hand[i].rank() == 1;
+			// 條件二：第二張是 2W
+			condition[2] = _hand[i].suit() == _hand[i + 1].suit() && _hand[i + 1].rank() == 2;
+			// 條件三：第三張不是 3W
+			condition[3] = !(_hand[i].suit() == _hand[i + 2].suit() && _hand[i + 2].rank() == 3);
+			if (condition[1] && condition[2] && condition[3]) return i;
+
+			// 看倒數第二張
+			i = _hand.total_len() - 1;
+			// 條件一：suit 不為 4 ，rank 是 1
+			condition[1] = _hand[i].suit() != 4 && _hand[i].rank() == 1;
+			// 條件二：下一張是 2W
+			condition[2] = _hand[i].suit() == _hand[i + 1].suit() && _hand[i + 1].rank() == 2;
+			if (condition[1] && condition[2]) return i;
+
+			// 看其他張
+			for (i = _hand.faceup_len() + 1; i < _hand.total_len() - 1; i++) {
+				// 條件一：suit 不為 4 ，rank 是 1
+				condition[1] = _hand[i].suit() != 4 && _hand[i].rank() == 1;
+				// 條件二：前一張跟自己不一樣
+				condition[2] = !_hand[i].fromsuitrank(_hand[i - 1].suit(), _hand[i - 1].rank());
+				// 條件三：第二張是 2W
+				condition[3] = _hand[i].suit() == _hand[i + 1].suit() && _hand[i + 1].rank() == 2;
+				// 條件四：第三張不是 3W
+				condition[4] = !(_hand[i].suit() == _hand[i + 2].suit() && _hand[i + 2].rank() == 3);
+				if (condition[1] && condition[2] && condition[3] && condition[4]) return i;
+			}
+
+
+			// 再 8W 9W 這種
+			// 看最後一張
+			i = _hand.total_len();
+			// 條件一：suit 不為 4 ，rank 是 9
+			condition[1] = _hand[i].suit() != 4 && _hand[i].rank() == 9;
+			// 條件二：倒數第二張是 8W
+			condition[2] = _hand[i].suit() == _hand[i + 1].suit() && _hand[i + 1].rank() == 8;
+			// 條件三：倒數第三張不是 7W
+			condition[3] = !(_hand[i].suit() == _hand[i + 2].suit() && _hand[i + 2].rank() == 7);
+			if (condition[1] && condition[2] && condition[3]) return i;
+
+			// 看第二張
+			i = _hand.faceup_len() + 1;
+			// 條件一：suit 不為 4 ，rank 是 9
+			condition[1] = _hand[i].suit() != 4 && _hand[i].rank() == 9;
+			// 條件二：前一張是 8W
+			condition[2] = _hand[i].suit() == _hand[i + 1].suit() && _hand[i + 1].rank() == 8;
+			if (condition[1] && condition[2]) return i;
+
+			// 看其他張
+			for (i = _hand.total_len() - 1; i > _hand.faceup_len() + 1; i--) {
+				// 條件一：suit 不為 4 ，rank 是 1
+				condition[1] = _hand[i].suit() != 4 && _hand[i].rank() == 9;
+				// 條件二：後一張跟自己不一樣
+				condition[2] = !_hand[i].fromsuitrank(_hand[i + 1].suit(), _hand[i + 1].rank());
+				// 條件三：前一張是 8W
+				condition[3] = _hand[i].suit() == _hand[i - 1].suit() && _hand[i - 1].rank() == 8;
+				// 條件四：前二張不是 7W
+				condition[4] = !(_hand[i].suit() == _hand[i - 2].suit() && _hand[i - 2].rank() == 7);
+				if (condition[1] && condition[2] && condition[3] && condition[4]) return i;
+			}
 		}
+
 
 
 

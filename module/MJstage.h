@@ -6,6 +6,7 @@
 #include "Shuffler.h"
 #include "MJplayer.h"
 #include "MJAIplayer.h"
+#include "Debug.h"
 
 using namespace std;
 
