@@ -226,7 +226,7 @@ MJstage& MJstage::operator=(MJstage&& other ) {
 
 void MJstage::clear(void) {
 	extern bool print_stage;
-	if(print_stage) cout << "Do clear." << endl;
+	if (print_stage) cout << "Do clear." << endl;
 	// Preserve settings，再打一場
 	Shuffler s;
 	MJtile mjtiles[144];
@@ -234,7 +234,7 @@ void MJstage::clear(void) {
 	s.fill(mjtiles);
 	mjcol = MJcollection(mjtiles);
 	for (int i = 0; i < 4; i++) {
-	    _players[i]->clear_info();
+		_players[i]->clear_info();
 	}
 }
 
@@ -243,7 +243,7 @@ void MJstage::pickSeat(void) {
 	// east = 1 ,south = 2 , west = 3 , north = 4
 	extern bool print_pickSeat;
 	extern bool print_stage;
-	if(print_stage) cout << "Do pickSeat." << endl;
+	if (print_stage) cout << "Do pickSeat." << endl;
 
 	srand(time(NULL));
 	int pos[4] = {1, 2, 3, 4};
@@ -271,7 +271,7 @@ void MJstage::pickSeat(void) {
 void MJstage::pickBookmaker(void) {
 	extern bool print_pickBookmaker;
 	extern bool print_stage;
-	if(print_stage) cout << "Do pickBookmaker." << endl;
+	if (print_stage) cout << "Do pickBookmaker." << endl;
 
 	srand(time(NULL));
 	_bookmaker = rand() % 4;
@@ -284,7 +284,7 @@ void MJstage::nextBookmaker(void) {
 	// 東南西北輪的話，pos 依序是 1 2 3 4
 	extern bool print_pickBookmaker;
 	extern bool print_stage;
-	if(print_stage) cout << "Do nextBookmaker." << endl;
+	if (print_stage) cout << "Do nextBookmaker." << endl;
 
 	int bookmaker_pos = playerToPos[_bookmaker];
 	(bookmaker_pos == 4) ? (bookmaker_pos = 1) : (bookmaker_pos += 1);
@@ -301,7 +301,7 @@ int MJstage::getBookmaker(void) {
 
 void MJstage::getTiles(void) {
 	extern bool print_stage;
-	if(print_stage) cout << "Do getTiles." << endl;
+	if (print_stage) cout << "Do getTiles." << endl;
 
 	MJtile mjtiles_for_player[4][16];
 	for (int k = 0; k < 4; k++) {
@@ -321,7 +321,7 @@ void MJstage::getTiles(void) {
 
 void MJstage::initiate(void) {
 	extern bool print_stage;
-	if(print_stage) cout << "Do initiate." << endl;
+	if (print_stage) cout << "Do initiate." << endl;
 
 	for (int i = 0; i < 4; i++) {
 		_players[i]->initiate(mjcol);
@@ -340,7 +340,7 @@ int MJstage::mainGame(int& rounds) {
 	extern bool print_mainGame_singleHands;
 	extern bool print_mainGame_others;
 	extern bool print_stage;
-	if(print_stage) cout << "Enter mainGame." << endl;
+	if (print_stage) cout << "Enter mainGame." << endl;
 
 	int currentPos = 0;
 	int currentPlayer = 0;

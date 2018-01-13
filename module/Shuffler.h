@@ -4,7 +4,7 @@
 #include "MJtile.h"
 #include <ctime>
 #include <cstdlib>
-// #include <Windows.h>
+#include <Windows.h>
 
 
 class Shuffler{
@@ -17,8 +17,8 @@ public:
 
 	void init() {
 		// random seed
-		srand((time(NULL)));
-		// srand(GetTickCount());
+		// srand((time(NULL)));
+		srand(GetTickCount());
 		// generate 144 MJtile in order
 		for(int i=0; i<144; i++){
 			rand_mj[i] = MJtile(i+1);

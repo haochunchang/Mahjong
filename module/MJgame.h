@@ -1,8 +1,8 @@
-/******************************************************************************
+/*
    FileName  [MJgame.h]
    Author    [HsuehYa Huang]
    Synopsis  [define a game]
-******************************************************************************/
+*/
 #ifndef MJGAME
 #define MJGAME
 
@@ -47,9 +47,9 @@ void clear_screen()
 MJgame::MJgame() {
     clear_screen();
     cout << endl;
-    cout << "************************************" << endl;
-    cout << "***** Welcome to Taiwan Mahjong ****" << endl;
-    cout << "************************************" << endl;
+    cout << "====================================" << endl;
+    cout << "===== Welcome to Taiwan Mahjong ====" << endl;
+    cout << "====================================" << endl;
     cout << endl;
     rounds = 0;
     valueofpoints = 1;
@@ -128,9 +128,9 @@ MJgame::MJgame() {
 MJgame::MJgame(int human, int isAIgreedy, int round_in, int money) {
     clear_screen();
     cout << endl;
-    cout << "************************************" << endl;
-    cout << "***** Welcome to Taiwan Mahjong ****" << endl;
-    cout << "************************************" << endl;
+    cout << "====================================" << endl;
+    cout << "===== Welcome to Taiwan Mahjong ====" << endl;
+    cout << "====================================" << endl;
     cout << endl;
 
     cout << "  Set\thuman = " << human << endl;
@@ -177,7 +177,10 @@ void MJgame::start() {
             if (winner != -1) hu[winner] += 1;
             if (winner != stage.getBookmaker() && winner != -1) {
                 stage.nextBookmaker();
-                if (stage.getBookmaker() == init_book) break;
+                if (stage.getBookmaker() == init_book) {
+                    stage.clear();
+                    break;
+                }
             }
             winner = -1;
             num_rounds = 0;
@@ -193,11 +196,11 @@ void MJgame::start() {
 
 void MJgame::end() {
     cout << "\nGame End." << endl;
-    cout << "===== Final Result =====" << endl;
+    cout << "====== Final Result ======" << endl;
     for (int i = 0; i < 4; i++) {
         fprintf(stdout, "Player %d: $ %d, #hu: %d\n", i, stage.get_money(i), hu_count[i]);
     }
-    cout << "========================" << endl;
+    cout << "==========================" << endl;
     // hold();
     return;
 }
