@@ -426,7 +426,7 @@ public:
 			// 先最後兩張
 			i = _hand.total_len() - 1;
 			// 條件一：suit 不為 4
-			condition[1] = !_hand[i].suit() == 4;
+			condition[1] = !(_hand[i].suit() == 4);
 			// 條件二：下一張是 4W
 			condition[2] = _hand[i].suit() == _hand[i + 1].suit() && _hand[i + 1].rank() == _hand[i].rank() + 1;
 			// 條件三：前一張不是 2W
@@ -438,7 +438,7 @@ public:
 			// 處理第一張
 			i = _hand.faceup_len();
 			// 條件一：suit 不為 4
-			condition[1] = !_hand[i].suit() == 4;
+			condition[1] = !(_hand[i].suit() == 4);
 			// 條件二：下一張是 4W
 			condition[2] = _hand[i].suit() == _hand[i + 1].suit() && _hand[i + 1].rank() == _hand[i].rank() + 1;
 			// 條件三：下二張不是 4W
@@ -450,7 +450,7 @@ public:
 			// 處理其他張
 			for (i = _hand.faceup_len() + 1; i < _hand.total_len() - 1; i++) {
 				// 條件一：不是 suit 4
-				condition[1] = !_hand[i].suit() == 4;
+				condition[1] = !(_hand[i].suit() == 4);
 				// 條件二：下一張是自己 4W
 				condition[2] = _hand[i].suit() == _hand[i + 1].suit() && _hand[i + 1].rank() == _hand[i].rank() + 1;
 				// 條件三：前一張不是 2W
@@ -484,27 +484,60 @@ public:
 	MJCustomAIplayer(int money) : MJplayer(money) {
 		// cout << "Call MJCustomAIplayer constructor with money." << endl;
 	}
-	/*
+	
 	void strategy(int position, MJtile t, int &actiontype, int &actionparameter) {
 		// Use information from getinfo to decide
+        vector<bool> condition(4, false);
 		vector<bool> avail(9, false); // Indicator of available actions
-		avail = get_avail_actions(position, t);
+		avail = this->get_avail_actions(position, t);
 
-		int suit = t.suit();
-		int rank = t.rank();
+        // type: eat=1 pong=2 minggone=3 angone=4 bugone=5 applique=6
+		int s = t.suit();
+		int r = t.rank();
 		// hu
 		if (avail[7]) { actiontype = 7; return; }
 		// minggone & pong
 		if (avail[3]) {
 			// can minggone -> can pong
-			// pong first, but minggone first if one of them can form 順
+			// pong first
+            // but minggone first if there are pairs of rank-1, rank-2, rank+1, rank+2
+            for (int i = _hand.faceup_len(); i < _hand.total_len()-1; i++) {
+                condition[0] = (_hand[i].fromsuitrank(s, r-2) && _hand[i+1].fromsuitrank(s, r-2));
+                condition[1] = (_hand[i].fromsuitrank(s, r-1) && _hand[i+1].fromsuitrank(s, r-1));
+                condition[2] = (_hand[i].fromsuitrank(s, r+1) && _hand[i+1].fromsuitrank(s, r+1));
+                condition[3] = (_hand[i].fromsuitrank(s, r+2) && _hand[i+1].fromsuitrank(s, r+2));
+                if (condition[0] || condition[1] || condition[2] || condition[3]) {
+                    actiontype = 3;
+                    return;
+                }
+            }
+            actiontype = 2;
+            return;
 
 		} else if (avail[2]) {
-
+            // can only pong
+            actiontype = 2;
+            return;
 		}
 		// eat
-		if (avail[1]) {
-
+        int method = 0;
+        if (avail[1]) {
+            actiontype = 1;
+            method = _hand.caneat(t);
+			switch (method) {
+				case 3:
+					actionparameter = 1;
+					break;
+				case 5:
+					actionparameter = 1;
+					break;
+				case 6:
+					actionparameter = 2;
+					break;
+				case 7:
+					actionparameter = 1;
+					break;
+			}
 		}
 		// play
 		if (avail[8]) {
@@ -518,12 +551,14 @@ public:
 
 
 	int decidePlay(void) {
-
+        // Decide which tile to play out
+        // We have current count of playout tiles.
+        //TODO
+        return _hand.faceup_len();
 	}
 
 
 	vector<bool> get_avail_actions(int position, MJtile t) {
-
 		vector<bool> avail(9, false); // Indicator of available actions
 		// if 現在出牌的人是上家, check if caneat
 		avail[0] = true;
@@ -531,22 +566,7 @@ public:
 			//cout << "check if caneat: ";
 			if (_hand.caneat(t)) {
 				avail[1] = true;
-				method = _hand.caneat(t);
-				switch (method) {
-				case 3:
-					method = 1;
-					break;
-				case 5:
-					method = 1;
-					break;
-				case 6:
-					method = 2;
-					break;
-				case 7:
-					method = 1;
-					break;
-				}
-			}
+		    }
 		}
 		// check if canpong
 		if (_hand.canpong(t)) {
@@ -584,7 +604,7 @@ public:
 	void whoIam(void) {
 		cout << "I am the Best!!" << endl;
 	}
-	*/
+	
 };
 
 
