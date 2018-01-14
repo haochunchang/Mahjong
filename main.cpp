@@ -48,7 +48,7 @@ int main() {
 
 void mainGame(void) {
 	// human, isAIgreedy, round_in, money
-	MJgame mygame(0, 1, 3, 10000);
+	MJgame mygame(0, 1, 2, 10000);
 	// mygame.setting();
 	mygame.start();
 	mygame.end();

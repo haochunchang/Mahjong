@@ -19,7 +19,7 @@ public:
 	//      2. One must decide which tile to play
 	// actiontype: nothing=0 eat=1 pong=2 minggone=3 angone=4 bugone=5 hu=7 play=8
 	// actionparameter: huown=1 huother=2 play=number
-	void strategy(int position, MJtile t, int &actiontype, int &actionparameter) {
+	virtual void strategy(int position, MJtile t, int &actiontype, int &actionparameter) {
 		// Naive and greedy strategy
 		// cout << "Call MJGreedyAIplayer::strategy." << endl;
 		// 上家出的牌才能吃
@@ -483,7 +483,7 @@ public:
 		return -1;
 	}
 
-	int decidePlay(void) {
+	virtual int decidePlay(void) {
 		extern bool greedyAIPlayer_decidePlay_checkPoint;
 		// 目前策略：
 		// 以下策略請在手牌數量 >= 5 時做，目前 <5 仍無策略
@@ -553,14 +553,19 @@ public:
 		return _hand.faceup_len();
 	}
 
-	bool is_human(void) {
+	virtual bool is_human(void) {
 		return false;
 	}
 
-	string getFunctionOrder(void) {
+	virtual string className(void) {
+		return "MJGreedyAIplayer";
+	}
+
+	virtual string getFunctionOrder(void) {
 		return functionOrder;
 	}
-	
+
+
 private:
 	string functionOrder = "123456789";
 };
@@ -669,8 +674,8 @@ public:
 		// play
 		if (avail[8]) {
 			actiontype = 8;
-            int index = this->decidePlay();
-            actionparameter = index - _hand.faceup_len() + 1;
+			int index = this->decidePlay();
+			actionparameter = index - _hand.faceup_len() + 1;
 			return;
 		}
 		// nothing
@@ -711,8 +716,8 @@ public:
 
 		//大部分應該都跟Greedy策略類似
 		functionOrder = "123456789";
-        int i = -1;
-        for (int j = 0; j < functionOrder.length(); j++) {
+		int i = -1;
+		for (int j = 0; j < functionOrder.length(); j++) {
 			char functionToCall = functionOrder.at(j);
 			// cout << functionToCall << endl;
 			if (functionToCall == '1') i = singleSuit4();
@@ -727,7 +732,7 @@ public:
 			// cout << i << endl;
 			if (i != -1) return i;
 		}
-	
+
 		return max_tile;
 	}
 
@@ -779,8 +784,12 @@ public:
 		return false;
 	}
 
+	virtual string className(void) {
+		return "MJCustomAIplayer";
+	}
+
 private:
-    string functionOrder;
+	string functionOrder;
 
 };
 

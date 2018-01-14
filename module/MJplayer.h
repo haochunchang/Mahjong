@@ -9,7 +9,7 @@ class MJplayer {
 public :
 	MJplayer();
 	MJplayer(int); // money
-    MJplayer(int, int, MJtile*, int); // position, money, tiles, num_tiles
+	MJplayer(int, int, MJtile*, int); // position, money, tiles, num_tiles
 	~MJplayer();
 
 	void Set_Pos(int);
@@ -26,19 +26,21 @@ public :
 
 	virtual void initiate(MJcollection&);
 	void draw(MJcollection&);
-    MJtile play(int);
-    void act(int, int, MJtile&, MJcollection&);
+	MJtile play(int);
+	void act(int, int, MJtile&, MJcollection&);
 
-    void showhandtoothers(void);
+	void showhandtoothers(void);
 	void clear_info(void);
-    // actiontype: hu=-1 nothing=0 eat=1 pong=2 minggone=3 angone=4 bugone=5
+	// actiontype: hu=-1 nothing=0 eat=1 pong=2 minggone=3 angone=4 bugone=5
 	virtual void strategy(int position, MJtile t, int &actiontype, int &actionparameter);
 	// call after every play
 	virtual int decidePlay(void);
-    virtual void getinfo(int position, int type, MJtile* ts, int tiles_num);
+	virtual void getinfo(int position, int type, MJtile* ts, int tiles_num);
 	// type: eat=1 pong=2 minggone=3 angone=4 bugone=5 applique=6
 	// call after any type above
-    virtual bool is_human(void);
+	virtual bool is_human(void);
+	virtual string className(void);
+	virtual string getFunctionOrder(void);
 
 protected :
 	MJhand _hand;
@@ -46,10 +48,10 @@ protected :
 	int _money;
 	map<int, int> previousPlayer;
 
-    // Used for deciding strategy: store MJtile suit/rank
-    // Tiles played out: out[i][j] = count of suit i, rank j
-    vector<vector<int> > out;//(4, vector<int>(9, 0));
-    int count_angone;
-    MJtile previousTile;
+	// Used for deciding strategy: store MJtile suit/rank
+	// Tiles played out: out[i][j] = count of suit i, rank j
+	vector<vector<int> > out;//(4, vector<int>(9, 0));
+	int count_angone;
+	MJtile previousTile;
 };
 #endif

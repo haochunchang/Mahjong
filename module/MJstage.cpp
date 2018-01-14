@@ -199,7 +199,7 @@ MJstage& MJstage::operator=(MJstage&& other ) {
 	mjcol = other.mjcol;
 	playerToPos = other.playerToPos;
 	posToPlayer = other.posToPlayer;
-    for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 4; i++) {
 		// set unique_ptr by providing raw pointer and deleter
 		_players[i] = move(other._players[i]);
 	}
@@ -350,6 +350,7 @@ pair<int, int> MJstage::mainGame(int& rounds) {
 		if (print_mainGame_info) cout << "***** _player[" << currentPlayer << "] huown! *****" << endl;
 		_players[currentPlayer]->act(7, 1, dummy, mjcol);
 		//hold();
+	writeInfo();
 		return make_pair(currentPlayer, -1);
 	}
 
@@ -364,10 +365,10 @@ pair<int, int> MJstage::mainGame(int& rounds) {
 		current_action_type = 0;
 		current_action_param = 0;
 		//cout << "_players[" << currentPlayer << "] decides what tile to play." << endl;
-        while (actiontype[currentPlayer] != 8) {
+		while (actiontype[currentPlayer] != 8) {
 			_players[currentPlayer]->act(current_action_type, current_action_param, dummy, mjcol);
 			_players[currentPlayer]->strategy(currentPos, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
-	    }
+		}
 		if (actiontype[currentPlayer] == 8) {
 			//cout << "Bookmaker decides what tile to play." << endl;
 			t = _players[currentPlayer]->play(actionparameter[currentPlayer]);
@@ -406,6 +407,7 @@ pair<int, int> MJstage::mainGame(int& rounds) {
 				_players[i]->act(actiontype[i], actionparameter[i], t, mjcol);
 				if (print_mainGame_info) cout << "***** _players[" << i << "] huother! *****" << endl;
 				//hold();
+	writeInfo();
 				return make_pair(i, currentPlayer);
 			} else { // 優先順序：gone > pong > eat，同時有人同樣動作就由玩家index小的先？應該要由下家優先
 				if (actiontype[i] > current_action_type) {
@@ -436,20 +438,21 @@ pair<int, int> MJstage::mainGame(int& rounds) {
 				cout << "Now _player[" << currentPlayer << "]'s hand is " << endl;
 				_players[currentPlayer]->Print_Hand();
 			}
-            // 看其他玩家faceup的牌
-            if (_players[currentPlayer]->is_human()) {
-                cout << "Other players faceup hands." << endl;
-                for (int i = 0; i < 4; i++) {
-                    if (currentPlayer != i) _players[i]->showhandtoothers();
-                }
-            }
-            // 檢查是否胡牌
+			// 看其他玩家faceup的牌
+			if (_players[currentPlayer]->is_human()) {
+				cout << "Other players faceup hands." << endl;
+				for (int i = 0; i < 4; i++) {
+					if (currentPlayer != i) _players[i]->showhandtoothers();
+				}
+			}
+			// 檢查是否胡牌
 			_players[currentPlayer]->strategy(currentPos, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
 			if (actiontype[currentPlayer] == 7 && actionparameter[currentPlayer] == 1) {
 				// huown
 				if (print_mainGame_info) cout << "***** _player[" << currentPlayer << "] huown! *****" << endl;
 				_players[currentPlayer]->act(7, 1, dummy, mjcol);
 				//hold();
+	writeInfo();
 				return make_pair(currentPlayer, -1);
 			}
 		} else {
@@ -474,19 +477,20 @@ pair<int, int> MJstage::mainGame(int& rounds) {
 				_players[i]->getinfo(currentPos, actiontype[currentPlayer], &t, tiles_num);
 			}
 			// 看其他玩家faceup的牌
-            if (_players[currentPlayer]->is_human()) {
-                cout << "Other players faceup hands." << endl;
-                for (int i = 0; i < 4; i++) {
-                    if (currentPlayer != i) _players[i]->showhandtoothers();
-                }
-            }
-            // 有吃碰槓的動作就是直接出一張，不用抽
+			if (_players[currentPlayer]->is_human()) {
+				cout << "Other players faceup hands." << endl;
+				for (int i = 0; i < 4; i++) {
+					if (currentPlayer != i) _players[i]->showhandtoothers();
+				}
+			}
+			// 有吃碰槓的動作就是直接出一張，不用抽
 			_players[currentPlayer]->strategy(currentPos, dummy, actiontype[currentPlayer], actionparameter[currentPlayer]);
 			if (actiontype[currentPlayer] == 7 && actionparameter[currentPlayer] == 1) {
 				// huown
 				if (print_mainGame_info) cout << "***** _player[" << currentPlayer << "] huown! *****" << endl;
 				_players[currentPlayer]->act(7, 1, dummy, mjcol);
 				// hold();
+	writeInfo();
 				return make_pair(currentPlayer, -1);
 			}
 			// printAllHands(_players);
@@ -501,7 +505,8 @@ pair<int, int> MJstage::mainGame(int& rounds) {
 		if (print_mainGame_others)
 			cout << "\n--------------------------------------------------\n" << endl;
 	}
-
+	// cout << "write info." << endl;
+	// cout << "Now the size is " << mjcol.size() << endl;
 	writeInfo();
 	return make_pair(-1, -1);
 }
@@ -544,22 +549,24 @@ void MJstage::writeInfo(void) {
 
 	myfile.open(filename, fstream::in | fstream::out | fstream::app);
 	// write seed
-	if(!file_exist) myfile << "seed, strategy, remain mycol tiles" << endl;
+	if (!file_exist) myfile << "seed, strategy, remain mycol tiles" << endl;
 	myfile << seed << ",";
 
 	// write if all players are greedy AI, if true then write function order
 	bool is_all_greedyAI = true;
-	for(int i=0; i<4;i++){
-		string class_name = typeid(_players[i]).name();
-		if(class_name!="St10unique_ptrI8MJplayerSt14default_deleteIS0_EE"){
+	for (int i = 0; i < 4; i++) {
+		string class_name = _players[i]->className();
+		if (class_name != "MJGreedyAIplayer") {
 			is_all_greedyAI = false;
 			break;
 		}
 	}
-	// if(is_all_greedyAI) myfile << _players[0]->getFunctionOrder() << ",";
-	// else myfile << "None" << ",";
+	if (is_all_greedyAI) myfile << _players[0]->getFunctionOrder() << ",";
+	else myfile << "Not all GreedyAI" << ",";
 
-	// working on write col...
+	// write remain mjcol size
+	// cout << "write " << mjcol.size() - 16 << " in the file." << endl;;
+	myfile << mjcol.size() - 16;
 
 	myfile << endl;
 	myfile.close();

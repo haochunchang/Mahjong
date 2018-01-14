@@ -89,7 +89,7 @@ int MJplayer::faceup_len() const {
 }
 
 
-void MJplayer::Set_Hand(MJhand& input){
+void MJplayer::Set_Hand(MJhand& input) {
     _hand = input;
     return;
 }
@@ -232,11 +232,11 @@ void MJplayer::strategy(int position, MJtile t, int &actiontype, int &actionpara
         avail[8] = true;
         // draw stage, you must play
         if (_hand.stage() == 1) {
-            avail[0] = false;    
+            avail[0] = false;
         }
     }
 
-    // Prompt user to choose from available actions 
+    // Prompt user to choose from available actions
     fprintf(stdout, "You can do the following actions:\n");
     for (int i = 8; i >= 0; i--) {
         if (avail[i]) {
@@ -285,7 +285,7 @@ int MJplayer::decidePlay(void) {
     cout << _hand;
     cin >> pos;
     if (pos < 1 || pos > _hand.total_len() + _hand.stage()) {
-        pos = 1;    
+        pos = 1;
     }
     return pos;
 }
@@ -318,10 +318,18 @@ void MJplayer::getinfo(int position, int type, MJtile* ts, int tiles_num) {
         // someone angone
         count_angone += 1;
     }
-    previousTile = *ts; 
+    previousTile = *ts;
     return;
 }
 
 bool MJplayer::is_human(void) {
     return true;
+}
+
+string MJplayer::className(void) {
+    return "MJplayer";
+}
+
+string MJplayer::getFunctionOrder(void) {
+    return "";
 }
