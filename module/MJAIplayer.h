@@ -566,12 +566,15 @@ private:
 };
 
 
-class MJCustomAIplayer: public MJplayer {
+
+class MJCustomAIplayer: public MJGreedyAIplayer {
+
+
 public:
-	MJCustomAIplayer() : MJplayer() {
+	MJCustomAIplayer() : MJGreedyAIplayer() {
 		// cout << "Call MJCustomAIplayer constructor." << endl;
 	}
-	MJCustomAIplayer(int money) : MJplayer(money) {
+	MJCustomAIplayer(int money) : MJGreedyAIplayer(money) {
 		// cout << "Call MJCustomAIplayer constructor with money." << endl;
 	}
 
@@ -666,7 +669,8 @@ public:
 		// play
 		if (avail[8]) {
 			actiontype = 8;
-			actionparameter = this->decidePlay();
+            int index = this->decidePlay();
+            actionparameter = index - _hand.faceup_len() + 1;
 			return;
 		}
 		// nothing
@@ -687,7 +691,7 @@ public:
 		}
 		// 記錄手牌中哪張出現最多次
 		int max = 0;
-		int max_tile = 0;
+		int max_tile = _hand.faceup_len();
 		for (int i = _hand.faceup_len(); i < _hand.total_len() + 1; i++) {
 			if (hand_occur[i] > max) {
 				max = hand_occur[i];
@@ -706,8 +710,24 @@ public:
 		}
 
 		//大部分應該都跟Greedy策略類似
-		//TODO
-
+		functionOrder = "123456789";
+        int i = -1;
+        for (int j = 0; j < functionOrder.length(); j++) {
+			char functionToCall = functionOrder.at(j);
+			// cout << functionToCall << endl;
+			if (functionToCall == '1') i = singleSuit4();
+			if (functionToCall == '2') i = singleRank19();
+			if (functionToCall == '3') i = singleTile();
+			if (functionToCall == '4') i = pairSuit4();
+			if (functionToCall == '5') i = gapSuit123Rank19();
+			if (functionToCall == '6') i = gapSuit123();
+			if (functionToCall == '7') i = pairSuit123();
+			if (functionToCall == '8') i = contiSuit123Rank19();
+			if (functionToCall == '9') i = contiSuit123();
+			// cout << i << endl;
+			if (i != -1) return i;
+		}
+	
 		return max_tile;
 	}
 
@@ -758,6 +778,10 @@ public:
 	bool is_human(void) {
 		return false;
 	}
+
+private:
+    string functionOrder;
+
 };
 
 #endif
