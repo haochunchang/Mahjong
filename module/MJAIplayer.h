@@ -485,7 +485,6 @@ public:
 
 	int decidePlay(void) {
 		extern bool greedyAIPlayer_decidePlay_checkPoint;
-		functionOrder = "123456789";
 		// 目前策略：
 		// 以下策略請在手牌數量 >= 5 時做，目前 <5 仍無策略
 		// 先找落單的東西北中發白 (singleSuit4, id = 1)
@@ -521,7 +520,7 @@ public:
 			// cout << i << endl;
 			if (i != -1) return i;
 		}
-		
+
 		// i = singleSuit4();
 		// if (i != -1) return i;
 
@@ -548,22 +547,26 @@ public:
 
 		// i = contiSuit123();
 		// if (i != -1) return i;
-		
 
 		if (greedyAIPlayer_decidePlay_checkPoint) cout << "Not the above method. Return first tile." << endl;
 		// 沒其他判斷方式了，就 return 第一張牌吧
 		return _hand.faceup_len();
 	}
+
 	bool is_human(void) {
 		return false;
 	}
+
+	string getFunctionOrder(void) {
+		return functionOrder;
+	}
+	
 private:
-	string functionOrder;
+	string functionOrder = "123456789";
 };
 
 
 class MJCustomAIplayer: public MJplayer {
-
 public:
 	MJCustomAIplayer() : MJplayer() {
 		// cout << "Call MJCustomAIplayer constructor." << endl;
@@ -755,8 +758,6 @@ public:
 	bool is_human(void) {
 		return false;
 	}
-
 };
-
 
 #endif

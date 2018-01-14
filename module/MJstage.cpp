@@ -350,7 +350,6 @@ pair<int, int> MJstage::mainGame(int& rounds) {
 		if (print_mainGame_info) cout << "***** _player[" << currentPlayer << "] huown! *****" << endl;
 		_players[currentPlayer]->act(7, 1, dummy, mjcol);
 		//hold();
-		// writeRemainCol(mjcol.size()); wait
 		return make_pair(currentPlayer, -1);
 	}
 
@@ -407,7 +406,6 @@ pair<int, int> MJstage::mainGame(int& rounds) {
 				_players[i]->act(actiontype[i], actionparameter[i], t, mjcol);
 				if (print_mainGame_info) cout << "***** _players[" << i << "] huother! *****" << endl;
 				//hold();
-				// writeRemainCol(mjcol.size()); wait
 				return make_pair(i, currentPlayer);
 			} else { // 優先順序：gone > pong > eat，同時有人同樣動作就由玩家index小的先？應該要由下家優先
 				if (actiontype[i] > current_action_type) {
@@ -452,7 +450,6 @@ pair<int, int> MJstage::mainGame(int& rounds) {
 				if (print_mainGame_info) cout << "***** _player[" << currentPlayer << "] huown! *****" << endl;
 				_players[currentPlayer]->act(7, 1, dummy, mjcol);
 				//hold();
-				// writeRemainCol(mjcol.size()); wait
 				return make_pair(currentPlayer, -1);
 			}
 		} else {
@@ -490,7 +487,6 @@ pair<int, int> MJstage::mainGame(int& rounds) {
 				if (print_mainGame_info) cout << "***** _player[" << currentPlayer << "] huown! *****" << endl;
 				_players[currentPlayer]->act(7, 1, dummy, mjcol);
 				// hold();
-				// writeRemainCol(mjcol.size()); wait
 				return make_pair(currentPlayer, -1);
 			}
 			// printAllHands(_players);
@@ -506,7 +502,6 @@ pair<int, int> MJstage::mainGame(int& rounds) {
 			cout << "\n--------------------------------------------------\n" << endl;
 	}
 
-	// writeRemainCol(mjcol.size()); wait
 	writeInfo();
 	return make_pair(-1, -1);
 }
@@ -548,8 +543,25 @@ void MJstage::writeInfo(void) {
 	myfile.close();
 
 	myfile.open(filename, fstream::in | fstream::out | fstream::app);
+	// write seed
 	if(!file_exist) myfile << "seed, strategy, remain mycol tiles" << endl;
-	myfile << seed << endl;
+	myfile << seed << ",";
+
+	// write if all players are greedy AI, if true then write function order
+	bool is_all_greedyAI = true;
+	for(int i=0; i<4;i++){
+		string class_name = typeid(_players[i]).name();
+		if(class_name!="St10unique_ptrI8MJplayerSt14default_deleteIS0_EE"){
+			is_all_greedyAI = false;
+			break;
+		}
+	}
+	// if(is_all_greedyAI) myfile << _players[0]->getFunctionOrder() << ",";
+	// else myfile << "None" << ",";
+
+	// working on write col...
+
+	myfile << endl;
 	myfile.close();
 	return;
 }
