@@ -180,6 +180,19 @@ void MJgame::start() {
             w_and_l = stage.mainGame(num_rounds);
             winner = w_and_l.first;
             loser = w_and_l.second;
+            cout << "================================" << endl;
+            if (winner == -1) {
+                cout << "============= 流局 =============" << endl;
+            } else {
+                if (loser == -1) {
+                    cout << "====== " << "player["<<winner<<"] 自摸^ ^! ======" << endl;    
+                } else {
+                    cout << "====== " << "player["<<winner<<"] 胡牌^ ^! ======" << endl;    
+                    cout << "====== " << "player["<<loser<<"] 放槍QAQ! ======" << endl;    
+                }
+            }
+            cout << "================================" << endl;
+            clear_screen();
             if (winner != -1) hu[winner] += 1;
             if (loser != -1) put_gun[loser] += 1;
             if (winner != stage.getBookmaker() && winner != -1) {
