@@ -847,7 +847,7 @@ MJtile& MJhand::operator [] (int index) {
 	}
 }
 
-
+/*
 ostream& operator << (ostream& os, const MJhand& h) {
 
 	//part 1 " __ "
@@ -1014,8 +1014,8 @@ ostream& operator << (ostream& os, const MJhand& h) {
 	os << endl;
 	return os;
 }
+*/
 
-/*
 ostream& operator << (ostream& os, const MJhand& h){
 
 	//part 1 " __ "
@@ -1071,7 +1071,8 @@ ostream& operator << (ostream& os, const MJhand& h){
 					os<<"九";
 					break;
 				default:
-					assert(false);
+					os<<"Ｘ";
+                    //assert(false);
 			}
 		}
 		os<<"|";
@@ -1123,7 +1124,8 @@ ostream& operator << (ostream& os, const MJhand& h){
 							os<<"菊";
 							break;
 						default:
-							assert(false);
+							os<<"Ｘ";
+                            //assert(false);
 					}
 					break;
 				case 9:
@@ -1141,11 +1143,13 @@ ostream& operator << (ostream& os, const MJhand& h){
 							os<<"冬";
 							break;
 						default:
-							assert(false);
+							os<<"Ｘ";
+                            //assert(false);
 					}
 					break;
 				default:
-					assert(false);
+					os<<"Ｘ";
+                    //assert(false);
 			}
 		else{
 			switch(h._tiles[i].suit()){
@@ -1159,7 +1163,8 @@ ostream& operator << (ostream& os, const MJhand& h){
 					os<<"萬";
 					break;
 				default:
-					assert(false);
+					os<<"Ｘ";
+                    //assert(false);
 			}
 		}
 		os<<"|";
@@ -1177,4 +1182,4 @@ ostream& operator << (ostream& os, const MJhand& h){
 	os<<endl;
 	return os;
 }
-*/
+
