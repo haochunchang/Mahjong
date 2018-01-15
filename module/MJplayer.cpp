@@ -250,6 +250,21 @@ void MJplayer::strategy(int position, MJtile t, int &actiontype, int &actionpara
         if (avail[i]) action_count++;
     }
 
+    cout << "Your Hands:" << endl;
+    for (int i = 0; i < _hand.total_len() + _hand.faceup_len() + _hand.stage(); i++) {
+        if (i <= _hand.faceup_len() || i > _hand.total_len()) {
+            cout << "    ";
+        } else if (i == _hand.total_len()) {
+            cout << " " << i - _hand.faceup_len() << "    "; 
+        } else if (i - _hand.faceup_len() < 10) {
+            cout << "  " << i - _hand.faceup_len() << " ";    
+        } else {
+            cout << " " << i - _hand.faceup_len() << " ";    
+        }
+    }
+    cout << endl;
+    cout << _hand;
+
     if (action_count) {
         fprintf(stdout, "Please choose one of the actions above:\n");
         fscanf(stdin, "%d", &a);
@@ -283,22 +298,6 @@ int MJplayer::decidePlay(void) {
     int pos = 0;
     cout << "Which tile do you want to play?" << endl;
     cout << "First: 1, Last: " << _hand.total_len() + _hand.stage() - _hand.faceup_len() << endl;
-    for (int i = 0; i < _hand.total_len() + _hand.faceup_len() + _hand.stage(); i++) {
-        if (i <= _hand.faceup_len() || i > _hand.total_len()) {
-            cout << "    ";
-        } else if (i == _hand.total_len()) {
-            cout << " " << i - _hand.faceup_len() << "    ";
-        
-        } else if (i - _hand.faceup_len() < 10) {
-            cout << "  " << i - _hand.faceup_len() << " ";    
-        } else {
-            cout << " " << i - _hand.faceup_len() << " ";    
-        }
-
-    }
-    
-    cout << endl;
-    cout << _hand;
     cin >> pos;
     if (pos < 1 || pos > _hand.total_len() + _hand.stage()) {
         pos = _hand.total_len() + _hand.stage();
