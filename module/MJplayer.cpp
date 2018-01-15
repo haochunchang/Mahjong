@@ -176,12 +176,12 @@ void MJplayer::strategy(int position, MJtile t, int &actiontype, int &actionpara
     int method = 0;
     map<int, string> action_map;
     action_map[0] = "nothing";
-    action_map[1] = "eat";
-    action_map[2] = "pong";
-    action_map[3] = "minggone";
-    action_map[5] = "bugone";
-    action_map[7] = "hu";
-    action_map[8] = "play";
+    action_map[1] = "吃(eat)";
+    action_map[2] = "碰(pong)";
+    action_map[3] = "明槓(minggone)";
+    action_map[5] = "補槓(bugone)";
+    action_map[7] = "胡(hu)";
+    action_map[8] = "出牌(play)";
     vector<bool> avail(9, false); // Indicator of available actions
     // if 現在出牌的人是上家, check if caneat
     avail[0] = true;
