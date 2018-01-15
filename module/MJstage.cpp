@@ -166,6 +166,19 @@ MJstage::MJstage(int n_human, int AIkind, int money) {
 	s.fill(mjtiles);
 	mjcol = MJcollection(mjtiles);
 
+    if (AIkind >= 2 && n_human == 0) {
+        // GreedyAI v.s. CustomAI
+        // AIkind = # of GreedyAI
+	    for (int i = 0; i < AIkind; i++) {
+		    unique_ptr<MJplayer> ptr(new MJGreedyAIplayer(money));
+		    _players.push_back(move(ptr));
+	    }
+	    for (int i = 0; i < 4 - AIkind; i++) {
+		    unique_ptr<MJplayer> ptr(new MJCustomAIplayer(money));
+		    _players.push_back(move(ptr));
+	    }
+    }
+
 	for (int i = 0; i < n_human; i++) {
 		unique_ptr<MJplayer> ptr(new MJplayer(money));
 		_players.push_back(move(ptr));
@@ -174,7 +187,7 @@ MJstage::MJstage(int n_human, int AIkind, int money) {
 		if (AIkind == 1) {
 			unique_ptr<MJplayer> ptr(new MJGreedyAIplayer(money));
 			_players.push_back(move(ptr));
-		} else {
+        } else {
 			unique_ptr<MJplayer> ptr(new MJCustomAIplayer(money));
 			_players.push_back(move(ptr));
 		}
