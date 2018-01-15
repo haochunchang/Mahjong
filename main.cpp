@@ -26,18 +26,18 @@ void testInitEatPong(void);
 bool is_holding = false;
 
 // MJgame control
-bool print_result = false;
+bool print_result = true;
 
 // MJstage control
-bool print_stage = false;				// 每個 MJstage 函數名稱
-bool print_pickSeat = false;			// 選位子
-bool print_pickBookmaker = false;		// 選莊家
-bool print_mainGame_info = false;		// 輪到誰等等
-bool print_mainGame_allHands = false;	// 每個玩家手牌，方便 debug
-bool print_mainGame_singleHands = false;	// 輪到該玩家時手牌，可以看出牌策略是否正確
-bool print_mainGame_others = false;		// 進入第幾個迴圈、牌堆剩多少等等
-bool print_strategy = false;			// 每個玩家可以做什麼動作
-bool print_action = false;				// 最後給哪個玩家做什麼動作
+bool print_stage = true;					// 每個 MJstage 函數名稱
+bool print_pickSeat = true;				// 選位子
+bool print_pickBookmaker = true;			// 選莊家
+bool print_mainGame_info = true;			// 輪到誰等等
+bool print_mainGame_allHands = true;		// 每個玩家手牌，方便 debug
+bool print_mainGame_singleHands = true;	// 輪到該玩家時手牌，可以看出牌策略是否正確
+bool print_mainGame_others = true;			// 進入第幾個迴圈、牌堆剩多少等等
+bool print_strategy = true;				// 每個玩家可以做什麼動作
+bool print_action = true;					// 最後給哪個玩家做什麼動作
 
 // MJGreedyAIplayer control
 bool greedyAIPlayer_decidePlay_checkPoint = false;	// 方便 debug
@@ -52,7 +52,7 @@ int main() {
 
 void mainGame(void) {
 	// human, isAIgreedy, round_in, money
-	MJgame mygame(0, 1, 500, 10000);
+	MJgame mygame(0, 1, 2000, 10000);
 	// mygame.setting();
 	mygame.start();
 	mygame.end();

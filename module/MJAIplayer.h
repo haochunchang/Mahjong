@@ -97,7 +97,7 @@ public:
 	};
 
 	int singleSuit4(void) {
-		if (_hand.total_len() - _hand.faceup_len() >= 5) {
+		if (_hand.total_len() - _hand.faceup_len() >= 4) {
 			extern bool greedyAIPlayer_decidePlay_checkPoint;
 			// ***** 處理落單的東南西北中發白 *****
 			if (greedyAIPlayer_decidePlay_checkPoint) cout << "Check: suit is 4." << endl;
@@ -126,7 +126,7 @@ public:
 	}
 
 	int singleRank19(void) {
-		if (_hand.total_len() - _hand.faceup_len() >= 5) {
+		if (_hand.total_len() - _hand.faceup_len() >= 4) {
 			extern bool greedyAIPlayer_decidePlay_checkPoint;
 			// ***** 處理落單的 1 和 9 *****
 			// 檢查第一張牌，如果是 rank 1，則下一張 rank 要是 1 or 2 or 3
@@ -176,7 +176,7 @@ public:
 	}
 
 	int singleTile(void) {
-		if (_hand.total_len() - _hand.faceup_len() >= 5) {
+		if (_hand.total_len() - _hand.faceup_len() >= 4) {
 			extern bool greedyAIPlayer_decidePlay_checkPoint;
 			// ***** 處理其他落單的牌 *****
 			if (greedyAIPlayer_decidePlay_checkPoint) cout << "Check: lonely tile." << endl;
@@ -225,7 +225,7 @@ public:
 	}
 
 	int pairSuit4(void) {
-		if (_hand.total_len() - _hand.faceup_len() >= 5) {
+		if (_hand.total_len() - _hand.faceup_len() >= 4) {
 			extern bool greedyAIPlayer_decidePlay_checkPoint;
 			// ***** 處理只有兩個 suit 4 (Fa Fa) 這種狀況 *****
 			if (greedyAIPlayer_decidePlay_checkPoint) cout << "Check: Fa Fa condition." << endl;
@@ -248,7 +248,7 @@ public:
 	}
 
 	int gapSuit123Rank19(void) {
-		if (_hand.total_len() - _hand.faceup_len() >= 5) {
+		if (_hand.total_len() - _hand.faceup_len() >= 4) {
 			extern bool greedyAIPlayer_decidePlay_checkPoint;
 			// ***** 處理只有 7W 9W 或 1W 3W ，應先丟 9W 或 1W *****
 			if (greedyAIPlayer_decidePlay_checkPoint) cout << "Check: 7W 9W or 1W 3W condition." << endl;
@@ -294,7 +294,7 @@ public:
 	}
 
 	int gapSuit123(void) {
-		if (_hand.total_len() - _hand.faceup_len() >= 5) {
+		if (_hand.total_len() - _hand.faceup_len() >= 4) {
 			extern bool greedyAIPlayer_decidePlay_checkPoint;
 			// ***** 處理如果只有 6W 8W 應先丟，因為只能等 7W *****
 			if (greedyAIPlayer_decidePlay_checkPoint) cout << "Check: 6W 8W condition." << endl;
@@ -327,7 +327,7 @@ public:
 	}
 
 	int pairSuit123(void) {
-		if (_hand.total_len() - _hand.faceup_len() >= 5) {
+		if (_hand.total_len() - _hand.faceup_len() >= 4) {
 			extern bool greedyAIPlayer_decidePlay_checkPoint;
 			// ***** 處理 6W 6W 這種，但要先確定是不是 6W 6W 6W *****
 			if (greedyAIPlayer_decidePlay_checkPoint) cout << "Check: 6W 6W condition." << endl;
@@ -359,7 +359,7 @@ public:
 	}
 
 	int contiSuit123Rank19(void) {
-		if (_hand.total_len() - _hand.faceup_len() >= 5) {
+		if (_hand.total_len() - _hand.faceup_len() >= 4) {
 			extern bool greedyAIPlayer_decidePlay_checkPoint;
 			bool condition[10];
 			// ***** 然後才丟 8W 9W 或 1W 2W 這種，但要先確定不是 789 或 123 *****
@@ -433,7 +433,7 @@ public:
 	}
 
 	int contiSuit123(void) {
-		if (_hand.total_len() - _hand.faceup_len() >= 5) {
+		if (_hand.total_len() - _hand.faceup_len() >= 4) {
 			extern bool greedyAIPlayer_decidePlay_checkPoint;
 			bool condition[10];
 			// ***** 處理 3W 4W 這種，但要先確定不是 234 或 345 *****
@@ -504,6 +504,18 @@ public:
 		_hand.set_total_len(_hand.total_len() - 1);
 		int i = -1;
 		int suit, rank;
+		if (_hand.total_len() - _hand.faceup_len() == 1) {
+			int t1suit = _hand[_hand.faceup_len()].suit();
+			int t1rank = _hand[_hand.faceup_len()].rank();
+			int t2suit = _hand[_hand.faceup_len() + 1].suit();
+			int t2rank = _hand[_hand.faceup_len() + 1].rank();
+			int t1out = out[t1suit - 1][t1rank - 1];
+			int t2out = out[t2suit - 1][t2rank - 1];
+			if (t1out == 4) return _hand.faceup_len();
+			if (t2out == 4) return _hand.faceup_len() + 1;
+			if (t1out > t2out) return _hand.faceup_len();
+			if (t1out < t2out) return _hand.faceup_len() + 1;
+		}
 
 		for (int j = 0; j < functionOrder.length(); j++) {
 			char functionToCall = functionOrder.at(j);
@@ -520,33 +532,6 @@ public:
 			// cout << i << endl;
 			if (i != -1) return i;
 		}
-
-		// i = singleSuit4();
-		// if (i != -1) return i;
-
-		// i = singleRank19();
-		// if (i != -1) return i;
-
-		// i = singleTile();
-		// if (i != -1) return i;
-
-		// i = pairSuit4();
-		// if (i != -1) return i;
-
-		// i = gapSuit123Rank19();
-		// if (i != -1) return i;
-
-		// i = gapSuit123();
-		// if (i != -1) return i;
-
-		// i = pairSuit123();
-		// if (i != -1) return i;
-
-		// i = contiSuit123Rank19();
-		// if (i != -1) return i;
-
-		// i = contiSuit123();
-		// if (i != -1) return i;
 
 		if (greedyAIPlayer_decidePlay_checkPoint) cout << "Not the above method. Return first tile." << endl;
 		// 沒其他判斷方式了，就 return 第一張牌吧
@@ -568,7 +553,7 @@ public:
 
 
 private:
-	string functionOrder = "1234567";
+	string functionOrder = "123456789";
 };
 
 

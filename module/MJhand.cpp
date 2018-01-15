@@ -1182,5 +1182,4 @@ ostream& operator << (ostream& os, const MJhand& h){
 	os<<endl;
 	return os;
 }
-
 */
