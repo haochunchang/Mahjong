@@ -101,6 +101,7 @@ void printAction(int player_to_act, int current_action_type, int current_action_
 			case 6: cout << "(010) (100)"; break;
 			case 7: cout << "(001) (010) (100)"; break;
 			}
+            cout << endl;
 			break;
 		case 2:
 			cout << "pong" << endl;
@@ -385,7 +386,7 @@ pair<int, int> MJstage::mainGame(int& rounds) {
 		if (actiontype[currentPlayer] == 8) {
 			//cout << "Bookmaker decides what tile to play." << endl;
 			t = _players[currentPlayer]->play(actionparameter[currentPlayer]);
-			if (print_mainGame_others) {
+			if (print_mainGame_singleHands) {
 				cout << "_players[" << currentPlayer << "] play:" << endl;
 				cout << t;
 			}
