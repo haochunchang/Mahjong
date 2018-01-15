@@ -562,12 +562,13 @@ public:
 	}
 
 	virtual string getFunctionOrder(void) {
+		// cout << functionOrder << endl;
 		return functionOrder;
 	}
 
 
 private:
-	string functionOrder = "123456789";
+	string functionOrder = "1234567";
 };
 
 

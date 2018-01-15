@@ -101,7 +101,7 @@ void printAction(int player_to_act, int current_action_type, int current_action_
 			case 6: cout << "(010) (100)"; break;
 			case 7: cout << "(001) (010) (100)"; break;
 			}
-            cout << endl;
+			cout << endl;
 			break;
 		case 2:
 			cout << "pong" << endl;
@@ -167,18 +167,18 @@ MJstage::MJstage(int n_human, int AIkind, int money) {
 	s.fill(mjtiles);
 	mjcol = MJcollection(mjtiles);
 
-    if (AIkind >= 2 && n_human == 0) {
-        // GreedyAI v.s. CustomAI
-        // AIkind = # of GreedyAI
-	    for (int i = 0; i < AIkind; i++) {
-		    unique_ptr<MJplayer> ptr(new MJGreedyAIplayer(money));
-		    _players.push_back(move(ptr));
-	    }
-	    for (int i = 0; i < 4 - AIkind; i++) {
-		    unique_ptr<MJplayer> ptr(new MJCustomAIplayer(money));
-		    _players.push_back(move(ptr));
-	    }
-    }
+	if (AIkind >= 2 && n_human == 0) {
+		// GreedyAI v.s. CustomAI
+		// AIkind = # of GreedyAI
+		for (int i = 0; i < AIkind; i++) {
+			unique_ptr<MJplayer> ptr(new MJGreedyAIplayer(money));
+			_players.push_back(move(ptr));
+		}
+		for (int i = 0; i < 4 - AIkind; i++) {
+			unique_ptr<MJplayer> ptr(new MJCustomAIplayer(money));
+			_players.push_back(move(ptr));
+		}
+	}
 
 	for (int i = 0; i < n_human; i++) {
 		unique_ptr<MJplayer> ptr(new MJplayer(money));
@@ -188,7 +188,7 @@ MJstage::MJstage(int n_human, int AIkind, int money) {
 		if (AIkind == 1) {
 			unique_ptr<MJplayer> ptr(new MJGreedyAIplayer(money));
 			_players.push_back(move(ptr));
-        } else {
+		} else {
 			unique_ptr<MJplayer> ptr(new MJCustomAIplayer(money));
 			_players.push_back(move(ptr));
 		}
@@ -364,7 +364,7 @@ pair<int, int> MJstage::mainGame(int& rounds) {
 		if (print_mainGame_info) cout << "***** _player[" << currentPlayer << "] huown! *****" << endl;
 		_players[currentPlayer]->act(7, 1, dummy, mjcol);
 		//hold();
-	writeInfo();
+		writeInfo();
 		return make_pair(currentPlayer, -1);
 	}
 
@@ -421,7 +421,7 @@ pair<int, int> MJstage::mainGame(int& rounds) {
 				_players[i]->act(actiontype[i], actionparameter[i], t, mjcol);
 				if (print_mainGame_info) cout << "***** _players[" << i << "] huother! *****" << endl;
 				//hold();
-	writeInfo();
+				writeInfo();
 				return make_pair(i, currentPlayer);
 			} else { // 優先順序：gone > pong > eat，同時有人同樣動作就由玩家index小的先？應該要由下家優先
 				if (actiontype[i] > current_action_type) {
@@ -466,7 +466,7 @@ pair<int, int> MJstage::mainGame(int& rounds) {
 				if (print_mainGame_info) cout << "***** _player[" << currentPlayer << "] huown! *****" << endl;
 				_players[currentPlayer]->act(7, 1, dummy, mjcol);
 				//hold();
-	writeInfo();
+				writeInfo();
 				return make_pair(currentPlayer, -1);
 			}
 		} else {
@@ -504,7 +504,7 @@ pair<int, int> MJstage::mainGame(int& rounds) {
 				if (print_mainGame_info) cout << "***** _player[" << currentPlayer << "] huown! *****" << endl;
 				_players[currentPlayer]->act(7, 1, dummy, mjcol);
 				// hold();
-	writeInfo();
+				writeInfo();
 				return make_pair(currentPlayer, -1);
 			}
 			// printAllHands(_players);
@@ -563,7 +563,7 @@ void MJstage::writeInfo(void) {
 
 	myfile.open(filename, fstream::in | fstream::out | fstream::app);
 	// write seed
-	if (!file_exist) myfile << "seed, strategy, remain mycol tiles" << endl;
+	if (!file_exist) myfile << "seed,strategy,remain mycol tiles" << endl;
 	myfile << seed << ",";
 
 	// write if all players are greedy AI, if true then write function order

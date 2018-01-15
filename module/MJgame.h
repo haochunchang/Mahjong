@@ -122,7 +122,7 @@ MJgame::MJgame() {
     // MJstage stage(human, isAIgreedy, money);
     stage = MJstage(human, isAIgreedy, money);
     extern bool is_holding;
-    if(is_holding) cout << "Press any key to continue...";
+    if (is_holding) cout << "Press any key to continue...";
     hold();
 };
 
@@ -143,7 +143,7 @@ MJgame::MJgame(int human, int isAIgreedy, int round_in, int money) {
     // MJstage stage(human, isAIgreedy, money);
     stage = MJstage(human, isAIgreedy, money);
     extern bool is_holding;
-    if(is_holding) cout << "\nPress any key to continue...";
+    if (is_holding) cout << "\nPress any key to continue...";
     hold();
 }
 
@@ -153,6 +153,8 @@ MJgame::~MJgame() {
 
 
 void MJgame::start() {
+    extern bool print_result;
+
     stage.pickSeat();
     hold();
     // cout << endl;
@@ -170,6 +172,7 @@ void MJgame::start() {
     vector<int> put_gun(4, 0);
 
     for (int i = 0; i < rounds; i++) {
+        if (print_result) cout << "\n第 " << i + 1 << " 輪\n";
         while (true) {
             stage.getTiles();
             hold();
@@ -180,19 +183,22 @@ void MJgame::start() {
             w_and_l = stage.mainGame(num_rounds);
             winner = w_and_l.first;
             loser = w_and_l.second;
-            cout << "================================" << endl;
-            if (winner == -1) {
-                cout << "============= 流局 =============" << endl;
-            } else {
-                if (loser == -1) {
-                    cout << "====== " << "player["<<winner<<"] 自摸^ ^! ======" << endl;    
+            if (print_result) {
+                cout << "\n================================" << endl;
+                if (winner == -1) {
+                    cout << "============= 流局 =============" << endl;
                 } else {
-                    cout << "====== " << "player["<<winner<<"] 胡牌^ ^! ======" << endl;    
-                    cout << "====== " << "player["<<loser<<"] 放槍QAQ! ======" << endl;    
+                    if (loser == -1) {
+                        cout << "====== " << "player[" << winner << "] 自摸^ ^! ======" << endl;
+                    } else {
+                        cout << "====== " << "player[" << winner << "] 胡牌^ ^! ======" << endl;
+                        cout << "====== " << "player[" << loser << "] 放槍QAQ! ======" << endl;
+                    }
                 }
+                cout << "================================" << endl;
+                // cin.get();
+                // clear_screen();
             }
-            cout << "================================" << endl;
-            clear_screen();
             if (winner != -1) hu[winner] += 1;
             if (loser != -1) put_gun[loser] += 1;
             if (winner != stage.getBookmaker() && winner != -1) {
@@ -219,8 +225,8 @@ void MJgame::end() {
     cout << "\nGame End." << endl;
     cout << "============ Final Result ============" << endl;
     for (int i = 0; i < 4; i++) {
-        fprintf(stdout, "Player %d: $ %d, #hu: %d, #gun: %d\n", 
-                                i, stage.get_money(i), hu_count[i], gun_count[i]);
+        fprintf(stdout, "Player %d: $ %d, #hu: %d, #gun: %d\n",
+                i, stage.get_money(i), hu_count[i], gun_count[i]);
     }
     cout << "======================================" << endl;
     // hold();
