@@ -4,8 +4,10 @@
 #include "MJtile.h"
 #include <ctime>
 #include <cstdlib>
-#include <Windows.h>
 
+// #ifdef WINDOWS
+#include <Windows.h>
+// #endif
 
 class Shuffler {
 private:
@@ -18,7 +20,9 @@ public:
 
 	void init() {
 		// seed = time(NULL);
+		// #ifdef WINDOWS
 		seed = GetTickCount(); // in Windows.h
+		// #endif
 		// cout << seed << endl;
 		srand(seed);
 

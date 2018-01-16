@@ -9,11 +9,11 @@
 #include <iostream>
 #include <vector>
 #include <limits>
-using namespace std;
 #include "MJplayer.h"
 #include "MJAIplayer.h"
 #include "MJstage.h"
 #include "Debug.h"
+using namespace std;
 
 int MAX = numeric_limits<int>::max();
 

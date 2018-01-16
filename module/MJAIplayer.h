@@ -587,7 +587,7 @@ public:
 		for (int i = _hand.faceup_len() + 1; i < _hand.total_len(); i++) {
 			suit = _hand[i].suit();
 			rank = _hand[i].rank();
-			if ((suit == 1 || suit == 2 || suit == 3)) {
+			if (suit != 4) {
 				bool previousTile = _hand[i - 1].fromsuitrank(suit, rank - 2) ||
 				                    _hand[i - 1].fromsuitrank(suit, rank - 1) ||
 				                    _hand[i - 1].fromsuitrank(suit, rank);
@@ -596,10 +596,12 @@ public:
 				                _hand[i + 1].fromsuitrank(suit, rank + 2);
 				if (!previousTile && !nextTile) count_lonely++;
 			} else { // suit == 4
-				if (!_hand[i + 1].fromsuitrank(suit, rank)) { count_lonely++; }
+				bool previousTile = _hand[i - 1].fromsuitrank(suit, rank);
+				bool nextTile = _hand[i + 1].fromsuitrank(suit, rank);
+				if (!previousTile && !nextTile) count_lonely++;
 			}
 		}
-		if (count_lonely > 7) { defensive = true; }
+		if (count_lonely > 7) defensive = true;;
 		return;
 	}
 
