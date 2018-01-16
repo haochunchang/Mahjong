@@ -1,5 +1,7 @@
 import numpy as np
 import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 # 要單個檔案或多個檔案可自行修改
 # data1 = pd.read_csv('0115test.txt', delimiter=',')
@@ -14,6 +16,7 @@ data['remain mycol tiles'] = data['remain mycol tiles'].replace(
 amount_of_data = len(data) - 1
 print("總局數為 " + str(amount_of_data) + " 局")
 strategy_list = list()
+
 for strategy in data['strategy'].unique():
     sub_data = data.loc[data['strategy'] == strategy]
     # remain col 為 0 的比例
@@ -39,3 +42,15 @@ strategy_list.sort(key=lambda x: x['mjcol_median'], reverse=True)
 print("剩餘牌堆中位數最多的策略是\t " + str(strategy_list[0]['strategy']))
 strategy_list.sort(key=lambda x: x['mjcol_mean'], reverse=True)
 print("剩餘牌堆平均最多的策略是\t " + str(strategy_list[0]['strategy']))
+
+# Plot distribution of remain tiles of each strategy sequence
+data = data.drop('seed', axis=1)
+data_group = data.groupby(['strategy'])
+print(data_group.describe())
+for g in data_group:
+    sns.distplot(g[1]['remain mycol tiles'], label=g[0])
+plt.legend(loc='best')
+plt.ylabel('Density')
+plt.xlabel('Remain MJcollection tiles')
+plt.show()
+plt.close()
