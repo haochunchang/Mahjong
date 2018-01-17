@@ -15,6 +15,7 @@
 #include "MJstage.h"
 
 using namespace std;
+bool extern gaming_UI;
 
 void swapInt(int& a, int& b) {
 	int c = a;
@@ -137,7 +138,15 @@ void printAllHands(const vector<unique_ptr<MJplayer> > &_players) {
 	return;
 }
 
-
+void clear_screen()
+{
+#ifdef WINDOWS
+	std::system("cls");
+#else
+	// Assume POSIX
+	std::system("clear");
+#endif
+}
 
 
 
@@ -241,9 +250,168 @@ void MJstage::pickSeat(void) {
 	// east = 1 ,south = 2 , west = 3 , north = 4
 	extern bool print_pickSeat;
 	extern bool print_stage;
-	if (print_stage) cout << "Do pickSeat." << endl;
-
 	srand(time(NULL));
+
+	if (print_stage) cout << "Do pickSeat." << endl;
+	if (gaming_UI) {
+		vector<int> seat_player = {0, 1, 2, 3};
+		vector<int> seat_tile = { -1, 1, 2, 3, 4, 5};	// -1 is odd, 1 is even
+		map<int, string> pos_name;
+		pos_name[1] = "East";
+		pos_name[2] = "South";
+		pos_name[3] = "West";
+		pos_name[4] = "North";
+		clear_screen();
+		cout << "\nPick seat. Please sit down." << endl;
+		cout << "Press Enter to sit down...";
+		cin.get();
+		cout << "These are your seats:" << endl;
+		cout << "\t\t\t----------" << endl;
+		cout << "\t\t\t|Player 2|" << endl;
+		cout << "\t\t\t----------" << endl;
+		cout << "\t----------\t\t\t----------" << endl;
+		cout << "\t|Player 3|\t\t\t|Player 1|" << endl;
+		cout << "\t----------\t\t\t----------" << endl;
+		cout << "\t\t\t----------" << endl;
+		cout << "\t\t\t|  You   |" << endl;
+		cout << "\t\t\t----------" << endl;
+		cout << "Put east, south, west, north tiles and an odd tile, an even tile on the table." << endl;
+		cout << "    --  --  --  --  --  --" << endl;
+		cout << "   |  ||  ||  ||  ||  ||  |" << endl;
+		cout << "   |od||Ea||So||We||No||ev|" << endl;
+		cout << "    --  --  --  --  --  --" << endl;
+		cout << "\nYou are the most senior player! Please throw the dice." << endl;
+		cout << "Press Enter to throw the dice...";
+		cin.get();
+		int dice_num = rand() % 6 + 1;
+		int next_player;
+		cout << "\nYou throw out " << dice_num << " !" << endl;
+		cout << "Count from your right. ";
+		cout << "It is ";
+		next_player = dice_num % 4;
+		if (next_player == 0) cout << "You." << endl;
+		if (next_player == 1) cout << "Player 1." << endl;
+		if (next_player == 2) cout << "Player 2." << endl;
+		if (next_player == 3) cout << "Player 3." << endl;
+
+		if (next_player == 1) {
+			cout << "The Player 1 sits on the East." << endl;
+			_players[1]->Set_Pos(1);
+			playerToPos[1] = 1;
+			posToPlayer[1] = 1;
+			next_player = 1;
+			cout << "\nNow Player 1 throw the dice." << endl;
+		}
+		if (next_player == 2) {
+			cout << "The Player 2 sits on the East." << endl;
+			_players[2]->Set_Pos(1);
+			playerToPos[2] = 1;
+			posToPlayer[1] = 2;
+			next_player = 2;
+			cout << "\nNow Player 2 throw the dice." << endl;
+		}
+		if (next_player == 3) {
+			cout << "The Player 3 sits on the East." << endl;
+			_players[3]->Set_Pos(1);
+			playerToPos[3] = 1;
+			posToPlayer[1] = 3;
+			next_player = 3;
+			cout << "\nNow Player 3 throw the dice." << endl;
+		}
+		if (next_player == 0) {
+			cout << "You sit on the East." << endl;
+			_players[0]->Set_Pos(1);
+			playerToPos[0] = 1;
+			posToPlayer[1] = 0;
+			next_player = 0;
+			cout << "\nYou can throw the dice again." << endl;
+		}
+		seat_tile.erase(std::remove(seat_tile.begin(), seat_tile.end(), 1), seat_tile.end());
+		seat_player.erase(std::remove(seat_player.begin(), seat_player.end(), next_player), seat_player.end());
+		for (int i = 3; i > 1; i--) {
+			vector<int> remain;
+			if (i == 3) {
+				if (next_player == 0) remain = {1, 2, 3};
+				if (next_player == 1) remain = {2, 3, 0};
+				if (next_player == 2) remain = {3, 0, 1};
+				if (next_player == 3) remain = {0, 1, 2};
+			}
+			if (i == 2) {
+				// seat_player 應該剩兩個人，比自己大的那個是優先的
+				int index0 = seat_player[0];
+				int index1 = seat_player[1];
+				if (index0 > next_player && index1 > next_player)
+					if (index0 > index1) remain = {index1, index0};
+					else remain = {index0, index1};
+				if (index0 > next_player && index1 < next_player)
+					remain = {index0, index1};
+				if (index0 < next_player && index1 > next_player)
+					remain = {index1, index0};
+				if (index0 < next_player && index1 < next_player)
+					if (index0 < index1) remain = {index0, index1};
+					else remain = {index1, index0};
+			}
+
+			if (next_player == 0) {
+				cout << "Press Enter to throw the dice...";
+				cin.get();
+				dice_num = rand() % 6 + 1;
+				cout << "\nYou throw out " << dice_num << " !" << endl;
+			} else {
+				cout << "\nPlayer " << next_player << " throw out ";
+				dice_num = rand() % 6 + 1;
+				cout << dice_num << " !" << endl;
+			}
+			if (dice_num % i == 0) {
+				next_player = remain[i - 1];
+			} else {
+				next_player = remain[dice_num % i - 1];
+			}
+
+			cout << "It is Player " << next_player << endl;
+			if (dice_num % 2 == 0) { // even, draw from right
+				_players[next_player]->Set_Pos(seat_tile[seat_tile.size() - 2]);
+				playerToPos[next_player] = seat_tile[seat_tile.size() - 2];
+				posToPlayer[seat_tile[seat_tile.size() - 2]] = next_player;
+				cout << next_player << " sit on the " << pos_name[seat_tile[seat_tile.size() - 2]] << endl;
+				seat_tile.erase(seat_tile.begin() + seat_tile.size() - 2);
+				seat_player.erase(std::remove(seat_player.begin(), seat_player.end(), next_player), seat_player.end());
+			}
+			if (dice_num % 2 == 1) { // odd, draw from left
+				_players[next_player]->Set_Pos(seat_tile[1]);
+				playerToPos[next_player] = seat_tile[1];
+				posToPlayer[seat_tile[1]] = next_player;
+				cout << next_player << " sit on the " << pos_name[seat_tile[1]] << endl;
+				seat_tile.erase(seat_tile.begin() + 1);
+				seat_player.erase(std::remove(seat_player.begin(), seat_player.end(), next_player), seat_player.end());
+			}
+		}
+		// seat_tile 剩下 -1, ?, 5
+		// seat_player 剩下 1 個人
+		_players[seat_player[0]]->Set_Pos(seat_tile[1]);
+		playerToPos[seat_player[0]] = seat_tile[1];
+		posToPlayer[seat_tile[1]] = seat_player[0];
+
+
+		cout << "\n\nAll players have picked their seats." << endl;
+		cout << "You are at pos " << playerToPos[0] << endl;
+		cout << "Player 1 is at pos " << playerToPos[1] << endl;
+		cout << "Player 2 is at pos " << playerToPos[2] << endl;
+		cout << "Player 3 is at pos " << playerToPos[3] << endl;
+		cout << endl;
+		cout << "Pos 1 is player " << posToPlayer[1] << endl;
+		cout << "Pos 2 is player " << posToPlayer[2] << endl;
+		cout << "Pos 3 is player " << posToPlayer[3] << endl;
+		cout << "Pos 4 is player " << posToPlayer[4] << endl;
+		cout << "\nCheck player object setting." << endl;
+		for(int i=0; i<4; i++){
+			cout << "player " << i << " is at pos ";
+			cout << _players[i]->Get_Pos() << endl;
+		}
+		cin.get();
+		return;
+	}
+
 	int pos[4] = {1, 2, 3, 4};
 	for (int i = 0; i < 4; i++) {
 		int change_with = rand() % 4;
@@ -263,6 +431,7 @@ void MJstage::pickSeat(void) {
 		// cout << "Set playerToPos[" << i << "] to " << pos[i] << endl;
 		// cout << "Set posToPlayer[" << pos[i] << "] to " << i << endl;
 	}
+	return;
 }
 
 

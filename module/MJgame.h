@@ -16,6 +16,7 @@
 using namespace std;
 
 int MAX = numeric_limits<int>::max();
+bool extern gaming_UI;
 
 class MJgame {
     friend ostream& operator << (ostream&, const MJhand&);
@@ -35,19 +36,18 @@ private:
     MJstage stage;
 };
 
-void clear_screen()
-{
-#ifdef WINDOWS
-    std::system("cls");
-#else
-    // Assume POSIX
-    std::system("clear");
-#endif
-}
+// void clear_screen()
+// {
+// #ifdef WINDOWS
+//     std::system("cls");
+// #else
+//     // Assume POSIX
+//     std::system("clear");
+// #endif
+// }
 
 MJgame::MJgame() {
     clear_screen();
-    cout << endl;
     cout << "=====================================" << endl;
     cout << "===== Welcome to Taiwan Mahjong =====" << endl;
     cout << "=====================================" << endl;
@@ -128,16 +128,27 @@ MJgame::MJgame() {
 
 MJgame::MJgame(int human, int isAIgreedy, int round_in, int money) {
     clear_screen();
-    cout << endl;
     cout << "=====================================" << endl;
     cout << "===== Welcome to Taiwan Mahjong =====" << endl;
     cout << "=====================================" << endl;
     cout << endl;
 
-    cout << "  Set\thuman = " << human << endl;
-    cout << "\tisAIgreedy = " << isAIgreedy << endl;
-    cout << "\trounds = " << round_in << endl;
-    cout << "\tmoney = " << money << endl;
+    if (gaming_UI) {
+        cout << "Auto set " << human << " humans."  << endl;
+        cout << "Other players are ";
+        if(isAIgreedy) cout << "greedy AI." << endl;
+        else cout << "custom AI." << endl;
+        cout << "Will play " << round_in << " rounds." << endl;
+        cout << "Press Enter to continue...";
+        cin.sync();
+        cin.get();
+    } else {
+        cout << "  Set\thuman = " << human << endl;
+        cout << "\tisAIgreedy = " << isAIgreedy << endl;
+        cout << "\trounds = " << round_in << endl;
+        cout << "\tmoney = " << money << endl;
+    }
+
     rounds = round_in;
     // 原來的錯誤寫法
     // MJstage stage(human, isAIgreedy, money);

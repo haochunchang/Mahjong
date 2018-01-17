@@ -60,5 +60,6 @@ private:
 	map<int, int> posToPlayer;
 };
 
+void clear_screen(void);
 
 #endif

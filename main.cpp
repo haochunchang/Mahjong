@@ -22,6 +22,9 @@ void testBugone(void);
 void testAngone(void);
 void testInitEatPong(void);
 
+// show gaming user interface
+bool gaming_UI = true;
+
 // main control
 bool is_holding = false;
 
@@ -52,7 +55,7 @@ int main() {
 
 void mainGame(void) {
 	// human, isAIgreedy, round_in, money
-	MJgame mygame(1, 1, 5, 10000);
+	MJgame mygame(1, 3, 5, 10000);
 	// mygame.setting();
 	mygame.start();
 	mygame.end();
