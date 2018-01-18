@@ -848,7 +848,7 @@ MJtile& MJhand::operator [] (int index) {
 }
 
 
-
+/*
 ostream& operator << (ostream& os, const MJhand& h) {
 
 	//part 1 " __ "
@@ -1014,8 +1014,8 @@ ostream& operator << (ostream& os, const MJhand& h) {
 	}
 	os << endl;
 	return os;
-}
-/*
+}*/
+
 ostream& operator << (ostream& os, const MJhand& h){
 
 	//part 1 " __ "
@@ -1182,4 +1182,4 @@ ostream& operator << (ostream& os, const MJhand& h){
 	os<<endl;
 	return os;
 }
-*/
+
