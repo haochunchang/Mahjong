@@ -583,7 +583,7 @@ int MJstage::getBookmaker(void) {
 void MJstage::getTiles(void) {
 	extern bool print_stage;
 	if (print_stage) cout << "Do getTiles." << endl;
-	if(gaming_UI) {
+	if (gaming_UI) {
 		clear_screen();
 		cout << "=================" << endl;
 		cout << "=== Get tiles ===" << endl;
@@ -613,7 +613,7 @@ void MJstage::getTiles(void) {
 	for (int i = 0; i < 4; i++) {
 		_players[i]->Set_Hand(&mjtiles_for_player[i][0], 16);
 	}
-	if(gaming_UI){
+	if (gaming_UI) {
 		cout << "All the players have get their tiles." << endl;
 		cout << "Now your hand is:" << endl;
 		_players[0]->Print_Hand();
@@ -633,7 +633,16 @@ void MJstage::initiate(void) {
 		_players[i]->initiate(mjcol);
 	}
 	printAllHands(_players);
-
+	if (gaming_UI) {
+		cout << "\n================" << endl;
+		cout << "=== Initiate ===" << endl;
+		cout << "================" << endl;
+		cout << "Automatically initiate." << endl;
+		cout << "Afetr initiate, your hand is:" << endl;
+		_players[0]->Print_Hand();
+		cout << "Press \033[1;93mEnter\033[0m to move to the next stage...";
+		cin.get();
+	}
 }
 
 
@@ -642,7 +651,7 @@ pair<int, int> MJstage::mainGame(int& rounds) {
 	extern bool print_mainGame_singleHands;
 	extern bool print_mainGame_others;
 	extern bool print_stage;
-	if (print_stage) cout << "\033[1;93mEnter\033[0m mainGame." << endl;
+	if (print_stage) cout << "Enter mainGame." << endl;
 
 	int currentPos = 0;
 	int currentPlayer = 0;
