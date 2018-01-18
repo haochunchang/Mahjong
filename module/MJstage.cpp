@@ -272,6 +272,7 @@ void MJstage::pickSeat(void) {
 		cout << "\t\t\t -------- " << endl;
 		cout << "\t\t\t|  You   |" << endl;
 		cout << "\t\t\t -------- " << endl;
+		cout << "Press \033[1;93mEnter\033[0m to continue...";
 		cin.get();
 		cout << "Put east, south, west, north tiles and an odd tile, an even tile on the table." << endl;
 		cout << "    __  __  __  __  __  __" << endl;
@@ -412,7 +413,8 @@ void MJstage::pickSeat(void) {
 		cout << "\nThe last player choose the remain position." << endl;
 		if (next_player == 0) cout << "You sit ";
 		else cout << "Player " << next_player << " sits ";
-		cout << "on the " << pos_name[seat_tile[1]] << ".";
+		cout << "on the " << pos_name[seat_tile[1]] << "." << endl;
+		cout << "Press \033[1;93mEnter\033[0m to continue...";
 		cin.get();
 
 
@@ -447,7 +449,7 @@ void MJstage::pickSeat(void) {
 		// 	cout << "player " << i << " is at pos ";
 		// 	cout << _players[i]->Get_Pos() << endl;
 		// }
-		cout << "Press \033[1;93mEnter\033[0m to continue...";
+		cout << "Press \033[1;93mEnter\033[0m to move to the next stage...";
 		cin.get();
 		return;
 	}
@@ -480,12 +482,29 @@ void MJstage::pickBookmaker(void) {
 	extern bool print_stage;
 	if (gaming_UI) {
 		clear_screen();
-		cout << "\nPick bookmaker." << endl;
+		cout << "======================" << endl;
+		cout << "=== Pick bookmaker ===" << endl;
+		cout << "======================" << endl;
+		map<int, string> player_name;
+		player_name[0] = "  You   ";
+		player_name[1] = "Player 1";
+		player_name[2] = "Player 2";
+		player_name[3] = "Player 3";
+		cout << "These are your seats:" << endl;
+		cout << "\t\t\t -------- " << endl;
+		cout << "\t\t\t|" << player_name[posToPlayer[4]] << "|" << endl;
+		cout << "\t\t\t -------- " << endl;
+		cout << "\t -------- \t\t\t -------- " << endl;
+		cout << "\t|" << player_name[posToPlayer[3]] << "|\t\t\t|" << player_name[posToPlayer[1]] << "|" << endl;
+		cout << "\t -------- \t\t\t -------- " << endl;
+		cout << "\t\t\t -------- " << endl;
+		cout << "\t\t\t|" << player_name[posToPlayer[2]] << "|" << endl;
+		cout << "\t\t\t -------- " << endl;
 		cout << "The player on the East throw the dice." << endl;
 		cout << "Press \033[1;93mEnter\033[0m to continue...";
 		cin.get();
 		int dice_num = rand() % 6 + 1;
-		cout << "The player on the East is ";
+		cout << "\nThe player on the East is ";
 		int player_index = posToPlayer[1];
 		if (player_index == 0) cout << "you. You";
 		else cout << "Player " << player_index << ". Player " << player_index;
@@ -493,11 +512,43 @@ void MJstage::pickBookmaker(void) {
 		cout << "Count from ";
 		if (player_index == 0) cout << "your";
 		else cout << "Player " << player_index << "'s";
-		cout << "right hand side. ";
-		int next_pos = (1 + dice_num) % 4;
-		if (next_pos == 0) next_pos = 4;
-		cout << "It is ";
+		cout << " right hand side. ";
 
+		int next_pos = (9 - dice_num) % 4;
+		if (next_pos == 0) next_pos = 4;
+		// cout << "next pos is " << next_pos << endl;
+		player_index = posToPlayer[next_pos];
+		// cout << "next player is " << player_index << endl;
+		cout << "It is ";
+		if (player_index == 0) cout << "you." << endl;
+		else cout << "Player " << player_index << "." << endl;
+
+		cout << "Now it is ";
+		if (player_index == 0) cout << "your turn ";
+		else cout << "Player " << player_index << "'s turn ";
+		cout << "to throw the dice." << endl;
+		cout << "Press \033[1;93mEnter\033[0m to continue...";
+		cin.get();
+		dice_num = rand() % 6 + 1;
+		if (player_index == 0) cout << "\nYou";
+		else cout << "\nPlayer " << player_index;
+		cout << " throw out " << dice_num << " !" << endl;
+		cout << "Count from ";
+		if (player_index == 0) cout << "your";
+		else cout << "Player " << player_index << "'s";
+		cout << " right hand side. ";
+
+		// cout << next_pos;
+		next_pos = (8 + next_pos - dice_num) % 4;
+		// cout << next_pos;
+		if (next_pos == 0) next_pos = 4;
+		player_index = posToPlayer[next_pos];
+		cout << "It is ";
+		if (player_index == 0) cout << "you." << endl;
+		else cout << "Player " << player_index << "." << endl;
+
+		_bookmaker = player_index;
+		cout << "Press \033[1;93mEnter\033[0m to move to the next stage...";
 		cin.get();
 		return;
 	}
