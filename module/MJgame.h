@@ -218,7 +218,9 @@ void MJgame::start() {
                     }
                 }
                 cout << "================================" << endl;
-                //cin.get();
+                cout << "Press \033[1;93mEnter\033[0m ..." << endl;	
+                cin.sync();
+                cin.get();
             }
             if (winner != -1) hu[winner] += 1;
             if (loser != -1) put_gun[loser] += 1;

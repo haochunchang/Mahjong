@@ -280,7 +280,8 @@ void MJplayer::strategy(int position, MJtile t, int &actiontype, int &actionpara
             a = 0;
         }
     }
-	cout << "Press \033[1;93mEnter\033[0m ...";
+	cout << "Press \033[1;93mEnter\033[0m ...\n";
+    cin.sync();
     cin.get();
     if (a == 8) {
         actiontype = 8;
