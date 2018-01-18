@@ -350,15 +350,15 @@ void MJstage::pickSeat(void) {
 				int index0 = seat_player[0];
 				int index1 = seat_player[1];
 				if (index0 > next_player && index1 > next_player)
-					if (index0 > index1) remain = {index1, index0};
-					else remain = {index0, index1};
+					if (index0 > index1) { remain = {index1, index0}; }
+					else { remain = {index0, index1}; }
 				if (index0 > next_player && index1 < next_player)
 					remain = {index0, index1};
 				if (index0 < next_player && index1 > next_player)
 					remain = {index1, index0};
 				if (index0 < next_player && index1 < next_player)
-					if (index0 < index1) remain = {index0, index1};
-					else remain = {index1, index0};
+					if (index0 < index1) { remain = {index0, index1}; }
+					else { remain = {index1, index0}; }
 			}
 
 			if (next_player == 0) {
@@ -568,7 +568,7 @@ pair<int, int> MJstage::mainGame(int& rounds) {
 	int current_action_param = 0;
 	// 正式開局！
 	while (mjcol.size() > 16) { // 留下八墩(16張)牌
-		if (print_mainGame_info) cout << "\nEnter while loop in rounds " << ++rounds << "." << endl;
+        if (print_mainGame_info) cout << "\nEnter while loop in rounds " << ++rounds << "." << endl;
 		if (print_mainGame_info) cout << "Currently is _players[" << currentPlayer << "](position " << currentPos
 			                              << ")'s turn." << endl;
 
@@ -650,7 +650,8 @@ pair<int, int> MJstage::mainGame(int& rounds) {
 			}
 			// 看其他玩家faceup的牌
 			if (_players[currentPlayer]->is_human()) {
-				cout << "Other players faceup hands." << endl;
+				clear_screen();
+                cout << "Other players faceup hands." << endl;
 				for (int i = 0; i < 4; i++) {
 					if (currentPlayer != i) _players[i]->showhandtoothers();
 				}
@@ -688,7 +689,8 @@ pair<int, int> MJstage::mainGame(int& rounds) {
 			}
 			// 看其他玩家faceup的牌
 			if (_players[currentPlayer]->is_human()) {
-				cout << "Other players faceup hands." << endl;
+				clear_screen();
+                cout << "Other players faceup hands." << endl;
 				for (int i = 0; i < 4; i++) {
 					if (currentPlayer != i) _players[i]->showhandtoothers();
 				}

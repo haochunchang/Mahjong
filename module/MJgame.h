@@ -195,6 +195,7 @@ void MJgame::start() {
             winner = w_and_l.first;
             loser = w_and_l.second;
             if (print_result) {
+                clear_screen(); 
                 cout << "\n================================" << endl;
                 if (winner == -1) {
                     cout << "============= 流局 =============" << endl;
@@ -207,8 +208,7 @@ void MJgame::start() {
                     }
                 }
                 cout << "================================" << endl;
-                // cin.get();
-                // clear_screen();
+                //cin.get();
             }
             if (winner != -1) hu[winner] += 1;
             if (loser != -1) put_gun[loser] += 1;
