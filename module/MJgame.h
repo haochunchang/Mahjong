@@ -129,16 +129,16 @@ MJgame::MJgame() {
 MJgame::MJgame(int human, int isAIgreedy, int round_in, int money) {
     clear_screen();
     cout << "=====================================" << endl;
-    cout << "===== Welcome to Taiwan Mahjong =====" << endl;
+    cout << "===== Welcome to \033[1;91mTaiwan Mahjong\033[0m =====" << endl;
     cout << "=====================================" << endl;
     cout << endl;
 
     if (gaming_UI) {
-        cout << "Auto set " << human << " humans."  << endl;
+        cout << "Auto set \033[1;93m" << human << "\033[0m humans."  << endl;
         cout << "Other players are ";
-        if(isAIgreedy) cout << "greedy AI." << endl;
-        else cout << "custom AI." << endl;
-        cout << "Will play " << round_in << " rounds." << endl;
+        if(isAIgreedy) cout << "\033[1;93mgreedy AI\033[0m." << endl;
+        else cout << "\033[1;93mcustom AI\033[0m." << endl;
+        cout << "Will play \033[1;93m" << round_in << "\033[0m rounds." << endl;
         cout << "Press Enter to continue...";
         cin.sync();
         cin.get();

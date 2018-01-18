@@ -1,0 +1,3 @@
+seed,strategy,remain mycol tiles
+0,Not all GreedyAI,9
+4144656,Not all GreedyAI,24
