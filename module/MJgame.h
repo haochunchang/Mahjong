@@ -136,7 +136,7 @@ MJgame::MJgame(int human, int isAIgreedy, int round_in, int money) {
     if (gaming_UI) {
         cout << "Auto set \033[1;93m" << human << "\033[0m humans."  << endl;
         cout << "Other players are ";
-        if(isAIgreedy) cout << "\033[1;93mgreedy AI\033[0m." << endl;
+        if (isAIgreedy) cout << "\033[1;93mgreedy AI\033[0m." << endl;
         else cout << "\033[1;93mcustom AI\033[0m." << endl;
         cout << "Will play \033[1;93m" << round_in << "\033[0m rounds." << endl;
         cout << "Press \033[1;93mEnter\033[0m to continue...";
@@ -183,7 +183,17 @@ void MJgame::start() {
     vector<int> put_gun(4, 0);
 
     for (int i = 0; i < rounds; i++) {
-        if (print_result) cout << "\n第 " << i + 1 << " 輪\n";
+        if(gaming_UI) clear_screen();
+        if (print_result) {
+            cout << "Enter " << i + 1;
+            if (i % 10 == 0) cout << "st";
+            else if (i % 10 == 1) cout << "nd";
+            else if (i % 10 == 2) cout << "rd";
+            else cout << "th";
+            cout << " round." << endl;
+            cout << "Press \033[1;93mEnter\033[0m to continue...";
+            cin.get();
+        }
         while (true) {
             stage.getTiles();
             hold();
@@ -195,7 +205,7 @@ void MJgame::start() {
             winner = w_and_l.first;
             loser = w_and_l.second;
             if (print_result) {
-                clear_screen(); 
+                clear_screen();
                 cout << "\n================================" << endl;
                 if (winner == -1) {
                     cout << "============= 流局 =============" << endl;

@@ -583,10 +583,27 @@ int MJstage::getBookmaker(void) {
 void MJstage::getTiles(void) {
 	extern bool print_stage;
 	if (print_stage) cout << "Do getTiles." << endl;
-
+	if(gaming_UI) {
+		clear_screen();
+		cout << "=================" << endl;
+		cout << "=== Get tiles ===" << endl;
+		cout << "=================" << endl;
+		cout << "After shuffle, each player draw 4 tiles from the collection for 4 times." << endl;
+	}
 	MJtile mjtiles_for_player[4][16];
 	for (int k = 0; k < 4; k++) {
+		// if(gaming_UI) {
+		// 	if(k==0)cout << "First time: " << endl;
+		// 	if(k==1)cout << "Second time: " << endl;
+		// 	if(k==2)cout << "Third time: " << endl;
+		// 	if(k==3)cout << "Fourth time: " << endl;
+		// }
 		for (int i = 0; i < 4; i++) {
+			// if(gaming_UI){
+			// 	if(i==0) cout << "You";
+			// 	else cout << "Player " << i;
+			// 	cout << "draw 4 tiles." << endl;
+			// }
 			// 從 mjcol 從前面取走 4 張給 _players[i]
 			for (int j = k * 4; j < (k + 1) * 4; j++) {
 				mjtiles_for_player[i][j] = mjcol.drawfronttile();
@@ -596,6 +613,14 @@ void MJstage::getTiles(void) {
 	for (int i = 0; i < 4; i++) {
 		_players[i]->Set_Hand(&mjtiles_for_player[i][0], 16);
 	}
+	if(gaming_UI){
+		cout << "All the players have get their tiles." << endl;
+		cout << "Now your hand is:" << endl;
+		_players[0]->Print_Hand();
+		cout << "Press \033[1;93mEnter\033[0m to move to the next stage...";
+		cin.get();
+	}
+
 	return;
 }
 
@@ -608,6 +633,7 @@ void MJstage::initiate(void) {
 		_players[i]->initiate(mjcol);
 	}
 	printAllHands(_players);
+
 }
 
 
