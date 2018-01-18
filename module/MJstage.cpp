@@ -421,7 +421,7 @@ void MJstage::pickSeat(void) {
 
 		cout << "\nAll players have picked their seats!" << endl;
 		map<int, string> player_name;
-		player_name[0] = "You";
+		player_name[0] = "  You   ";
 		player_name[1] = "Player 1";
 		player_name[2] = "Player 2";
 		player_name[3] = "Player 3";
@@ -435,7 +435,7 @@ void MJstage::pickSeat(void) {
 		cout << "\t|" << player_name[posToPlayer[3]] << "|\t\t\t|"<< player_name[posToPlayer[1]] << "|" << endl;
 		cout << "\t----------\t\t\t----------" << endl;
 		cout << "\t\t\t----------" << endl;
-		cout << "\t\t\t|  "<< player_name[posToPlayer[2]] << "   |" << endl;
+		cout << "\t\t\t|"<< player_name[posToPlayer[2]] << "|" << endl;
 		cout << "\t\t\t----------" << endl;
 		cin.get();
 
