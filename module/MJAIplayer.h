@@ -4,12 +4,12 @@
 #include "MJplayer.h"
 using namespace std;
 
-class MJGreedyAIplayer: public MJplayer {
+class MJAIplayer: public MJplayer {
 public:
-	MJGreedyAIplayer() : MJplayer() {
+	MJAIplayer() : MJplayer() {
 		// cout << "Call MJGreedyAIplayer constructor." << endl;
 	}
-	MJGreedyAIplayer(int money) : MJplayer(money) {
+	MJAIplayer(int money) : MJplayer(money) {
 		// cout << "Call MJGreedyAIplayer constructor with money." << endl;
 		// cout << "this->Get_Mon(): " << this->Get_Mon() << endl;
 	}
