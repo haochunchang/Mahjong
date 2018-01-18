@@ -1,6 +1,6 @@
 seed,strategy,remain mycol tiles
 1572887,Not all GreedyAI,14
-57340000,Not all GreedyAI,0
+57340000,Not all GreedyAI,1
 57340343,Not all GreedyAI,29
 1572887,Not all GreedyAI,9
 57427734,Not all GreedyAI,4
