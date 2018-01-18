@@ -138,14 +138,8 @@ void printAllHands(const vector<unique_ptr<MJplayer> > &_players) {
 	return;
 }
 
-void clear_screen()
-{
-#ifdef WINDOWS
-	std::system("cls");
-#else
-	// Assume POSIX
+void clear_screen() {
 	std::system("clear");
-#endif
 }
 
 
@@ -465,6 +459,29 @@ void MJstage::pickSeat(void) {
 void MJstage::pickBookmaker(void) {
 	extern bool print_pickBookmaker;
 	extern bool print_stage;
+	if (gaming_UI) {
+		clear_screen();
+		cout << "\nPick bookmaker." << endl;
+		cout << "The player on the East throw the dice." << endl;
+		cout << "Press Enter to continue...";
+		cin.get();
+		int dice_num = rand() % 6 + 1;
+		cout << "The player on the East is ";
+		int player_index = posToPlayer[1];
+		if (player_index == 0) cout << "you. You";
+		else cout << "Player " << player_index << ". Player " << player_index;
+		cout << " throw out " << dice_num << " !" << endl;
+		cout << "Count from ";
+		if (player_index == 0) cout << "your";
+		else cout << "Player " << player_index << "'s";
+		cout << "right hand side. ";
+		int next_pos = (1 + dice_num) % 4;
+		if (next_pos == 0) next_pos = 4;
+		cout << "It is ";
+
+		cin.get();
+		return;
+	}
 	if (print_stage) cout << "Do pickBookmaker." << endl;
 
 	srand(time(NULL));
@@ -568,7 +585,7 @@ pair<int, int> MJstage::mainGame(int& rounds) {
 	int current_action_param = 0;
 	// 正式開局！
 	while (mjcol.size() > 16) { // 留下八墩(16張)牌
-        if (print_mainGame_info) cout << "\nEnter while loop in rounds " << ++rounds << "." << endl;
+		if (print_mainGame_info) cout << "\nEnter while loop in rounds " << ++rounds << "." << endl;
 		if (print_mainGame_info) cout << "Currently is _players[" << currentPlayer << "](position " << currentPos
 			                              << ")'s turn." << endl;
 
@@ -651,7 +668,7 @@ pair<int, int> MJstage::mainGame(int& rounds) {
 			// 看其他玩家faceup的牌
 			if (_players[currentPlayer]->is_human()) {
 				clear_screen();
-                cout << "Other players faceup hands." << endl;
+				cout << "Other players faceup hands." << endl;
 				for (int i = 0; i < 4; i++) {
 					if (currentPlayer != i) _players[i]->showhandtoothers();
 				}
@@ -690,7 +707,7 @@ pair<int, int> MJstage::mainGame(int& rounds) {
 			// 看其他玩家faceup的牌
 			if (_players[currentPlayer]->is_human()) {
 				clear_screen();
-                cout << "Other players faceup hands." << endl;
+				cout << "Other players faceup hands." << endl;
 				for (int i = 0; i < 4; i++) {
 					if (currentPlayer != i) _players[i]->showhandtoothers();
 				}
