@@ -256,19 +256,22 @@ void MJstage::pickSeat(void) {
 		pos_name[3] = "West";
 		pos_name[4] = "North";
 		clear_screen();
-		cout << "\nPick seat. Please sit down." << endl;
-		cout << "Press Enter to sit down...";
+		cout << "=================" << endl;
+		cout << "=== Pick seat ===" << endl;
+		cout << "=================" << endl;
+		cout << "Please sit down." << endl;
+		cout << "Press \033[1;93mEnter\033[0m to sit down...";
 		cin.get();
 		cout << "These are your seats:" << endl;
-		cout << "\t\t\t----------" << endl;
+		cout << "\t\t\t -------- " << endl;
 		cout << "\t\t\t|Player 2|" << endl;
-		cout << "\t\t\t----------" << endl;
-		cout << "\t----------\t\t\t----------" << endl;
+		cout << "\t\t\t -------- " << endl;
+		cout << "\t -------- \t\t\t -------- " << endl;
 		cout << "\t|Player 3|\t\t\t|Player 1|" << endl;
-		cout << "\t----------\t\t\t----------" << endl;
-		cout << "\t\t\t----------" << endl;
+		cout << "\t -------- \t\t\t -------- " << endl;
+		cout << "\t\t\t -------- " << endl;
 		cout << "\t\t\t|  You   |" << endl;
-		cout << "\t\t\t----------" << endl;
+		cout << "\t\t\t -------- " << endl;
 		cin.get();
 		cout << "Put east, south, west, north tiles and an odd tile, an even tile on the table." << endl;
 		cout << "    __  __  __  __  __  __" << endl;
@@ -276,7 +279,7 @@ void MJstage::pickSeat(void) {
 		cout << "   |od||Ea||So||We||No||ev|" << endl;
 		cout << "    --  --  --  --  --  --" << endl;
 		cout << "\nYou are the most senior player! Please throw the dice." << endl;
-		cout << "Press Enter to throw the dice...";
+		cout << "Press \033[1;93mEnter\033[0m to throw the dice...";
 		cin.get();
 		int dice_num = rand() % 6 + 1;
 		int next_player;
@@ -296,7 +299,7 @@ void MJstage::pickSeat(void) {
 			posToPlayer[1] = 1;
 			next_player = 1;
 			cout << "\nNow Player 1 throw the dice." << endl;
-			cout << "Press Enter to continue...";
+			cout << "Press \033[1;93mEnter\033[0m to continue...";
 			cin.get();
 		}
 		if (next_player == 2) {
@@ -306,7 +309,7 @@ void MJstage::pickSeat(void) {
 			posToPlayer[1] = 2;
 			next_player = 2;
 			cout << "\nNow Player 2 throw the dice." << endl;
-			cout << "Press Enter to continue...";
+			cout << "Press \033[1;93mEnter\033[0m to continue...";
 			cin.get();
 		}
 		if (next_player == 3) {
@@ -316,7 +319,7 @@ void MJstage::pickSeat(void) {
 			posToPlayer[1] = 3;
 			next_player = 3;
 			cout << "\nNow Player 3 throw the dice." << endl;
-			cout << "Press Enter to continue...";
+			cout << "Press \033[1;93mEnter\033[0m to continue...";
 			cin.get();
 		}
 		if (next_player == 0) {
@@ -357,7 +360,7 @@ void MJstage::pickSeat(void) {
 
 			if (next_player == 0) {
 				cout << "\nYour turn to throw the dice again." << endl;
-				cout << "Press Enter to throw the dice...";
+				cout << "Press \033[1;93mEnter\033[0m to throw the dice...";
 				cin.get();
 				dice_num = rand() % 6 + 1;
 				cout << "\nYou throw out " << dice_num << " !" << endl;
@@ -397,7 +400,7 @@ void MJstage::pickSeat(void) {
 				seat_tile.erase(seat_tile.begin() + 1);
 				seat_player.erase(std::remove(seat_player.begin(), seat_player.end(), next_player), seat_player.end());
 			}
-			cout << "Press Enetr to continue...";
+			cout << "Press \033[1;93mEnter\033[0m to continue...";
 			cin.get();
 		}
 		// seat_tile 剩下 -1, ?, 5
@@ -419,25 +422,22 @@ void MJstage::pickSeat(void) {
 		player_name[1] = "Player 1";
 		player_name[2] = "Player 2";
 		player_name[3] = "Player 3";
-	
-        cin.get();
-		cout << "These are your seats:" << endl;
-		cout << "\t\t\t----------" << endl;
-		cout << "\t\t\t|"<< player_name[posToPlayer[4]] << "|" << endl;
-		cout << "\t\t\t----------" << endl;
-		cout << "\t----------\t\t\t----------" << endl;
-		cout << "\t|" << player_name[posToPlayer[3]] << "|\t\t\t|"<< player_name[posToPlayer[1]] << "|" << endl;
-		cout << "\t----------\t\t\t----------" << endl;
-		cout << "\t\t\t----------" << endl;
-		cout << "\t\t\t|"<< player_name[posToPlayer[2]] << "|" << endl;
-		cout << "\t\t\t----------" << endl;
-		cin.get();
 
-        cout << "You are on the " << pos_name[playerToPos[0]] << "." << endl;
-		cout << "Player 1 is on the " << pos_name[playerToPos[1]] << "." << endl;
-		cout << "Player 2 is on the " << pos_name[playerToPos[2]] << "." << endl;
-		cout << "Player 3 is on the " << pos_name[playerToPos[3]] << "." << endl;
-		cout << endl;
+		cout << "These are your seats:" << endl;
+		cout << "\t\t\t -------- " << endl;
+		cout << "\t\t\t|" << player_name[posToPlayer[4]] << "|" << endl;
+		cout << "\t\t\t -------- " << endl;
+		cout << "\t -------- \t\t\t -------- " << endl;
+		cout << "\t|" << player_name[posToPlayer[3]] << "|\t\t\t|" << player_name[posToPlayer[1]] << "|" << endl;
+		cout << "\t -------- \t\t\t -------- " << endl;
+		cout << "\t\t\t -------- " << endl;
+		cout << "\t\t\t|" << player_name[posToPlayer[2]] << "|" << endl;
+		cout << "\t\t\t -------- " << endl;
+		// cout << "You are on the " << pos_name[playerToPos[0]] << "." << endl;
+		// cout << "Player 1 is on the " << pos_name[playerToPos[1]] << "." << endl;
+		// cout << "Player 2 is on the " << pos_name[playerToPos[2]] << "." << endl;
+		// cout << "Player 3 is on the " << pos_name[playerToPos[3]] << "." << endl;
+		// cout << endl;
 		// cout << "Pos 1 is player " << posToPlayer[1] << endl;
 		// cout << "Pos 2 is player " << posToPlayer[2] << endl;
 		// cout << "Pos 3 is player " << posToPlayer[3] << endl;
@@ -447,7 +447,7 @@ void MJstage::pickSeat(void) {
 		// 	cout << "player " << i << " is at pos ";
 		// 	cout << _players[i]->Get_Pos() << endl;
 		// }
-		cout << "Press Enetr to continue...";
+		cout << "Press \033[1;93mEnter\033[0m to continue...";
 		cin.get();
 		return;
 	}
@@ -482,7 +482,7 @@ void MJstage::pickBookmaker(void) {
 		clear_screen();
 		cout << "\nPick bookmaker." << endl;
 		cout << "The player on the East throw the dice." << endl;
-		cout << "Press Enter to continue...";
+		cout << "Press \033[1;93mEnter\033[0m to continue...";
 		cin.get();
 		int dice_num = rand() % 6 + 1;
 		cout << "The player on the East is ";
@@ -565,7 +565,7 @@ pair<int, int> MJstage::mainGame(int& rounds) {
 	extern bool print_mainGame_singleHands;
 	extern bool print_mainGame_others;
 	extern bool print_stage;
-	if (print_stage) cout << "Enter mainGame." << endl;
+	if (print_stage) cout << "\033[1;93mEnter\033[0m mainGame." << endl;
 
 	int currentPos = 0;
 	int currentPlayer = 0;
@@ -604,7 +604,7 @@ pair<int, int> MJstage::mainGame(int& rounds) {
 	int current_action_param = 0;
 	// 正式開局！
 	while (mjcol.size() > 16) { // 留下八墩(16張)牌
-		if (print_mainGame_info) cout << "\nEnter while loop in rounds " << ++rounds << "." << endl;
+		if (print_mainGame_info) cout << "\n\033[1;93mEnter\033[0m while loop in rounds " << ++rounds << "." << endl;
 		if (print_mainGame_info) cout << "Currently is _players[" << currentPlayer << "](position " << currentPos
 			                              << ")'s turn." << endl;
 

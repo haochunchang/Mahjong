@@ -139,7 +139,7 @@ MJgame::MJgame(int human, int isAIgreedy, int round_in, int money) {
         if(isAIgreedy) cout << "\033[1;93mgreedy AI\033[0m." << endl;
         else cout << "\033[1;93mcustom AI\033[0m." << endl;
         cout << "Will play \033[1;93m" << round_in << "\033[0m rounds." << endl;
-        cout << "Press Enter to continue...";
+        cout << "Press \033[1;93mEnter\033[0m to continue...";
         cin.sync();
         cin.get();
     } else {
