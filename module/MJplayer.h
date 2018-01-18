@@ -5,7 +5,8 @@
 #include <iostream>
 #include "MJhand.h"
 using namespace std;
-class MJplayer {
+class MJplayer: public MJhand {
+friend class MJstage;
 public :
 	MJplayer();
 	MJplayer(int); // money

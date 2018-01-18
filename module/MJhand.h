@@ -58,7 +58,7 @@ public:
 	int getFaceupLen(void);
 	MJtile getLastTile(void);
 		
-private:
+protected:
 	int _total_len;
 	int _faceup_len;
 	int _stage;//0 normal stage, 1 draw stage, 2 hu
