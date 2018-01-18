@@ -414,7 +414,26 @@ void MJstage::pickSeat(void) {
 
 
 		cout << "\nAll players have picked their seats!" << endl;
-		cout << "You are on the " << pos_name[playerToPos[0]] << "." << endl;
+		map<int, string> player_name;
+		player_name[0] = "  You   ";
+		player_name[1] = "Player 1";
+		player_name[2] = "Player 2";
+		player_name[3] = "Player 3";
+	
+        cin.get();
+		cout << "These are your seats:" << endl;
+		cout << "\t\t\t----------" << endl;
+		cout << "\t\t\t|"<< player_name[posToPlayer[4]] << "|" << endl;
+		cout << "\t\t\t----------" << endl;
+		cout << "\t----------\t\t\t----------" << endl;
+		cout << "\t|" << player_name[posToPlayer[3]] << "|\t\t\t|"<< player_name[posToPlayer[1]] << "|" << endl;
+		cout << "\t----------\t\t\t----------" << endl;
+		cout << "\t\t\t----------" << endl;
+		cout << "\t\t\t|"<< player_name[posToPlayer[2]] << "|" << endl;
+		cout << "\t\t\t----------" << endl;
+		cin.get();
+
+        cout << "You are on the " << pos_name[playerToPos[0]] << "." << endl;
 		cout << "Player 1 is on the " << pos_name[playerToPos[1]] << "." << endl;
 		cout << "Player 2 is on the " << pos_name[playerToPos[2]] << "." << endl;
 		cout << "Player 3 is on the " << pos_name[playerToPos[3]] << "." << endl;
