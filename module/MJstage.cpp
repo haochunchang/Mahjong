@@ -696,7 +696,12 @@ pair<int, int> MJstage::mainGame(int& rounds) {
 			//cout << "Bookmaker decides what tile to play." << endl;
 			t = _players[currentPlayer]->play(actionparameter[currentPlayer]);
 			if (print_mainGame_singleHands) {
-				cout << "_players[" << currentPlayer << "] play:" << endl;
+                if (_players[currentPlayer]->is_human()) {
+                    clear_screen();
+                    cout << "You play:" << endl;
+                } else { 
+				    cout << "Player " << currentPlayer << " play:" << endl;
+                }
 				cout << t;
 			}
 			tiles_num = 1;
@@ -728,7 +733,7 @@ pair<int, int> MJstage::mainGame(int& rounds) {
 		for (int i = 0; i < 4; i++) {
 			if (actiontype[i] == 7) {
 				_players[i]->act(actiontype[i], actionparameter[i], t, mjcol);
-				if (print_mainGame_info) cout << "***** _players[" << i << "] huother! *****" << endl;
+				if (print_mainGame_info) cout << "***** Player " << i << "] huother! *****" << endl;
 				//hold();
 				writeInfo();
 				return make_pair(i, currentPlayer);
